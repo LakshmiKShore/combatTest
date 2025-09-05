@@ -39,7 +39,6 @@ public class Main {
         }
         if (playerHealth < 0) {
             System.out.println("The enemy killed you!");
-            //change
         }
     }
 }
