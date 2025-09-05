@@ -1,6 +1,5 @@
 import java.util.Scanner;
 import java.util.Random;
-//here's my change
 
 public class Main {
     static Scanner myScanner = new Scanner(System.in);
