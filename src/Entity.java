@@ -24,12 +24,16 @@ public class Entity {
     }
 
     public int attackRoll() {
-        int result = 1 + proficiency + Main.rand.nextInt(19);
+        int result = 1 + proficiency + (int) (Math.random()*20) + 1;
         return result;
     }
 
     public int damageRoll(int diceType, int diceNumber) {
-
+        int result = 0;
+        for (int i = 0; i < diceNumber; i++) {
+            result += (int) (Math.random()*diceType) + 1;
+        }
+        return result;
     }
 
     public void reduceHealth(int damage) {
@@ -40,28 +44,23 @@ public class Entity {
 
     }
 
-    public void getName() {
-        System.out.println("My name is " + name );
+    public String getName() {
+        return name;
     }
 
-    public void getHeath() {
-        System.out.println("My health is " + health);
+    public int getHeath() {
+        return health;
     }
 
-    public void getArmorClass() {
-        System.out.println("My armor class is " + armorClass);
+    public int getArmorClass() {
+        return armorClass;
     }
 
-    public void getProficiency() {
-        System.out.println("My proficiency is " + proficiency);
+    public int getProficiency() {
+        return proficiency;
     }
 
-    public void getIsAlive() {
-        if (isAlive == true) {
-            System.out.println("I am alive");
-        } else {
-            System.out.println("I am not alive");
+    public boolean getIsAlive() {
+        return isAlive;
         }
     }
-
-}
