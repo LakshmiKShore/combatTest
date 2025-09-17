@@ -28,6 +28,10 @@ public class Entity {
         return result;
     }
 
+    public int damageRoll(int diceType, int diceNumber) {
+
+    }
+
     public void reduceHealth(int damage) {
         health -= damage;
     }
@@ -37,19 +41,19 @@ public class Entity {
     }
 
     public void getName() {
-        System.out.println("My name is" + name );
+        System.out.println("My name is " + name );
     }
 
     public void getHeath() {
-        System.out.println("My health is" + health);
+        System.out.println("My health is " + health);
     }
 
     public void getArmorClass() {
-        System.out.println("My armor class is" + armorClass);
+        System.out.println("My armor class is " + armorClass);
     }
 
     public void getProficiency() {
-        System.out.println("My proficiency is" + proficiency);
+        System.out.println("My proficiency is " + proficiency);
     }
 
     public void getIsAlive() {
