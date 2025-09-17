@@ -1,7 +1,11 @@
+import java.util.Scanner;
+
 public class Entity {
 
     private String name;
     private int health;
+    private int maxActionPoints;
+    private int actionPoints;
     private int armorClass;
     private int proficiency;
     private boolean isAlive;
@@ -11,6 +15,7 @@ public class Entity {
         health = tempHealth;
         armorClass = tempArmorClass;
         proficiency = tempProficiency;
+        maxActionPoints = 7;
         isAlive = true;
     }
 
