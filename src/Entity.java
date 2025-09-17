@@ -64,3 +64,5 @@ public class Entity {
         return isAlive;
         }
     }
+
+    //skks
