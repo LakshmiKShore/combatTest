@@ -64,5 +64,3 @@ public class Entity {
         return isAlive;
         }
     }
-
-    //big changes incoming
