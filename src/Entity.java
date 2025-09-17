@@ -25,7 +25,12 @@ public class Entity {
         health = 1;
         armorClass = 10;
         proficiency = 1;
+        maxActionPoints = 7;
         isAlive = true;
+    }
+
+    public void playerTurn() {
+        static Scanner entityScanner = new Scanner(System.in);
     }
 
     public int attackRoll() {
