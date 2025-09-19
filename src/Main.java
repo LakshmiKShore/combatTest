@@ -10,10 +10,13 @@ public class Main {
             "Lakshmi",6,12,1);
 
     public static void main(String[] args) {
-
+        initiativeRunner();
     }
 
     public static void initiativeRunner() {
-        player.runTurn();
+        while (player.getIsAlive() && enemy.getIsAlive()) {
+            player.runTurn();
+            enemy.runTurn();
+        }
     }
 }

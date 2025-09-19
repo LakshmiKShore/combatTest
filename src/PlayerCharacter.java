@@ -60,11 +60,8 @@ public class PlayerCharacter {
 
         }
 
-
-
         public int attackRoll() {
-            int result = 1 + proficiency + (int) (Math.random()*20) + 1;
-            return result;
+            return 1 + proficiency + (int) (Math.random()*20) + 1;
         }
 
         public int damageRoll(int diceType, int diceNumber) {
@@ -77,6 +74,9 @@ public class PlayerCharacter {
 
         public void reduceHealth(int damage) {
             health -= damage;
+            if (health <= 0) {
+                isAlive = false;
+            }
         }
 
         public void killEntity() {
