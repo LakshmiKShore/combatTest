@@ -30,7 +30,28 @@ public class Entity {
     }
 
     public void runTurn() {
+        if (!isAlive) {
+            return;
+        }
+        actionPoints = maxActionPoints;
+        while (actionPoints > 0) {
+            if (actionPoints >= 3) {
+                actionPoints -= 3;
+                attack();
+            } else {
+                break;
+            }
+        }
+    }
 
+    public void attack() {
+        if (attackRoll() >= Main.player.getArmorClass()) {
+            Main.player.reduceHealth(damageRoll(6, 1));
+            System.out.println(Main.player.getName() + " has " + Main.player.getHeath() +
+                    " health remaining.");
+        } else {
+            System.out.println(getName() + " missed.");
+        }
     }
 
     public int attackRoll() {

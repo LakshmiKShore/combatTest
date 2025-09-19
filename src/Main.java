@@ -14,9 +14,11 @@ public class Main {
     }
 
     public static void initiativeRunner() {
+
         while (player.getIsAlive() && enemy.getIsAlive()) {
             player.runTurn();
             enemy.runTurn();
         }
+
     }
 }

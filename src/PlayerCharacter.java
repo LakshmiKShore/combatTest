@@ -30,6 +30,9 @@ public class PlayerCharacter {
         }
 
         public void runTurn() {
+            if (!isAlive) {
+                return;
+            }
             Scanner playerScanner = new Scanner(System.in);
             playerScanner.useDelimiter("\n");
             actionPoints = maxActionPoints;
@@ -41,15 +44,7 @@ public class PlayerCharacter {
 
                 if (action.equals("attack") && actionPoints >= 3) {
                     actionPoints -= 3;
-                    int toHit = attackRoll();
-
-                    if (toHit >= Main.enemy.getArmorClass()) {
-                        Main.enemy.reduceHealth(damageRoll(6, 1));
-                        System.out.println("Bog Jones has " + Main.enemy.getHeath() +
-                                " health remaining.");
-                    } else {
-                        System.out.println("You missed.");
-                    }
+                    attack();
                 }
 
                 if (action.equals("end turn")) {
@@ -58,6 +53,16 @@ public class PlayerCharacter {
 
             }
 
+        }
+
+        public void attack() {
+            if (attackRoll() >= Main.enemy.getArmorClass()) {
+                Main.enemy.reduceHealth(damageRoll(6, 1));
+                System.out.println(Main.enemy.getName() + " has " + Main.enemy.getHeath() +
+                    " health remaining.");
+            } else {
+                System.out.println("You missed.");
+            }
         }
 
         public int attackRoll() {
