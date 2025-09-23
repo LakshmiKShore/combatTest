@@ -15,6 +15,9 @@ public class Main {
 
     public static void initiativeRunner() {
 
+        String firstInit = "player";
+
+
         while (player.getIsAlive() && enemy.getIsAlive()) {
             player.runTurn();
             enemy.runTurn();
