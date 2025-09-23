@@ -85,7 +85,8 @@ public class PlayerCharacter {
         }
 
         public void killEntity() {
-
+            health = 0;
+            isAlive = false;
         }
 
         public String getName() {
