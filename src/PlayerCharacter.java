@@ -9,6 +9,7 @@ public class PlayerCharacter {
         private int proficiency;
         private int maxEnergyPoints;
         private int energyPoints;
+        private int level;
         private boolean isAlive;
 
         private int str;
@@ -35,6 +36,14 @@ public class PlayerCharacter {
             proficiency = 1;
             maxActionPoints = 7;
             isAlive = true;
+        }
+
+        public PlayerCharacter(int tempStr, int tempDex, int tempCon, int tempWit, int tempWill, int tempKnow) {
+            str = tempStr;
+            dex = tempDex;
+            con = tempCon;
+            wit = tempWit;
+            will = tempWill;
         }
 
         public void runTurn() {
@@ -97,6 +106,10 @@ public class PlayerCharacter {
             isAlive = false;
         }
 
+
+
+
+
         public String getName() {
             return name;
         }
@@ -123,6 +136,10 @@ public class PlayerCharacter {
 
         public boolean getIsAlive() {
             return isAlive;
+        }
+
+        public int getLevel() {
+            return level;
         }
 
         public int getStr() {
