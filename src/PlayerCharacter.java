@@ -44,9 +44,13 @@ public class PlayerCharacter {
             con = tempCon;
             wit = tempWit;
             will = tempWill;
+            know = tempKnow;
             level = 1;
+            healthMod = 1;
             maxEnergyPoints = level + (con * 2) + (will * 2);
-            health = 4 + (level / 2) + (healthMod * proficiency * 2) + con;
+            maxHealth = 4 + (level / 2) + (healthMod * proficiency * 2) + con;
+            energyPoints = maxEnergyPoints;
+            health = maxHealth;
         }
 
         public void runTurn() {
@@ -74,6 +78,18 @@ public class PlayerCharacter {
             }
 
         }
+
+        public int parry() {
+            Scanner parryScanner = new Scanner(System.in);
+            parryScanner.useDelimiter("\n");
+            System.out.println("You are being attacked. You have " + actionPoints + " remaining. " +
+                    "Would you like to parry?");
+            /* finish this later
+             */
+            int tempParryModifier = 1;
+            return (int) (Math.random() * 20) + 1 + proficiency + tempParryModifier;
+        }
+
 
         public void attack() {
             if (attackRoll() >= 12) {
