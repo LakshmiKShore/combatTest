@@ -3,7 +3,9 @@ import java.util.Scanner;
 public class PlayerCharacter {
 
         private String name;
+        private int maxHealth;
         private int health;
+        private int healthMod;
         private int maxActionPoints;
         private int actionPoints;
         private int proficiency;
@@ -19,10 +21,9 @@ public class PlayerCharacter {
         private int will;
         private int know;
 
-        public PlayerCharacter(String tempName, int tempHealth, int tempArmorClass, int tempProficiency) {
+        public PlayerCharacter(String tempName, int tempHealth, int tempProficiency) {
             name = tempName;
             health = tempHealth;
-            armorClass = tempArmorClass;
             proficiency = tempProficiency;
             maxActionPoints = 7;
             isAlive = true;
@@ -32,7 +33,6 @@ public class PlayerCharacter {
             System.out.println("Null PlayerCharacter Created");
             name = "Null";
             health = 1;
-            armorClass = 10;
             proficiency = 1;
             maxActionPoints = 7;
             isAlive = true;
@@ -44,6 +44,9 @@ public class PlayerCharacter {
             con = tempCon;
             wit = tempWit;
             will = tempWill;
+            level = 1;
+            maxEnergyPoints = level + (con * 2) + (will * 2);
+            health = 4 + (level / 2) + (healthMod * proficiency * 2) + con;
         }
 
         public void runTurn() {
@@ -73,7 +76,7 @@ public class PlayerCharacter {
         }
 
         public void attack() {
-            if (attackRoll() >= Main.enemy.getArmorClass()) {
+            if (attackRoll() >= 12) {
                 Main.enemy.reduceHealth(damageRoll(6, 1));
                 System.out.println(Main.enemy.getName() + " has " + Main.enemy.getHeath() +
                     " health remaining.");
@@ -114,12 +117,16 @@ public class PlayerCharacter {
             return name;
         }
 
+        public int getMaxHealth() {
+            return maxHealth;
+        }
+
         public int getHeath() {
             return health;
         }
 
-        public int getArmorClass() {
-            return armorClass;
+        public int getHealthMod() {
+            return healthMod;
         }
 
         public int getProficiency() {

@@ -3,7 +3,9 @@ import java.util.Scanner;
 public class Entity {
 
     private String name;
+    private int maxHeath;
     private int health;
+    private int healthMod;
     private int maxActionPoints;
     private int actionPoints;
     private int proficiency;
@@ -18,10 +20,9 @@ public class Entity {
     private int will;
     private int know;
 
-    public Entity(String tempName, int tempHealth, int tempArmorClass, int tempProficiency) {
+    public Entity(String tempName, int tempHealth, int tempProficiency) {
         name = tempName;
         health = tempHealth;
-        armorClass = tempArmorClass;
         proficiency = tempProficiency;
         maxActionPoints = 7;
         isAlive = true;
@@ -31,7 +32,6 @@ public class Entity {
         System.out.println("Null PlayerCharacter Created");
         name = "Null";
         health = 1;
-        armorClass = 10;
         proficiency = 1;
         maxActionPoints = 7;
         isAlive = true;
@@ -53,7 +53,7 @@ public class Entity {
     }
 
     public void attack() {
-        if (attackRoll() >= Main.player.getArmorClass()) {
+        if (attackRoll() >= 12) {
             Main.player.reduceHealth(damageRoll(6, 1));
             System.out.println(Main.player.getName() + " has " + Main.player.getHeath() +
                     " health remaining.");
@@ -90,8 +90,16 @@ public class Entity {
         return name;
     }
 
+    public int getMaxHeath() {
+        return maxHeath;
+    }
+
     public int getHeath() {
         return health;
+    }
+
+    public int getHealthMod() {
+        return healthMod;
     }
 
     public int getMaxEnergyPoints() {

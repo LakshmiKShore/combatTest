@@ -5,9 +5,9 @@ public class Main {
     static int toHit;
     static int damage;
     static Entity enemy = new Entity(
-            "Bog Jones", 8, 11, 1);
+            "Bog Jones", 8, 1);
     static PlayerCharacter player = new PlayerCharacter(
-            "Lakshmi",7,13,1);
+            "Lakshmi",7,1);
 
     public static void main(String[] args) {
         initiativeRunner();
