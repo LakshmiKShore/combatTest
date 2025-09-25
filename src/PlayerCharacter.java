@@ -6,9 +6,17 @@ public class PlayerCharacter {
         private int health;
         private int maxActionPoints;
         private int actionPoints;
-        private int armorClass;
         private int proficiency;
+        private int maxEnergyPoints;
+        private int energyPoints;
         private boolean isAlive;
+
+        private int str;
+        private int dex;
+        private int con;
+        private int wit;
+        private int will;
+        private int know;
 
         public PlayerCharacter(String tempName, int tempHealth, int tempArmorClass, int tempProficiency) {
             name = tempName;
@@ -105,7 +113,40 @@ public class PlayerCharacter {
             return proficiency;
         }
 
+        public int getMaxEnergyPoints() {
+            return maxEnergyPoints;
+        }
+
+        public int getEnergyPoints() {
+            return energyPoints;
+        }
+
         public boolean getIsAlive() {
             return isAlive;
         }
+
+        public int getStr() {
+            return str;
+        }
+
+        public int getDex() {
+            return dex;
+        }
+
+        public int getCon() {
+            return con;
+        }
+
+        public int getWit() {
+            return wit;
+        }
+
+        public int getWill() {
+            return will;
+        }
+
+        public int getKnow() {
+            return know;
+        }
+
     }
