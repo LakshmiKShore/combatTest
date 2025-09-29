@@ -59,7 +59,6 @@ public class PlayerCharacter {
             }
             Scanner playerScanner = new Scanner(System.in);
             playerScanner.useDelimiter("\n");
-            actionPoints = maxActionPoints;
 
             while (actionPoints > 0) {
                 System.out.println("It is your turn. You have " + actionPoints +
@@ -74,25 +73,38 @@ public class PlayerCharacter {
                 if (action.equals("end turn")) {
                     break;
                 }
-
             }
+            endTurn();
 
+        }
+
+        public void endTurn() {
+            actionPoints = maxActionPoints;
         }
 
         public int parry() {
             Scanner parryScanner = new Scanner(System.in);
             parryScanner.useDelimiter("\n");
-            System.out.println("You are being attacked. You have " + actionPoints + " remaining. " +
-                    "Would you like to parry?");
-            /* finish this later
-             */
-            int tempParryModifier = 1;
-            return (int) (Math.random() * 20) + 1 + proficiency + tempParryModifier;
+            if (actionPoints >= 1) {
+                System.out.println("You are being attacked. You have " + actionPoints + " action points remaining. " +
+                        "Would you like to parry?");
+                String action = parryScanner.next();
+
+                if (action.equals("yes") || action.equals("parry")) {
+                    actionPoints -= 1;
+                    return (int) (Math.random() * 20) + 1 + proficiency + 1; //weapon parry modifier is set to 1
+                    // until a weapon system is made
+                } else {
+                    return -20;
+                }
+            } else {
+                return -20;
+            }
         }
 
 
         public void attack() {
-            if (attackRoll() >= 12) {
+            if (attackRoll() >= Main.enemy.parry()) {
                 Main.enemy.reduceHealth(damageRoll(6, 1));
                 System.out.println(Main.enemy.getName() + " has " + Main.enemy.getHeath() +
                     " health remaining.");
@@ -110,6 +122,7 @@ public class PlayerCharacter {
             for (int i = 0; i < diceNumber; i++) {
                 result += (int) (Math.random()*diceType) + 1;
             }
+            result += proficiency;
             return result;
         }
 

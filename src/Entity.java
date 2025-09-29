@@ -41,7 +41,6 @@ public class Entity {
         if (!isAlive) {
             return;
         }
-        actionPoints = maxActionPoints;
         while (actionPoints > 0) {
             if (actionPoints >= 3) {
                 actionPoints -= 3;
@@ -50,15 +49,32 @@ public class Entity {
                 break;
             }
         }
+        endTurn();
+    }
+
+    public void endTurn() {
+        actionPoints = maxActionPoints;
     }
 
     public void attack() {
-        if (attackRoll() >= 12) {
+        if (attackRoll() >= Main.player.parry()) {
             Main.player.reduceHealth(damageRoll(6, 1));
             System.out.println(Main.player.getName() + " has " + Main.player.getHeath() +
                     " health remaining.");
         } else {
             System.out.println(getName() + " missed.");
+        }
+    }
+
+    public int parry() {
+        Scanner parryScanner = new Scanner(System.in);
+        parryScanner.useDelimiter("\n");
+        if (actionPoints >= 1) {
+            actionPoints -= 1;
+            return (int) (Math.random() * 20) + 1 + proficiency + 1; //weapon parry modifier is set to 1
+            // until a weapon system is made
+        } else {
+            return -20;
         }
     }
 
@@ -71,6 +87,7 @@ public class Entity {
         for (int i = 0; i < diceNumber; i++) {
             result += (int) (Math.random()*diceType) + 1;
         }
+        result += proficiency;
         return result;
     }
 
