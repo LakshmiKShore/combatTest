@@ -72,8 +72,8 @@ public class Entity {
         if (actionPoints >= 1) {
             actionPoints -= 1;
             System.out.println("Parried!");
-            return (int) (Math.random() * 20) + 1 + proficiency + 1; //weapon parry modifier is set to 1
-            // until a weapon system is made
+            return (int) (Math.random() * 20) + 1 + proficiency + 1; /*weapon parry modifier is set to 1
+                                                                     until a weapon system is made */
         } else {
             return -20;
         }
