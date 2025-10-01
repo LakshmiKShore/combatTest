@@ -38,7 +38,8 @@ public class PlayerCharacter {
             isAlive = true;
         }
 
-        public PlayerCharacter(int tempStr, int tempDex, int tempCon, int tempWit, int tempWill, int tempKnow) {
+        public PlayerCharacter(String tempName, int tempStr, int tempDex, int tempCon, int tempWit, int tempWill, int tempKnow) {
+            name = tempName;
             str = tempStr;
             dex = tempDex;
             con = tempCon;
@@ -47,6 +48,9 @@ public class PlayerCharacter {
             know = tempKnow;
             level = 1;
             healthMod = 1;
+            proficiency = 1;
+            isAlive = true;
+            maxActionPoints = 7;
             maxEnergyPoints = level + (con * 2) + (will * 2);
             maxHealth = 4 + (level / 2) + (healthMod * proficiency * 2) + con;
             energyPoints = maxEnergyPoints;
@@ -62,12 +66,18 @@ public class PlayerCharacter {
 
             while (actionPoints > 0) {
                 System.out.println("It is your turn. You have " + actionPoints +
-                        " action points remaining. What would you like to do?");
+                        " action points remaining. What would you like to do? \n"
+                        + "attack, fast attack");
                 String action = playerScanner.next();
 
-                if (action.equals("attack") && actionPoints >= 3) {
+                if ((action.equals("attack") || action.equals("slow attack")) && actionPoints >= 3) {
                     actionPoints -= 3;
-                    attack();
+                    attack(1,6);
+                }
+
+                if ((action.equals("fast attack") || action.equals("quick attack")) && actionPoints >= 2) {
+                    actionPoints -= 2;
+                    attack(1,4);
                 }
 
                 if (action.equals("end turn")) {
@@ -103,9 +113,9 @@ public class PlayerCharacter {
         }
 
 
-        public void attack() {
+        public void attack(int diceType, int diceNumber) {
             if (attackRoll() >= Main.enemy.parry()) {
-                Main.enemy.reduceHealth(damageRoll(6, 1));
+                Main.enemy.reduceHealth(damageRoll(diceType, diceNumber));
                 System.out.println(Main.enemy.getName() + " has " + Main.enemy.getHeath() +
                     " health remaining.");
             } else {

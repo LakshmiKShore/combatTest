@@ -108,7 +108,7 @@ public class Entity {
         return name;
     }
 
-    public int getMaxHeath() {
+    public int getMaxHealth() {
         return maxHeath;
     }
 
