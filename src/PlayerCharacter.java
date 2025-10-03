@@ -21,6 +21,8 @@ public class PlayerCharacter {
         private int will;
         private int know;
 
+        Weapon playerWeapon = new Weapon(0);
+
         public PlayerCharacter(String tempName, int tempHealth, int tempProficiency) {
             name = tempName;
             health = tempHealth;
@@ -67,12 +69,12 @@ public class PlayerCharacter {
             while (actionPoints > 0) {
                 System.out.println("It is your turn. You have " + actionPoints +
                         " action points remaining. What would you like to do? \n"
-                        + "attack, fast attack");
+                        + playerWeapon.getAttackOneName() + ", " + playerWeapon.getAttackTwoName());
                 String action = playerScanner.next();
 
-                if ((action.equals("attack") || action.equals("slow attack")) && actionPoints >= 3) {
+                if ((action.equals(playerWeapon.getAttackOneName())) && actionPoints >= 3) {
                     actionPoints -= 3;
-                    attack(1,6);
+                    attack(playerWeapon.getAttackOneDice(),playerWeapon.getAttackOneDamage());
                 }
 
                 if ((action.equals("fast attack") || action.equals("quick attack")) && actionPoints >= 2) {
@@ -102,8 +104,7 @@ public class PlayerCharacter {
 
                 if (action.equals("yes") || action.equals("parry")) {
                     actionPoints -= 1;
-                    return (int) (Math.random() * 20) + 1 + proficiency + 1; //weapon parry modifier is set to 1
-                    // until a weapon system is made
+                    return (int) (Math.random() * 20) + 1 + proficiency + playerWeapon.getParryModifier();
                 } else {
                     return -20;
                 }
