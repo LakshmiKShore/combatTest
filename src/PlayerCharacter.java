@@ -74,12 +74,12 @@ public class PlayerCharacter {
 
                 if ((action.equals(playerWeapon.getAttackOneName())) && actionPoints >= 3) {
                     actionPoints -= 3;
-                    attack(playerWeapon.getAttackOneDice(),playerWeapon.getAttackOneDamage());
+                    attack(playerWeapon.getAttackOneDice(),playerWeapon.getAttackOneDamage(), Main.enemy);
                 }
 
                 if ((action.equals("fast attack") || action.equals("quick attack")) && actionPoints >= 2) {
                     actionPoints -= 2;
-                    attack(1,4);
+                    attack(1,4, Main.enemy);
                 }
 
                 if (action.equals("end turn")) {
@@ -114,10 +114,10 @@ public class PlayerCharacter {
         }
 
 
-        public void attack(int diceType, int diceNumber) {
-            if (attackRoll() >= Main.enemy.parry()) {
-                Main.enemy.reduceHealth(damageRoll(diceType, diceNumber));
-                System.out.println(Main.enemy.getName() + " has " + Main.enemy.getHeath() +
+        public void attack(int diceType, int diceNumber, Entity target) {
+            if (attackRoll() >= target.parry()) {
+                target.reduceHealth(damageRoll(diceType, diceNumber));
+                System.out.println(target.getName() + " has " + target.getHeath() +
                     " health remaining.");
             } else {
                 System.out.println("You missed.");
