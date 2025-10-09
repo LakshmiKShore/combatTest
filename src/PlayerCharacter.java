@@ -2,24 +2,24 @@ import java.util.Scanner;
 
 public class PlayerCharacter {
 
-        private String name;
-        private int maxHealth;
-        private int health;
-        private int healthMod;
-        private int maxActionPoints;
-        private int actionPoints;
-        private int proficiency;
-        private int maxEnergyPoints;
-        private int energyPoints;
-        private int level;
-        private boolean isAlive;
+        String name;
+        int maxHealth;
+        int health;
+        int healthMod;
+        int maxActionPoints;
+        int actionPoints;
+        int proficiency;
+        int maxEnergyPoints;
+        int energyPoints;
+        int level;
+        boolean isAlive;
 
-        private int str;
-        private int dex;
-        private int con;
-        private int wit;
-        private int will;
-        private int know;
+        int str;
+        int dex;
+        int con;
+        int wit;
+        int will;
+        int know;
 
         Weapon playerWeapon = new Weapon(0);
 
@@ -72,14 +72,14 @@ public class PlayerCharacter {
                         + playerWeapon.getAttackOneName() + ", " + playerWeapon.getAttackTwoName());
                 String action = playerScanner.next();
 
-                if ((action.equals(playerWeapon.getAttackOneName())) && actionPoints >= 3) {
-                    actionPoints -= 3;
+                if (action.equals(playerWeapon.getAttackOneName()) && actionPoints >= playerWeapon.getAttackOneAP()) {
+                    actionPoints -= playerWeapon.getAttackOneAP();
                     attack(playerWeapon.getAttackOneDice(),playerWeapon.getAttackOneDamage(), Main.enemy);
                 }
 
-                if ((action.equals("fast attack") || action.equals("quick attack")) && actionPoints >= 2) {
-                    actionPoints -= 2;
-                    attack(1,4, Main.enemy);
+                if (action.equals(playerWeapon.getAttackTwoName()) && actionPoints >= playerWeapon.getAttackTwoAP()) {
+                    actionPoints -= playerWeapon.getAttackTwoAP();
+                    attack(playerWeapon.getAttackTwoDice(),playerWeapon.getAttackTwoDamage(), Main.enemy);
                 }
 
                 if (action.equals("end turn")) {
