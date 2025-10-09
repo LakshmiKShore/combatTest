@@ -9,15 +9,14 @@ public class Weapon {
 
     String weaponName;
     String[] weaponAttacks = new String[2];
-    int[] weaponValues = new int[5];
+    int[] weaponValues = new int[7];
 
     public Weapon(int weaponID) {
         if (weaponID == 0) {
             weaponName = "Shortsword";
-            String[] weaponAttacks = {"Slash", "Quick Cut"};
-            int[] weaponValues = {2, 1, 4, 3, 1, 6, 2};
-            System.out.println(getAttackOneName());
-            System.out.println(getAttackOneDamage());
+            weaponAttacks[0] = "slash"; weaponAttacks[1] = "quick cut";
+            weaponValues[0] = 2; weaponValues[1] = 1; weaponValues[2] = 4; weaponValues[3] = 3; weaponValues[4] = 1;
+            weaponValues[5] = 6; weaponValues[6] = 2;
         }
     }
 
