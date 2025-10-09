@@ -57,6 +57,21 @@ public class PlayerCharacter {
             maxHealth = 4 + (level / 2) + (healthMod * proficiency * 2) + con;
             energyPoints = maxEnergyPoints;
             health = maxHealth;
+
+            Scanner creationScanner = new Scanner(System.in);
+            creationScanner.useDelimiter("\n");
+
+            System.out.println("What weapon would you like to use?");
+            System.out.println("Shortsword, Mace");
+            String cased = creationScanner.next();
+            String input = cased.toLowerCase();
+
+            if (input.equals("shortsword"))
+                playerWeapon.setWeapon(0);
+            if (input.equals("mace"))
+                playerWeapon.setWeapon(1);
+
+            System.out.println("You chose the: " + playerWeapon.getWeaponName());
         }
 
         public void runTurn() {
@@ -70,7 +85,8 @@ public class PlayerCharacter {
                 System.out.println("It is your turn. You have " + actionPoints +
                         " action points remaining. What would you like to do? \n"
                         + playerWeapon.getAttackOneName() + ", " + playerWeapon.getAttackTwoName());
-                String action = playerScanner.next();
+                String cased = playerScanner.next();
+                String action = cased.toLowerCase();
 
                 if (action.equals(playerWeapon.getAttackOneName()) && actionPoints >= playerWeapon.getAttackOneAP()) {
                     actionPoints -= playerWeapon.getAttackOneAP();
@@ -100,9 +116,10 @@ public class PlayerCharacter {
             if (actionPoints >= 1) {
                 System.out.println("You are being attacked. You have " + actionPoints + " action points remaining. " +
                         "Would you like to parry?");
-                String action = parryScanner.next();
+                String cased = parryScanner.next();
+                String action = cased.toLowerCase();
 
-                if (action.equals("yes") || action.equals("parry")) {
+                if (action.equals("yes") || action.equals("parry") || action.equals("y")) {
                     actionPoints -= 1;
                     return (int) (Math.random() * 20) + 1 + proficiency + playerWeapon.getParryModifier();
                 } else {

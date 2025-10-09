@@ -18,8 +18,8 @@ public class Main {
 
 
         while (player.getIsAlive() && enemy.getIsAlive()) {
-            player.runTurn();
             enemy.runTurn();
+            player.runTurn();
         }
 
     }

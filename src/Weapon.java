@@ -12,11 +12,33 @@ public class Weapon {
     int[] weaponValues = new int[7];
 
     public Weapon(int weaponID) {
+        setWeapon(weaponID);
+    }
+
+    public void setWeapon(int weaponID) {
         if (weaponID == 0) {
             weaponName = "Shortsword";
-            weaponAttacks[0] = "slash"; weaponAttacks[1] = "quick cut";
-            weaponValues[0] = 2; weaponValues[1] = 1; weaponValues[2] = 4; weaponValues[3] = 3; weaponValues[4] = 1;
-            weaponValues[5] = 6; weaponValues[6] = 2;
+            weaponAttacks[0] = "slash";
+            weaponAttacks[1] = "quick cut";
+            weaponValues[0] = 2;
+            weaponValues[1] = 1;
+            weaponValues[2] = 6;
+            weaponValues[3] = 3;
+            weaponValues[4] = 1;
+            weaponValues[5] = 4;
+            weaponValues[6] = 2;
+        }
+        if (weaponID == 1) {
+            weaponName = "Mace";
+            weaponAttacks[0] = "slam";
+            weaponAttacks[1] = "heavy slam";
+            weaponValues[0] = 0;
+            weaponValues[1] = 1;
+            weaponValues[2] = 6;
+            weaponValues[3] = 3;
+            weaponValues[4] = 2;
+            weaponValues[5] = 6;
+            weaponValues[6] = 4;
         }
     }
 
@@ -54,6 +76,10 @@ public class Weapon {
 
     public int getAttackTwoAP() {
         return weaponValues[6];
+    }
+
+    public String getWeaponName() {
+        return weaponName;
     }
 
 }
