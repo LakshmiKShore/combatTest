@@ -45,6 +45,9 @@ public class Entity {
             if (actionPoints >= 3) {
                 actionPoints -= 3;
                 attack(6,1,Main.player);
+            } else if (actionPoints >= 2) {
+                actionPoints -= 2;
+                attack(4,1,Main.player);
             } else {
                 break;
             }
@@ -63,16 +66,15 @@ public class Entity {
             System.out.println(target.getName() + " took " + damage + " damage and has " + target.getHealth() +
                     " health remaining.");
         } else {
-            System.out.println("You missed.");
+            System.out.println(name + " missed.");
         }
     }
 
-    public int parry() {
-        Scanner parryScanner = new Scanner(System.in);
-        parryScanner.useDelimiter("\n");
-        if (actionPoints >= 1) {
+    public int parry(int diceType, int diceNumber, int damageBonus) {
+        double averageDamage = (diceType/2.0 + 0.5) * diceNumber + damageBonus;
+        if (actionPoints >= 1 && (averageDamage + 2) >= health )   {
+            System.out.println(name + " attempted to parry.");
             actionPoints -= 1;
-            System.out.println("Parried!");
             return (int) (Math.random() * 20) + 1 + proficiency + 1; /*weapon parry modifier is set to 1
                                                                      until a weapon system is made */
         } else {

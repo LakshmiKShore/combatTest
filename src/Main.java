@@ -20,8 +20,8 @@ public class Main {
         player.increaseLevel();
 
         while (player.getIsAlive() && enemy.getIsAlive()) {
-            enemy.runTurn();
             player.runTurn();
+            enemy.runTurn();
         }
 
     }

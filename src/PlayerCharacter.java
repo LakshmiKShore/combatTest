@@ -135,12 +135,13 @@ public class PlayerCharacter {
 
 
         public void attack(int diceType, int diceNumber, Entity target) {
-            if (attackRoll() >= target.parry()) {
-                target.reduceHealth(damageRoll(diceType, diceNumber));
+            if (attackRoll() >= target.parry(diceType, diceNumber, proficiency)) {
+                int damage = damageRoll(diceType, diceNumber);
+                target.reduceHealth(damage);
                 System.out.println(target.getName() + " has " + target.getHeath() +
                     " health remaining.");
             } else {
-                System.out.println("You missed.");
+                System.out.println(target.getName() + " parried your attack.");
             }
         }
 
