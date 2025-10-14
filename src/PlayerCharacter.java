@@ -138,6 +138,7 @@ public class PlayerCharacter {
             if (attackRoll() >= target.parry(diceType, diceNumber, proficiency)) {
                 int damage = damageRoll(diceType, diceNumber);
                 target.reduceHealth(damage);
+                System.out.println("You dealt " + damage + " damage.");
                 System.out.println(target.getName() + " has " + target.getHeath() +
                     " health remaining.");
             } else {
