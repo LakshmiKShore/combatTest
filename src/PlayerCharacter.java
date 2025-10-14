@@ -1,4 +1,3 @@
-import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class PlayerCharacter {
@@ -114,12 +113,12 @@ public class PlayerCharacter {
             actionPoints = maxActionPoints;
         }
 
-        public int parry() {
+        public int parry(int diceType, int diceNumber, int damageBonus) {
             Scanner parryScanner = new Scanner(System.in);
             parryScanner.useDelimiter("\n");
             if (actionPoints >= 1) {
-                System.out.println("You are being attacked. You have " + actionPoints + " action points remaining. " +
-                        "Would you like to parry?");
+                System.out.println("You are being attacked for " + diceNumber + "d" + diceType + " + " + damageBonus +
+                        " Damage. You have " + actionPoints + " action points remaining. " + "Would you like to parry?");
                 String cased = parryScanner.next();
                 String action = cased.toLowerCase();
 
@@ -191,7 +190,7 @@ public class PlayerCharacter {
             return maxHealth;
         }
 
-        public int getHeath() {
+        public int getHealth() {
             return health;
         }
 
