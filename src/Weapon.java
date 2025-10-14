@@ -40,6 +40,18 @@ public class Weapon {
             weaponValues[5] = 6;
             weaponValues[6] = 4;
         }
+        if (weaponID == 2) {
+            weaponName = "Spear";
+            weaponAttacks[0] = "stab";
+            weaponAttacks[1] = "none";
+            weaponValues[0] = 0;
+            weaponValues[1] = 1;
+            weaponValues[2] = 10;
+            weaponValues[3] = 3;
+            weaponValues[4] = 0;
+            weaponValues[5] = 0;
+            weaponValues[6] = 0;
+        }
     }
 
     public String getAttackOneName() {

@@ -44,10 +44,10 @@ public class Entity {
         while (actionPoints > 0) {
             if (actionPoints >= 3) {
                 actionPoints -= 3;
-                attack(6,1,Main.player);
+                attack(1,6,Main.player);
             } else if (actionPoints >= 2) {
                 actionPoints -= 2;
-                attack(4,1,Main.player);
+                attack(1,4,Main.player);
             } else {
                 break;
             }
@@ -59,8 +59,8 @@ public class Entity {
         actionPoints = maxActionPoints;
     }
 
-    public void attack(int diceType, int diceNumber, PlayerCharacter target) {
-        if (attackRoll() >= target.parry(diceType, diceNumber, proficiency)) {
+    public void attack(int diceNumber, int diceType, PlayerCharacter target) {
+        if (attackRoll() >= target.parry(diceNumber, diceType, proficiency)) {
             int damage = damageRoll(diceType, diceNumber);
             target.reduceHealth(damage);
             System.out.println(target.getName() + " took " + damage + " damage and has " + target.getHealth() +

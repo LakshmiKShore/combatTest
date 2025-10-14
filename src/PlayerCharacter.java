@@ -62,7 +62,7 @@ public class PlayerCharacter {
             creationScanner.useDelimiter("\n");
 
             System.out.println("What weapon would you like to use?");
-            System.out.println("Shortsword, Mace");
+            System.out.println("Shortsword, Mace, Spear");
             String cased = creationScanner.next();
             String input = cased.toLowerCase();
 
@@ -70,6 +70,8 @@ public class PlayerCharacter {
                 playerWeapon.setWeapon(0);
             if (input.equals("mace"))
                 playerWeapon.setWeapon(1);
+            if (input.equals("spear"))
+                playerWeapon.setWeapon(2);
 
             System.out.println("You chose the: " + playerWeapon.getWeaponName());
         }
@@ -113,7 +115,7 @@ public class PlayerCharacter {
             actionPoints = maxActionPoints;
         }
 
-        public int parry(int diceType, int diceNumber, int damageBonus) {
+        public int parry(int diceNumber, int diceType, int damageBonus) {
             Scanner parryScanner = new Scanner(System.in);
             parryScanner.useDelimiter("\n");
             if (actionPoints >= 1) {
@@ -134,7 +136,7 @@ public class PlayerCharacter {
         }
 
 
-        public void attack(int diceType, int diceNumber, Entity target) {
+        public void attack(int diceNumber, int diceType, Entity target) {
             if (attackRoll() >= target.parry(diceType, diceNumber, proficiency)) {
                 int damage = damageRoll(diceType, diceNumber);
                 target.reduceHealth(damage);
