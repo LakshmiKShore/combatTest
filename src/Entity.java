@@ -44,7 +44,7 @@ public class Entity {
         while (actionPoints > 0) {
             if (actionPoints >= 3) {
                 actionPoints -= 3;
-                attack();
+                attack(6,1,Main.player);
             } else {
                 break;
             }
@@ -56,13 +56,13 @@ public class Entity {
         actionPoints = maxActionPoints;
     }
 
-    public void attack() {
-        if (attackRoll() >= Main.player.parry()) {
-            Main.player.reduceHealth(damageRoll(6, 1));
-            System.out.println(Main.player.getName() + " has " + Main.player.getHeath() +
+    public void attack(int diceType, int diceNumber, PlayerCharacter target) {
+        if (attackRoll() >= target.parry()) {
+            target.reduceHealth(damageRoll(diceType, diceNumber));
+            System.out.println(target.getName() + " has " + target.getHeath() +
                     " health remaining.");
         } else {
-            System.out.println(getName() + " missed.");
+            System.out.println("You missed.");
         }
     }
 

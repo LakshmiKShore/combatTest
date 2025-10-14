@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class PlayerCharacter {
@@ -75,13 +76,12 @@ public class PlayerCharacter {
         }
 
         public void runTurn() {
-            if (!isAlive) {
-                return;
-            }
             Scanner playerScanner = new Scanner(System.in);
             playerScanner.useDelimiter("\n");
 
             while (actionPoints > 0) {
+                if (!isAlive)
+                    break;
                 System.out.println("It is your turn. You have " + actionPoints +
                         " action points remaining. What would you like to do? \n"
                         + playerWeapon.getAttackOneName() + ", " + playerWeapon.getAttackTwoName());
@@ -90,11 +90,15 @@ public class PlayerCharacter {
 
                 if (action.equals(playerWeapon.getAttackOneName()) && actionPoints >= playerWeapon.getAttackOneAP()) {
                     actionPoints -= playerWeapon.getAttackOneAP();
+                    System.out.println("You attacked " + Main.enemy.getName() + " with your " + playerWeapon.getWeaponName()
+                            + "'s " + playerWeapon.getAttackOneName() + ".");
                     attack(playerWeapon.getAttackOneDice(),playerWeapon.getAttackOneDamage(), Main.enemy);
                 }
 
                 if (action.equals(playerWeapon.getAttackTwoName()) && actionPoints >= playerWeapon.getAttackTwoAP()) {
                     actionPoints -= playerWeapon.getAttackTwoAP();
+                    System.out.println("You attacked " + Main.enemy.getName() + " with your " + playerWeapon.getWeaponName()
+                            + "'s " + playerWeapon.getAttackTwoName() + ".");
                     attack(playerWeapon.getAttackTwoDice(),playerWeapon.getAttackTwoDamage(), Main.enemy);
                 }
 
@@ -152,6 +156,15 @@ public class PlayerCharacter {
             }
             result += proficiency;
             return result;
+        }
+
+        public void increaseLevel() {
+            level++;
+            maxEnergyPoints = level + (con * 2) + (will * 2);
+            maxHealth = 4 + (level / 2) + (healthMod * proficiency * 2) + con;
+            energyPoints = maxEnergyPoints;
+            health = maxHealth;
+            System.out.println(name + " is now level " + level);
         }
 
         public void reduceHealth(int damage) {
