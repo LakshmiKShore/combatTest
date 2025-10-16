@@ -119,14 +119,16 @@ public class PlayerCharacter {
             Scanner parryScanner = new Scanner(System.in);
             parryScanner.useDelimiter("\n");
             if (actionPoints >= 1) {
-                System.out.println("You are being attacked for " + diceNumber + "d" + diceType + " + " + damageBonus +
+                System.out.println(name + " is being attacked for " + diceNumber + "d" + diceType + " + " + damageBonus +
                         " Damage. You have " + actionPoints + " action points remaining. " + "Would you like to parry?");
                 String cased = parryScanner.next();
                 String action = cased.toLowerCase();
 
                 if (action.equals("yes") || action.equals("parry") || action.equals("y")) {
                     actionPoints -= 1;
-                    return (int) (Math.random() * 20) + 1 + proficiency + playerWeapon.getParryModifier();
+                    int parryRoll = (int) (Math.random() * 20) + 1 + proficiency + playerWeapon.getParryModifier();
+                    System.out.println(name + " got a " + parryRoll + ".");
+                    return parryRoll;
                 } else {
                     return -20;
                 }
@@ -137,10 +139,15 @@ public class PlayerCharacter {
 
 
         public void attack(int diceNumber, int diceType, Entity target) {
-            if (attackRoll() >= target.parry(diceType, diceNumber, proficiency)) {
+            int atkParryRoll = attackRoll();
+            int defParryRoll = target.parry(diceType, diceNumber, proficiency);
+            if (defParryRoll != -20) {
+                System.out.println(name + " got a " + atkParryRoll + ".");
+            }
+            if (atkParryRoll > defParryRoll) {
                 int damage = damageRoll(diceType, diceNumber);
                 target.reduceHealth(damage);
-                System.out.println("You dealt " + damage + " damage.");
+                System.out.println(name + " dealt " + damage + " damage.");
                 System.out.println(target.getName() + " has " + target.getHeath() +
                     " health remaining.");
             } else {

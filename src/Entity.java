@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 public class Entity {
 
     private String name;
@@ -42,7 +40,10 @@ public class Entity {
             return;
         }
         while (actionPoints > 0) {
-            if (actionPoints >= 3) {
+            if (actionPoints == 4) {
+                actionPoints -= 2;
+                attack(1,4,Main.player);
+            } else if (actionPoints >= 3) {
                 actionPoints -= 3;
                 attack(1,6,Main.player);
             } else if (actionPoints >= 2) {
@@ -60,7 +61,12 @@ public class Entity {
     }
 
     public void attack(int diceNumber, int diceType, PlayerCharacter target) {
-        if (attackRoll() >= target.parry(diceNumber, diceType, proficiency)) {
+        int atkParryRoll = attackRoll();
+        int defParryRoll = target.parry(diceNumber, diceType, proficiency);
+        if (defParryRoll != -20) {
+            System.out.println(name + " got a " + atkParryRoll + ".");
+        }
+        if (atkParryRoll > defParryRoll) {
             int damage = damageRoll(diceType, diceNumber);
             target.reduceHealth(damage);
             System.out.println(target.getName() + " took " + damage + " damage and has " + target.getHealth() +
@@ -72,12 +78,15 @@ public class Entity {
 
     public int parry(int diceType, int diceNumber, int damageBonus) {
         double averageDamage = (diceType/2.0 + 0.5) * diceNumber + damageBonus;
-        if (actionPoints >= 1 && (averageDamage + 2) >= health )   {
+        if (actionPoints >= 1 && (averageDamage + 2) >= health/2.0 )   {
             System.out.println(name + " attempted to parry.");
             actionPoints -= 1;
-            return (int) (Math.random() * 20) + 1 + proficiency + 1; /*weapon parry modifier is set to 1
-                                                                     until a weapon system is made */
+            int parryRoll = (int) (Math.random() * 20) + 1 + proficiency + 1; /*weapon parry modifier is set to 1
+                                                                                until a weapon system is made */
+            System.out.println(name + " got a " + parryRoll + ".");
+            return parryRoll;
         } else {
+            System.out.println(name + " did not parry.");
             return -20;
         }
     }

@@ -1,15 +1,23 @@
 public class Weapon {
-    static final int parryModifier = 0;
-    static final int attackOneDice = 1;
-    static final int attackOneDamage = 2;
-    static final int attackOneAP = 3;
-    static final int attackTwoDice = 4;
-    static final int attackTwoDamage = 5;
-    static final int attackTwoAP = 6; //final ints to reduce confusion, use with weaponValues
 
     String weaponName;
+    int parryModifier;
+    int attacksTotal;
+    String attackOneName;
+    int attackOneDice;
+    int attackOneDamage;
+    int attackOneAP;
+    String attackTwoName;
+    int attackTwoDice;
+    int attackTwoDamage;
+    int attackTwoAP;
+    String attackThreeName;
+    int attackThreeDice;
+    int attackThreeDamage;
+    int attackThreeAP;
     String[] weaponAttacks = new String[2];
     int[] weaponValues = new int[7];
+    boolean isQuick;
 
     public Weapon(int weaponID) {
         setWeapon(weaponID);
@@ -18,44 +26,53 @@ public class Weapon {
     public void setWeapon(int weaponID) {
         if (weaponID == 0) {
             weaponName = "Shortsword";
-            weaponAttacks[0] = "slash";
-            weaponAttacks[1] = "quick cut";
-            weaponValues[0] = 2;
-            weaponValues[1] = 1;
-            weaponValues[2] = 6;
-            weaponValues[3] = 3;
-            weaponValues[4] = 1;
-            weaponValues[5] = 4;
-            weaponValues[6] = 2;
+            parryModifier = 2;
+            attacksTotal = 2;
+            attackOneName = "slash";
+            attackTwoName = "quick cut";
+            attackOneDice = 1;
+            attackOneDamage = 6;
+            attackOneAP = 3;
+            attackTwoDice = 1;
+            attackTwoDamage = 4;
+            attackTwoAP = 2;
+            isQuick = false;
         }
         if (weaponID == 1) {
             weaponName = "Mace";
             weaponAttacks[0] = "slam";
             weaponAttacks[1] = "heavy slam";
-            weaponValues[0] = 0;
+            weaponValues[0] = 0; //CHANGE TO NEW VARS
             weaponValues[1] = 1;
             weaponValues[2] = 6;
             weaponValues[3] = 3;
             weaponValues[4] = 2;
             weaponValues[5] = 6;
             weaponValues[6] = 4;
+            isQuick = false;
         }
         if (weaponID == 2) {
             weaponName = "Spear";
             weaponAttacks[0] = "stab";
             weaponAttacks[1] = "none";
-            weaponValues[0] = 0;
+            weaponValues[0] = 0; //CHANGE TO NEW VARS
             weaponValues[1] = 1;
             weaponValues[2] = 10;
             weaponValues[3] = 3;
             weaponValues[4] = 0;
             weaponValues[5] = 0;
             weaponValues[6] = 0;
+            isQuick = false;
+        }
+
+        if (weaponID == 3) {
+            weaponName = "Knife";
+            weaponAttacks[0] = "nick";
         }
     }
 
     public String getAttackOneName() {
-        return weaponAttacks[0];
+        return weaponAttacks[0]; //CHANGE TO NEW VARS
     }
 
     public String getAttackTwoName() {
