@@ -17,7 +17,7 @@ public class Weapon {
     int attackThreeAP;
     String[] weaponAttacks = new String[2];
     int[] weaponValues = new int[7];
-    boolean isQuick;
+    int attacksPerTurn;
 
     public Weapon(int weaponID) {
         setWeapon(weaponID);
@@ -36,33 +36,31 @@ public class Weapon {
             attackTwoDice = 1;
             attackTwoDamage = 4;
             attackTwoAP = 2;
-            isQuick = false;
+            attacksPerTurn = 2;
         }
         if (weaponID == 1) {
             weaponName = "Mace";
-            weaponAttacks[0] = "slam";
-            weaponAttacks[1] = "heavy slam";
-            weaponValues[0] = 0; //CHANGE TO NEW VARS
-            weaponValues[1] = 1;
-            weaponValues[2] = 6;
-            weaponValues[3] = 3;
-            weaponValues[4] = 2;
-            weaponValues[5] = 6;
-            weaponValues[6] = 4;
-            isQuick = false;
+            attacksTotal = 2;
+            attackOneName = "slam";
+            attackTwoName = "heavy slam";
+            parryModifier = 0;
+            attackOneDice = 1;
+            attackOneDamage = 6;
+            attackOneAP = 3;
+            attackTwoDice = 2;
+            attackTwoDamage = 6;
+            attackTwoAP = 4;
+            attacksPerTurn = 2;
         }
         if (weaponID == 2) {
             weaponName = "Spear";
-            weaponAttacks[0] = "stab";
-            weaponAttacks[1] = "none";
-            weaponValues[0] = 0; //CHANGE TO NEW VARS
-            weaponValues[1] = 1;
-            weaponValues[2] = 10;
-            weaponValues[3] = 3;
-            weaponValues[4] = 0;
-            weaponValues[5] = 0;
-            weaponValues[6] = 0;
-            isQuick = false;
+            attacksTotal = 1;
+            attackOneName = "stab";
+            parryModifier = 0; //CHANGE TO NEW VARS
+            attackOneDice = 1;
+            attackOneDamage = 10;
+            attackOneAP = 3;
+            attacksPerTurn = 2;
         }
 
         if (weaponID == 3) {
@@ -71,40 +69,64 @@ public class Weapon {
         }
     }
 
+    public int getAttacksTotal() {
+        return attacksTotal;
+    }
+
     public String getAttackOneName() {
-        return weaponAttacks[0]; //CHANGE TO NEW VARS
+        return attackOneName; //CHANGE TO NEW VARS
     }
 
     public String getAttackTwoName() {
-        return weaponAttacks[1];
+        return attackTwoName;
+    }
+
+    public String getAttackThreeName() {
+        return attackThreeName;
     }
 
     public int getParryModifier() {
-        return weaponValues[0];
+        return parryModifier;
     }
 
     public int getAttackOneDice() {
-        return weaponValues[1];
+        return attackOneDice;
     }
 
     public int getAttackOneDamage() {
-        return weaponValues[2];
+        return attackOneDamage;
     }
 
     public int getAttackOneAP() {
-        return weaponValues[3];
+        return attackOneAP;
     }
 
     public int getAttackTwoDice() {
-        return weaponValues[4];
+        return attackTwoDice;
     }
 
     public int getAttackTwoDamage() {
-        return weaponValues[5];
+        return attackTwoDamage;
     }
 
     public int getAttackTwoAP() {
-        return weaponValues[6];
+        return attackTwoAP;
+    }
+
+    public int getAttackThreeDice() {
+        return attackThreeDice;
+    }
+
+    public int getAttackThreeDamage() {
+        return attackThreeDamage;
+    }
+
+    public int getAttackThreeAP() {
+        return attackThreeAP;
+    }
+
+    public int getAttacksPerTurn() {
+        return attacksPerTurn;
     }
 
     public String getWeaponName() {

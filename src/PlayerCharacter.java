@@ -79,29 +79,41 @@ public class PlayerCharacter {
         public void runTurn() {
             Scanner playerScanner = new Scanner(System.in);
             playerScanner.useDelimiter("\n");
+            int mainAttacks = 0;
+            String attacks = playerWeapon.getAttackOneName() + " ";
+            if (playerWeapon.getAttacksTotal() > 1)
+                attacks += (playerWeapon.getAttackTwoName() + " ");
+            if (playerWeapon.getAttacksTotal() > 2)
+                attacks += (playerWeapon.getAttackThreeName() + " ");
 
             while (actionPoints > 0) {
                 if (!isAlive)
                     break;
                 System.out.println("It is your turn. You have " + actionPoints +
                         " action points remaining. What would you like to do? \n"
-                        + playerWeapon.getAttackOneName() + ", " + playerWeapon.getAttackTwoName());
+                        + attacks);
                 String cased = playerScanner.next();
                 String action = cased.toLowerCase();
 
-                if (action.equals(playerWeapon.getAttackOneName()) && actionPoints >= playerWeapon.getAttackOneAP()) {
+                if (action.equals(playerWeapon.getAttackOneName()) && actionPoints >= playerWeapon.getAttackOneAP()
+                        && mainAttacks < playerWeapon.getAttacksTotal()) {
                     actionPoints -= playerWeapon.getAttackOneAP();
                     System.out.println("You attacked " + Main.enemy.getName() + " with your " + playerWeapon.getWeaponName()
                             + "'s " + playerWeapon.getAttackOneName() + ".");
                     attack(playerWeapon.getAttackOneDice(),playerWeapon.getAttackOneDamage(), Main.enemy);
-                }
+                    mainAttacks++;
+                } else if (mainAttacks >= playerWeapon.getAttacksTotal())
+                    System.out.println("You have made too many attacks with this weapon.");
 
-                if (action.equals(playerWeapon.getAttackTwoName()) && actionPoints >= playerWeapon.getAttackTwoAP()) {
+                if (action.equals(playerWeapon.getAttackTwoName()) && actionPoints >= playerWeapon.getAttackTwoAP()
+                        && mainAttacks < playerWeapon.getAttacksTotal()) {
                     actionPoints -= playerWeapon.getAttackTwoAP();
                     System.out.println("You attacked " + Main.enemy.getName() + " with your " + playerWeapon.getWeaponName()
                             + "'s " + playerWeapon.getAttackTwoName() + ".");
                     attack(playerWeapon.getAttackTwoDice(),playerWeapon.getAttackTwoDamage(), Main.enemy);
-                }
+                    mainAttacks++;
+                } else if (mainAttacks >= playerWeapon.getAttacksTotal())
+                    System.out.println("You have made too many attacks with this weapon.");
 
                 if (action.equals("end turn")) {
                     break;
