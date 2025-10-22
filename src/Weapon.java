@@ -56,7 +56,7 @@ public class Weapon {
             weaponName = "Spear";
             attacksTotal = 1;
             attackOneName = "stab";
-            parryModifier = 0; //CHANGE TO NEW VARS
+            parryModifier = 0;
             attackOneDice = 1;
             attackOneDamage = 10;
             attackOneAP = 3;
@@ -67,6 +67,14 @@ public class Weapon {
             weaponName = "Knife";
             attacksTotal = 3;
             attackOneName = "nick";
+            attackTwoName = "stab";
+            parryModifier = 0;
+            attackOneDice = 1;
+            attackOneDamage = 1;
+            attackOneAP = 1;
+            attackTwoDice = 1;
+            attackTwoDamage = 8;
+            attackTwoAP = 3;
         }
     }
 

@@ -62,7 +62,7 @@ public class PlayerCharacter {
             creationScanner.useDelimiter("\n");
 
             System.out.println("What weapon would you like to use?");
-            System.out.println("Shortsword, Mace, Spear");
+            System.out.println("Shortsword, Mace, Spear, Knife");
             String cased = creationScanner.next();
             String input = cased.toLowerCase();
 
@@ -72,6 +72,8 @@ public class PlayerCharacter {
                 playerWeapon.setWeapon(1);
             if (input.equals("spear"))
                 playerWeapon.setWeapon(2);
+            if (input.equals("knife"))
+                playerWeapon.setWeapon(3);
 
             System.out.println("You chose the: " + playerWeapon.getWeaponName());
         }
