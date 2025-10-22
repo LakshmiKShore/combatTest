@@ -65,7 +65,8 @@ public class Weapon {
 
         if (weaponID == 3) {
             weaponName = "Knife";
-            weaponAttacks[0] = "nick";
+            attacksTotal = 3;
+            attackOneName = "nick";
         }
     }
 
