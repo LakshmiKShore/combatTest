@@ -81,51 +81,66 @@ public class PlayerCharacter {
         public void runTurn() {
             Scanner playerScanner = new Scanner(System.in);
             playerScanner.useDelimiter("\n");
+
+                //resets attacks made this turn
             int mainAttacks = 0;
+
+                //String attacks stores the attacks your weapon can make
             String attacks = playerWeapon.getAttackOneName() + " ";
             if (playerWeapon.getAttacksTotal() > 1)
                 attacks += (playerWeapon.getAttackTwoName() + " ");
             if (playerWeapon.getAttacksTotal() > 2)
                 attacks += (playerWeapon.getAttackThreeName() + " ");
 
-            while (actionPoints > 0) {
+            while (actionPoints > 0) { //runs until you die, have no action points, or manually end turn
                 if (!isAlive)
                     break;
+
+                    //get player input (stored in String action)
                 System.out.println("It is your turn. You have " + actionPoints +
                         " action points remaining. What would you like to do? \n"
                         + attacks);
                 String cased = playerScanner.next();
                 String action = cased.toLowerCase();
 
-                if (action.equals(playerWeapon.getAttackOneName())) {
-                    if (actionPoints >= playerWeapon.getAttackOneAP() && mainAttacks < playerWeapon.getAttacksTotal()) {
+                if (action.equals(playerWeapon.getAttackOneName())) {   //Attack One
+                    if (actionPoints >= playerWeapon.getAttackOneAP() && mainAttacks < playerWeapon.getAttacksPerTurn()) {  //If you have enough AP and aren't breaking the 2 attacks/weapon rule
+
+                            //Subtract AP, call the attack function, increase attacks made this turn
                         actionPoints -= playerWeapon.getAttackOneAP();
                         System.out.println("You attacked " + Main.enemy.getName() + " with your " + playerWeapon.getWeaponName()
                                             + "'s " + playerWeapon.getAttackOneName() + ".");
                         attack(playerWeapon.getAttackOneDice(), playerWeapon.getAttackOneDamage(), Main.enemy);
                         mainAttacks++;
+
+                            //print error messages
                     } else if (actionPoints < playerWeapon.getAttackOneAP()) {
                         System.out.println("Not enough Action Points.");
-                    } else if (mainAttacks >= playerWeapon.getAttacksTotal()) {
+                    } else if (mainAttacks >= playerWeapon.getAttacksPerTurn()) {
                         System.out.println("You have made too many attacks with this weapon.");
                     }
                 }
 
-                if (action.equals(playerWeapon.getAttackTwoName())) {
-                    if (actionPoints >= playerWeapon.getAttackTwoAP() && mainAttacks < playerWeapon.getAttacksTotal()) {
+                if (action.equals(playerWeapon.getAttackTwoName())) { //Attack Two
+                    if (actionPoints >= playerWeapon.getAttackTwoAP() && mainAttacks < playerWeapon.getAttacksPerTurn()) {  //If you have enough AP and aren't breaking the 2 attacks/weapon rule
+
+                            //Subtract AP, call the attack function, increase attacks made this turn
                         actionPoints -= playerWeapon.getAttackTwoAP();
                         System.out.println("You attacked " + Main.enemy.getName() + " with your " + playerWeapon.getWeaponName()
                                 + "'s " + playerWeapon.getAttackTwoName() + ".");
                         attack(playerWeapon.getAttackTwoDice(), playerWeapon.getAttackTwoDamage(), Main.enemy);
                         mainAttacks++;
+
+                            //print error messages
                     } else if (actionPoints < playerWeapon.getAttackTwoAP()) {
                         System.out.println("Not enough Action Points.");
-                    } else if (mainAttacks >= playerWeapon.getAttacksTotal()) {
+                    } else if (mainAttacks >= playerWeapon.getAttacksPerTurn()) {
                         System.out.println("You have made too many attacks with this weapon.");
                     }
                 }
 
-                if (action.equals("end turn")) {
+                    //end turn script
+                if (action.equals("end turn") || action.equals("quit")) {
                     break;
                 }
             }

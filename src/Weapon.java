@@ -65,7 +65,7 @@ public class Weapon {
 
         if (weaponID == 3) {
             weaponName = "Knife";
-            attacksTotal = 3;
+            attacksTotal = 2;
             attackOneName = "nick";
             attackTwoName = "stab";
             parryModifier = 0;
@@ -75,6 +75,7 @@ public class Weapon {
             attackTwoDice = 1;
             attackTwoDamage = 8;
             attackTwoAP = 3;
+            attacksPerTurn = 3;
         }
     }
 
