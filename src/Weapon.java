@@ -18,6 +18,7 @@ public class Weapon {
     String[] weaponAttacks = new String[2];
     int[] weaponValues = new int[7];
     int attacksPerTurn;
+    int minHands;
 
     public Weapon(int weaponID) {
         setWeapon(weaponID);
@@ -25,6 +26,17 @@ public class Weapon {
 
     public void setWeapon(int weaponID) {
         if (weaponID == 0) {
+            weaponName = "Unarmed";
+            parryModifier = 0;
+            attacksTotal = 1;
+            attackOneName = "unarmed strike";
+            attackOneDice = 1;
+            attackOneDamage = 1;
+            attackOneAP = 3;
+            attacksPerTurn = 2;
+            minHands = 1;
+        }
+        if (weaponID == 1) {
             weaponName = "Shortsword";
             parryModifier = 2;
             attacksTotal = 2;
@@ -37,8 +49,9 @@ public class Weapon {
             attackTwoDamage = 4;
             attackTwoAP = 2;
             attacksPerTurn = 2;
+            minHands = 1;
         }
-        if (weaponID == 1) {
+        if (weaponID == 2) {
             weaponName = "Mace";
             attacksTotal = 2;
             attackOneName = "slam";
@@ -51,8 +64,9 @@ public class Weapon {
             attackTwoDamage = 6;
             attackTwoAP = 4;
             attacksPerTurn = 2;
+            minHands = 1;
         }
-        if (weaponID == 2) {
+        if (weaponID == 3) {
             weaponName = "Spear";
             attacksTotal = 1;
             attackOneName = "stab";
@@ -61,9 +75,10 @@ public class Weapon {
             attackOneDamage = 10;
             attackOneAP = 3;
             attacksPerTurn = 2;
+            minHands = 2;
         }
 
-        if (weaponID == 3) {
+        if (weaponID == 4) {
             weaponName = "Knife";
             attacksTotal = 2;
             attackOneName = "nick";
@@ -76,6 +91,7 @@ public class Weapon {
             attackTwoDamage = 8;
             attackTwoAP = 3;
             attacksPerTurn = 3;
+            minHands = 1;
         }
     }
 
@@ -141,6 +157,10 @@ public class Weapon {
 
     public String getWeaponName() {
         return weaponName;
+    }
+
+    public int getMinHands() {
+        return minHands;
     }
 
 }
