@@ -111,6 +111,10 @@ public class PlayerCharacter {
             if (playerMainWeapon.getAttacksTotal() > 2)
                 attacks += (playerMainWeapon.getAttackThreeName() + " ");
 
+            if (!playerOffWeapon.getWeaponName().equals("Unarmed")) {
+
+            }
+
             while (actionPoints > 0) { //runs until you die, have no action points, or manually end turn
                 if (!isAlive)
                     break;
