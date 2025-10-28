@@ -19,17 +19,19 @@ public class Weapon {
     int[] weaponValues = new int[7];
     int attacksPerTurn;
     int minHands;
+    int weaponID;
 
-    public Weapon(int weaponID) {
-        setWeapon(weaponID);
+    public Weapon(int ID) {
+        setWeapon(ID);
     }
 
-    public void setWeapon(int weaponID) {
+    public void setWeapon(int ID) {
+        weaponID = ID;
         if (weaponID == 0) {
             weaponName = "Unarmed";
             parryModifier = 0;
             attacksTotal = 1;
-            attackOneName = "unarmed strike";
+            attackOneName = "strike";
             attackOneDice = 1;
             attackOneDamage = 1;
             attackOneAP = 3;
@@ -92,6 +94,26 @@ public class Weapon {
             attackTwoAP = 3;
             attacksPerTurn = 3;
             minHands = 1;
+        }
+
+        if (weaponID == 5) {
+            weaponName = "Poleaxe";
+            attacksTotal = 3;
+            attackOneName = "thrust";
+            attackTwoName = "beak";
+            attackThreeName = "slam";
+            parryModifier = 1;
+            attackOneDice = 1;
+            attackOneDamage = 4;
+            attackOneAP = 2;
+            attackTwoDice = 1;
+            attackTwoDamage = 6;
+            attackTwoAP = 3;
+            attackThreeDice = 2;
+            attackThreeDamage = 6;
+            attackThreeAP = 4;
+            attacksPerTurn = 2;
+            minHands = 2;
         }
     }
 
@@ -161,6 +183,10 @@ public class Weapon {
 
     public int getMinHands() {
         return minHands;
+    }
+
+    public int getID() {
+        return weaponID;
     }
 
 }
