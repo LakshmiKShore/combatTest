@@ -125,7 +125,7 @@ public class PlayerCharacter {
                     attacks += (", " + playerOffWeapon.getAttackThreeName());
             }
 
-            attacks += ".";
+            attacks += ", status.";
 
             while (actionPoints > 0) { //runs until you die, have no action points, or manually end turn
                 if (!isAlive)
@@ -248,6 +248,16 @@ public class PlayerCharacter {
                         System.out.println("You have made too many attacks with this weapon.");
                     }
                 } //no else, end of attacks
+
+                    //lists current status
+                if (action.equals("status")) {
+                    System.out.println(name + " has " + health + "/" + maxHealth + " health remaining.");
+                    System.out.println(name + " is wielding a " + playerMainWeapon.getWeaponName() + " and has made " + mainAttacks + "/" + playerMainWeapon.getAttacksPerTurn() + " attacks with it this turn.");
+                    if (playerOffWeapon.weaponID != 0) {
+                        System.out.println(name + " is wielding a " + playerOffWeapon.getWeaponName() + " and has made " + offAttacks + "/" + playerMainWeapon.getAttacksPerTurn() + " attacks with it this turn.");
+                    }
+                    System.out.println(name + "'s defending parry modifier is +" + (Math.max(playerMainWeapon.getParryModifier(), playerOffWeapon.getParryModifier()) + proficiency));
+                }
 
                     //end turn script
                 if (action.equals("end turn") || action.equals("quit")) {
