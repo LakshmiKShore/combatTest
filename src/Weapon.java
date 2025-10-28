@@ -115,6 +115,18 @@ public class Weapon {
             attacksPerTurn = 2;
             minHands = 2;
         }
+
+        if (weaponID == 6) {
+            weaponName = "Small Shield";
+            attacksTotal = 1;
+            attackOneName = "bash";
+            parryModifier = 3;
+            attackOneDice = 1;
+            attackOneDamage = 1;
+            attackOneAP = 2;
+            attacksPerTurn = 2;
+            minHands = 1;
+        }
     }
 
     public int getAttacksTotal() {

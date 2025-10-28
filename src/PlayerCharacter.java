@@ -63,7 +63,7 @@ public class PlayerCharacter {
             creationScanner.useDelimiter("\n");
 
             System.out.println("What weapon would you like to use in your main hand?");
-            System.out.println("Shortsword, Mace, Spear, Knife, Poleaxe");
+            System.out.println("Shortsword, Mace, Spear, Knife, Poleaxe, Shield");
             String cased = creationScanner.next();
             String input = cased.toLowerCase();
 
@@ -77,12 +77,14 @@ public class PlayerCharacter {
                 playerMainWeapon.setWeapon(4);
             if (input.equals("poleaxe"))
                 playerMainWeapon.setWeapon(5);
+            if (input.equals("shield"))
+                playerMainWeapon.setWeapon(6);
 
             System.out.println("You chose the: " + playerMainWeapon.getWeaponName());
 
             if (playerMainWeapon.getMinHands() < 2) {
                 System.out.println("What weapon would you like to use in your off hand?");
-                System.out.println("Shortsword, Mace, Knife");
+                System.out.println("Shortsword, Mace, Knife, Shield");
                 cased = creationScanner.next();
                 input = cased.toLowerCase();
 
@@ -92,6 +94,8 @@ public class PlayerCharacter {
                     playerOffWeapon.setWeapon(2);
                 if (input.equals("knife"))
                     playerOffWeapon.setWeapon(4);
+                if (input.equals("shield"))
+                    playerOffWeapon.setWeapon(6);
 
                 System.out.println("You chose the: " + playerOffWeapon.getWeaponName());
             }
@@ -149,7 +153,7 @@ public class PlayerCharacter {
                     } else if (actionPoints < playerMainWeapon.getAttackOneAP()) {
                         System.out.println("Not enough Action Points.");
                     }
-                } else if (mainAttacks >= playerMainWeapon.getAttacksPerTurn() && !(playerMainWeapon.getID() == playerOffWeapon.getID())) {
+                } else if (action.equals(playerMainWeapon.getAttackOneName()) && mainAttacks >= playerMainWeapon.getAttacksPerTurn() && !(playerMainWeapon.getID() == playerOffWeapon.getID())) {
                     System.out.println("You have made too many attacks with this weapon.");
                 } else
 
@@ -167,7 +171,7 @@ public class PlayerCharacter {
                     } else if (actionPoints < playerMainWeapon.getAttackTwoAP()) {
                         System.out.println("Not enough Action Points.");
                     }
-                } else if (mainAttacks >= playerMainWeapon.getAttacksPerTurn() && !(playerMainWeapon.getID() == playerOffWeapon.getID())) {
+                } else if (action.equals(playerMainWeapon.getAttackTwoName()) && mainAttacks >= playerMainWeapon.getAttacksPerTurn() && !(playerMainWeapon.getID() == playerOffWeapon.getID())) {
                     System.out.println("You have made too many attacks with this weapon.");
                 } else
 
@@ -185,7 +189,7 @@ public class PlayerCharacter {
                     } else if (actionPoints < playerMainWeapon.getAttackThreeAP()) {
                         System.out.println("Not enough Action Points.");
                     }
-                } else if (mainAttacks >= playerMainWeapon.getAttacksPerTurn() && !(playerMainWeapon.getID() == playerOffWeapon.getID())) {
+                } else if (action.equals(playerMainWeapon.getAttackThreeName()) && mainAttacks >= playerMainWeapon.getAttacksPerTurn() && !(playerMainWeapon.getID() == playerOffWeapon.getID())) {
                     System.out.println("You have made too many attacks with this weapon.");
                 } else
 
@@ -205,6 +209,7 @@ public class PlayerCharacter {
                         System.out.println("Not enough Action Points.");
                     } else if (offAttacks >= playerOffWeapon.getAttacksPerTurn()) {
                         System.out.println("You have made too many attacks with this weapon.");
+                        System.out.println(offAttacks);
                     }
                 } else
 
