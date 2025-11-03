@@ -50,12 +50,12 @@ public class PlayerCharacter {
             will = tempWill;
             know = tempKnow;
             level = 1;
-            healthMod = 1;
+            healthMod = 2;
             proficiency = 1;
             isAlive = true;
             maxActionPoints = 7;
             maxEnergyPoints = level + (con * 2) + (will * 2);
-            maxHealth = 4 + (level / 2) + (healthMod * proficiency * 2) + con;
+            maxHealth = 4 + (level * healthMod) + (con * proficiency * 2);
             energyPoints = maxEnergyPoints;
             health = maxHealth;
 
@@ -110,22 +110,22 @@ public class PlayerCharacter {
             int mainAttacks = 0;
             int offAttacks = 0;
 
-                //String attacks stores the attacks your weapon can make
-            String attacks = playerMainWeapon.getAttackOneName();
+                //String actions stores the actions the player can take
+            String actions = playerMainWeapon.getAttackOneName();
             if (playerMainWeapon.getAttacksTotal() > 1)
-                attacks += (", " + playerMainWeapon.getAttackTwoName());
+                actions += (", " + playerMainWeapon.getAttackTwoName());
             if (playerMainWeapon.getAttacksTotal() > 2)
-                attacks += (", " + playerMainWeapon.getAttackThreeName());
+                actions += (", " + playerMainWeapon.getAttackThreeName());
 
             if (!playerOffWeapon.getWeaponName().equals("Unarmed")) {
-                attacks += (", " + playerOffWeapon.getAttackOneName());
+                actions += (", " + playerOffWeapon.getAttackOneName());
                 if (playerOffWeapon.getAttacksTotal() > 1)
-                    attacks += (", " + playerOffWeapon.getAttackTwoName());
+                    actions += (", " + playerOffWeapon.getAttackTwoName());
                 if (playerOffWeapon.getAttacksTotal() > 2)
-                    attacks += (", " + playerOffWeapon.getAttackThreeName());
+                    actions += (", " + playerOffWeapon.getAttackThreeName());
             }
 
-            attacks += ", status.";
+            actions += ", stance, status.";
 
             while (actionPoints > 0) { //runs until you die, have no action points, or manually end turn
                 if (!isAlive)
@@ -134,7 +134,7 @@ public class PlayerCharacter {
                     //get player input (stored in String action)
                 System.out.println("It is your turn. You have " + actionPoints +
                         " action points remaining. What would you like to do? \n"
-                        + attacks);
+                        + actions);
                 String cased = playerScanner.next();
                 String action = cased.toLowerCase();
 
@@ -248,6 +248,20 @@ public class PlayerCharacter {
                         System.out.println("You have made too many attacks with this weapon.");
                     }
                 } //no else, end of attacks
+
+                //changing weapon stances
+                if (action.equals("stance")) {
+
+                    //checks if the player has an offhand weapon
+                    if (playerOffWeapon.getID() != 0 ){
+                        System.out.println("Which weapon's stance would you like to switch? (main, off)");
+                        cased = playerScanner.next();
+                        action = cased.toLowerCase();
+                        if (action.equals("main")) {
+                            System.out.println("Which stance would you like to switch to? " + playerMainWeapon.getStanceNames(true));
+                        }
+                    }
+                }
 
                     //lists current status
                 if (action.equals("status")) {

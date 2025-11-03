@@ -19,7 +19,16 @@ public class Weapon {
     int[] weaponValues = new int[7];
     int attacksPerTurn;
     int minHands;
+    int currentHands;
     int weaponID;
+    int totalStances;
+    int stanceID;
+    int stanceOneCost;
+    int stanceTwoCost;
+    int stanceThreeCost;
+    String stanceOneName;
+    String stanceTwoName;
+    String stanceThreeName;
 
     public Weapon(int ID) {
         setWeapon(ID);
@@ -27,57 +36,117 @@ public class Weapon {
 
     public void setWeapon(int ID) {
         weaponID = ID;
+        setStance(0);
+    }
+
+    public void setStance(int ID) {
+        stanceID = ID;
         if (weaponID == 0) {
             weaponName = "Unarmed";
-            parryModifier = 0;
-            attacksTotal = 1;
-            attackOneName = "strike";
-            attackOneDice = 1;
-            attackOneDamage = 1;
-            attackOneAP = 3;
-            attacksPerTurn = 2;
             minHands = 1;
+            totalStances = 1;
+            if (stanceID == 0) {
+                parryModifier = 0;
+                attacksTotal = 1;
+                attackOneName = "strike";
+                attackOneDice = 1;
+                attackOneDamage = 1;
+                attackOneAP = 3;
+                attacksPerTurn = 2;
+                currentHands = 1;
+            } else {
+                System.out.println("Error: Unknown Stance");
+            }
         }
+
         if (weaponID == 1) {
             weaponName = "Shortsword";
-            parryModifier = 2;
-            attacksTotal = 2;
-            attackOneName = "slash";
-            attackTwoName = "quick cut";
-            attackOneDice = 1;
-            attackOneDamage = 6;
-            attackOneAP = 3;
-            attackTwoDice = 1;
-            attackTwoDamage = 4;
-            attackTwoAP = 2;
-            attacksPerTurn = 2;
             minHands = 1;
+            totalStances = 1;
+            if (stanceID == 0) {
+                parryModifier = 2;
+                attacksTotal = 2;
+                attackOneName = "slash";
+                attackTwoName = "quick cut";
+                attackOneDice = 1;
+                attackOneDamage = 6;
+                attackOneAP = 3;
+                attackTwoDice = 1;
+                attackTwoDamage = 4;
+                attackTwoAP = 2;
+                attacksPerTurn = 2;
+                currentHands = 1;
+            } else {
+                System.out.println("Error: Unknown Stance");
+            }
         }
+
         if (weaponID == 2) {
             weaponName = "Mace";
-            attacksTotal = 2;
-            attackOneName = "slam";
-            attackTwoName = "heavy slam";
-            parryModifier = 0;
-            attackOneDice = 1;
-            attackOneDamage = 6;
-            attackOneAP = 3;
-            attackTwoDice = 2;
-            attackTwoDamage = 6;
-            attackTwoAP = 4;
-            attacksPerTurn = 2;
+            totalStances = 1;
             minHands = 1;
+            if (stanceID == 0) {
+                attacksTotal = 2;
+                attackOneName = "slam";
+                attackTwoName = "heavy slam";
+                parryModifier = 0;
+                attackOneDice = 1;
+                attackOneDamage = 6;
+                attackOneAP = 3;
+                attackTwoDice = 2;
+                attackTwoDamage = 6;
+                attackTwoAP = 4;
+                attacksPerTurn = 2;
+                currentHands = 1;
+            } else {
+                System.out.println("Error: Unknown Stance");
+            }
         }
+
         if (weaponID == 3) {
             weaponName = "Spear";
-            attacksTotal = 1;
-            attackOneName = "stab";
-            parryModifier = 0;
-            attackOneDice = 1;
-            attackOneDamage = 10;
-            attackOneAP = 3;
-            attacksPerTurn = 2;
-            minHands = 2;
+            totalStances = 3;
+            minHands = 1;
+            stanceOneCost = 1;
+            stanceTwoCost = 1;
+            stanceThreeCost = 1;
+            stanceOneName = "standard grip";
+            stanceTwoName = "wide grip";
+            stanceThreeName = "one handed";
+            if (stanceID == 0) {
+                attacksTotal = 1;
+                attackOneName = "stab";
+                parryModifier = 0;
+                attackOneDice = 1;
+                attackOneDamage = 10;
+                attackOneAP = 3;
+                attacksPerTurn = 2;
+                currentHands = 2;
+            } else if (stanceID == 1) {
+                attacksTotal = 2;
+                attackOneName = "stab";
+                attackTwoName = "bash";
+                parryModifier = 1;
+                attackOneDice = 1;
+                attackOneDamage = 6;
+                attackOneAP = 3;
+                attackTwoDice = 1;
+                attackTwoDamage = 4;
+                attackTwoAP = 2;
+                attacksPerTurn = 2;
+                currentHands = 2;
+            } else if (stanceID == 2) {
+                attacksTotal = 1;
+                attackOneName = "stab";
+                parryModifier = 0;
+                attackOneDice = 1;
+                attackOneDamage = 8;
+                attackOneAP = 3;
+                attacksPerTurn = 2;
+                currentHands = 1;
+            } else {
+                System.out.println("Error: Unknown Stance");
+            }
         }
 
         if (weaponID == 4) {
@@ -94,6 +163,7 @@ public class Weapon {
             attackTwoAP = 3;
             attacksPerTurn = 3;
             minHands = 1;
+            totalStances = 2;
         }
 
         if (weaponID == 5) {
@@ -114,6 +184,7 @@ public class Weapon {
             attackThreeAP = 4;
             attacksPerTurn = 2;
             minHands = 2;
+            totalStances = 1;
         }
 
         if (weaponID == 6) {
@@ -126,7 +197,32 @@ public class Weapon {
             attackOneAP = 2;
             attacksPerTurn = 2;
             minHands = 1;
+            totalStances = 1;
         }
+    }
+
+
+    public String getStanceNames(boolean removeCurrent) {
+        String stanceNames = "";
+        String toReplace = "";
+        stanceNames += stanceOneName;
+        if (totalStances >= 2)
+            stanceNames += stanceTwoName;
+        if (totalStances >= 3)
+            stanceNames += stanceThreeName;
+        if (removeCurrent) {
+            if (stanceID == 0) {
+                toReplace = stanceOneName;
+            }
+            if (stanceID == 1) {
+                toReplace = stanceTwoName;
+            }
+            if (stanceID == 2) {
+                toReplace = stanceThreeName;
+            }
+            stanceNames = stanceNames.replace(toReplace,"");
+        }
+        return stanceNames;
     }
 
     public int getAttacksTotal() {
@@ -134,7 +230,7 @@ public class Weapon {
     }
 
     public String getAttackOneName() {
-        return attackOneName; //CHANGE TO NEW VARS
+        return attackOneName;
     }
 
     public String getAttackTwoName() {
@@ -199,6 +295,14 @@ public class Weapon {
 
     public int getID() {
         return weaponID;
+    }
+
+    public int getTotalStances() {
+        return totalStances;
+    }
+
+    public int getStanceID() {
+        return stanceID;
     }
 
 }
