@@ -62,7 +62,7 @@ public class PlayerCharacter {
             Scanner creationScanner = new Scanner(System.in);
             creationScanner.useDelimiter("\n");
 
-            System.out.println("What weapon would you like to use in your main hand?");
+            System.out.println("What weapon should " + name + " use in their main hand?");
             System.out.println("Shortsword, Mace, Spear, Knife, Poleaxe, Shield");
             String cased = creationScanner.next();
             String input = cased.toLowerCase();
@@ -80,10 +80,10 @@ public class PlayerCharacter {
             if (input.equals("shield"))
                 mainWeapon.setWeapon(6);
 
-            System.out.println("You chose the: " + mainWeapon.getWeaponName());
+            System.out.println(name + " chose the: " + mainWeapon.getWeaponName());
 
             if (mainWeapon.getMinHands() < 2) {
-                System.out.println("What weapon would you like to use in your off hand?");
+                System.out.println("What weapon should " + name + " use in their off hand?");
                 System.out.println("Shortsword, Mace, Knife, Shield");
                 cased = creationScanner.next();
                 input = cased.toLowerCase();
@@ -97,7 +97,7 @@ public class PlayerCharacter {
                 if (input.equals("shield"))
                     offWeapon.setWeapon(6);
 
-                System.out.println("You chose the: " + offWeapon.getWeaponName());
+                System.out.println(name + " chose the: " + offWeapon.getWeaponName());
             }
 
         }
@@ -118,8 +118,8 @@ public class PlayerCharacter {
                 String actions = getActions();
 
                     //get player input (stored in String action)
-                System.out.println("It is your turn. You have " + actionPoints +
-                        " action points remaining. What would you like to do? \n"
+                System.out.println("It is " + name + "'s turn. They have " + actionPoints +
+                        " action points remaining. What will they do? \n"
                         + actions);
                 String cased = playerScanner.next();
                 String action = cased.toLowerCase();
@@ -130,7 +130,7 @@ public class PlayerCharacter {
 
                             //Subtract AP, call the attack function, increase attacks made this turn
                         actionPoints -= mainWeapon.getAttackOneAP();
-                        System.out.println("You attacked " + Main.enemy.getName() + " with your " + mainWeapon.getWeaponName()
+                        System.out.println(name + " attacked " + Main.enemy.getName() + " with their " + mainWeapon.getWeaponName()
                                             + "'s " + mainWeapon.getAttackOneName() + ".");
                         attack(mainWeapon.getAttackOneDice(), mainWeapon.getAttackOneDamage(), Main.enemy);
                         mainAttacks++;
@@ -140,7 +140,7 @@ public class PlayerCharacter {
                         System.out.println("Not enough Action Points.");
                     }
                 } else if (action.equals(mainWeapon.getAttackOneName()) && mainAttacks >= mainWeapon.getAttacksPerTurn() && !(mainWeapon.getID() == offWeapon.getID())) {
-                    System.out.println("You have made too many attacks with this weapon.");
+                    System.out.println(name + " has made too many attacks with this weapon.");
                 } else
 
                 if (action.equals(mainWeapon.getAttackTwoName()) && mainAttacks < mainWeapon.getAttacksPerTurn()) { //Attack Two
@@ -148,7 +148,7 @@ public class PlayerCharacter {
 
                             //Subtract AP, call the attack function, increase attacks made this turn
                         actionPoints -= mainWeapon.getAttackTwoAP();
-                        System.out.println("You attacked " + Main.enemy.getName() + " with your " + mainWeapon.getWeaponName()
+                        System.out.println(name + " attacked " + Main.enemy.getName() + " with their " + mainWeapon.getWeaponName()
                                 + "'s " + mainWeapon.getAttackTwoName() + ".");
                         attack(mainWeapon.getAttackTwoDice(), mainWeapon.getAttackTwoDamage(), Main.enemy);
                         mainAttacks++;
@@ -158,7 +158,7 @@ public class PlayerCharacter {
                         System.out.println("Not enough Action Points.");
                     }
                 } else if (action.equals(mainWeapon.getAttackTwoName()) && mainAttacks >= mainWeapon.getAttacksPerTurn() && !(mainWeapon.getID() == offWeapon.getID())) {
-                    System.out.println("You have made too many attacks with this weapon.");
+                    System.out.println(name + " have made too many attacks with this weapon.");
                 } else
 
                 if (action.equals(mainWeapon.getAttackThreeName()) && mainAttacks < mainWeapon.getAttacksPerTurn()) { //Attack Two
@@ -166,7 +166,7 @@ public class PlayerCharacter {
 
                         //Subtract AP, call the attack function, increase attacks made this turn
                         actionPoints -= mainWeapon.getAttackThreeAP();
-                        System.out.println("You attacked " + Main.enemy.getName() + " with your " + mainWeapon.getWeaponName()
+                        System.out.println(name + " attacked " + Main.enemy.getName() + " with their " + mainWeapon.getWeaponName()
                                 + "'s " + mainWeapon.getAttackThreeName() + ".");
                         attack(mainWeapon.getAttackThreeDice(), mainWeapon.getAttackThreeDamage(), Main.enemy);
                         mainAttacks++;
@@ -176,7 +176,7 @@ public class PlayerCharacter {
                         System.out.println("Not enough Action Points.");
                     }
                 } else if (action.equals(mainWeapon.getAttackThreeName()) && mainAttacks >= mainWeapon.getAttacksPerTurn() && !(mainWeapon.getID() == offWeapon.getID())) {
-                    System.out.println("You have made too many attacks with this weapon.");
+                    System.out.println(name + " has made too many attacks with this weapon.");
                 } else
 
                 //offhand attacks
@@ -185,7 +185,7 @@ public class PlayerCharacter {
 
                         //Subtract AP, call the attack function, increase attacks made this turn
                         actionPoints -= offWeapon.getAttackOneAP();
-                        System.out.println("You attacked " + Main.enemy.getName() + " with your " + offWeapon.getWeaponName()
+                        System.out.println(name + " attacked " + Main.enemy.getName() + " with their " + offWeapon.getWeaponName()
                                 + "'s " + offWeapon.getAttackOneName() + ".");
                         attack(offWeapon.getAttackOneDice(), offWeapon.getAttackOneDamage(), Main.enemy);
                         offAttacks++;
@@ -194,7 +194,7 @@ public class PlayerCharacter {
                     } else if (actionPoints < offWeapon.getAttackOneAP()) {
                         System.out.println("Not enough Action Points.");
                     } else if (offAttacks >= offWeapon.getAttacksPerTurn()) {
-                        System.out.println("You have made too many attacks with this weapon.");
+                        System.out.println(name + " have made too many attacks with this weapon.");
                         System.out.println(offAttacks);
                     }
                 } else
@@ -204,7 +204,7 @@ public class PlayerCharacter {
 
                         //Subtract AP, call the attack function, increase attacks made this turn
                         actionPoints -= offWeapon.getAttackTwoAP();
-                        System.out.println("You attacked " + Main.enemy.getName() + " with your " + offWeapon.getWeaponName()
+                        System.out.println(name + " attacked " + Main.enemy.getName() + " with their  " + offWeapon.getWeaponName()
                                 + "'s " + offWeapon.getAttackTwoName() + ".");
                         attack(offWeapon.getAttackTwoDice(), offWeapon.getAttackTwoDamage(), Main.enemy);
                         offAttacks++;
@@ -213,7 +213,7 @@ public class PlayerCharacter {
                     } else if (actionPoints < offWeapon.getAttackTwoAP()) {
                         System.out.println("Not enough Action Points.");
                     } else if (offAttacks >= offWeapon.getAttacksPerTurn()) {
-                        System.out.println("You have made too many attacks with this weapon.");
+                        System.out.println(name + " has made too many attacks with this weapon.");
                     }
                 } else
 
@@ -222,7 +222,7 @@ public class PlayerCharacter {
 
                         //Subtract AP, call the attack function, increase attacks made this turn
                         actionPoints -= offWeapon.getAttackThreeAP();
-                        System.out.println("You attacked " + Main.enemy.getName() + " with your " + offWeapon.getWeaponName()
+                        System.out.println(name + " attacked " + Main.enemy.getName() + " with their " + offWeapon.getWeaponName()
                                 + "'s " + offWeapon.getAttackThreeName() + ".");
                         attack(offWeapon.getAttackThreeDice(), offWeapon.getAttackThreeDamage(), Main.enemy);
                         offAttacks++;
@@ -231,7 +231,7 @@ public class PlayerCharacter {
                     } else if (actionPoints < offWeapon.getAttackTwoAP()) {
                         System.out.println("Not enough Action Points.");
                     } else if (offAttacks >= offWeapon.getAttacksPerTurn()) {
-                        System.out.println("You have made too many attacks with this weapon.");
+                        System.out.println(name + " has made too many attacks with this weapon.");
                     }
                 } //no else, end of attacks
 
@@ -239,12 +239,12 @@ public class PlayerCharacter {
                 if (action.equals("stance")) {
                         //checks if the player has an offhand weapon
                     if (offWeapon.getID() != 0 ){
-                        System.out.println("Which weapon's stance would you like to switch? (main, off)");
+                        System.out.println("Which weapon's stance should " + name + " switch to? (main, off)");
                         cased = playerScanner.next(); //gets input
                         action = cased.toLowerCase();
 
                         if (action.equals("main")) { //switching mainhand weapon
-                            System.out.println("Which stance would you like to switch to? " + mainWeapon.getStanceNames(true)); //gets a list of the stances you can switch to
+                            System.out.println("Which stance should " + name + " switch to? " + mainWeapon.getStanceNames(true)); //gets a list of the stances you can switch to
                             cased = playerScanner.next(); //gets input
                             action = cased.toLowerCase();
                             if (action.equals(mainWeapon.getStanceOneName())) { //setting the stance
@@ -259,7 +259,7 @@ public class PlayerCharacter {
                                 System.out.println("Cannot switch to that stance.");
                             }
                         } else if (action.equals("off")) { //switching offhand weapon
-                            System.out.println("Which stance would you like to switch to? " + offWeapon.getStanceNames(true)); //gets a list of the stances you can switch to
+                            System.out.println("Which stance should " + " switch to? " + offWeapon.getStanceNames(true)); //gets a list of the stances you can switch to
                             cased = playerScanner.next(); //gets input
                             action = cased.toLowerCase();
                             if (action.equals(offWeapon.getStanceOneName())) { //setting the stance
@@ -277,7 +277,7 @@ public class PlayerCharacter {
                             System.out.println("Invalid Weapon."); //error handling
                         }
                     } else { //switching mainhand weapon
-                            System.out.println("Which stance would you like to switch to? " + mainWeapon.getStanceNames(true)); //gets a list of the stances you can switch to
+                            System.out.println("Which stance should " + name + " switch to? " + mainWeapon.getStanceNames(true)); //gets a list of the stances you can switch to
                             cased = playerScanner.next(); //gets input
                             action = cased.toLowerCase();
                             if (action.equals(mainWeapon.getStanceOneName())) { //setting the stance
@@ -345,7 +345,7 @@ public class PlayerCharacter {
 
             if (actionPoints >= 1) {
                 System.out.println(name + " is being attacked for " + diceNumber + "d" + diceType + " + " + damageBonus +
-                        " Damage. You have " + actionPoints + " action points remaining. " + "Would you like to parry?");
+                        " Damage. " + name + " has " + actionPoints + " action points remaining. " + "Should " + name + " parry?");
                 String cased = parryScanner.next();
                 String action = cased.toLowerCase();
 
