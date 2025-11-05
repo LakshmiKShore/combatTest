@@ -44,6 +44,8 @@ public class Weapon {
         if (weaponID == 0) {
             weaponName = "Unarmed";
             minHands = 1;
+            stanceOneCost = 0;
+            stanceOneName = "standard grip";
             totalStances = 1;
             if (stanceID == 0) {
                 parryModifier = 0;
@@ -62,6 +64,8 @@ public class Weapon {
         if (weaponID == 1) {
             weaponName = "Shortsword";
             minHands = 1;
+            stanceOneCost = 0;
+            stanceOneName = "standard grip";
             totalStances = 1;
             if (stanceID == 0) {
                 parryModifier = 2;
@@ -84,6 +88,8 @@ public class Weapon {
         if (weaponID == 2) {
             weaponName = "Mace";
             totalStances = 1;
+            stanceOneCost = 0;
+            stanceOneName = "standard grip";
             minHands = 1;
             if (stanceID == 0) {
                 attacksTotal = 2;
@@ -207,9 +213,9 @@ public class Weapon {
         String toReplace = "";
         stanceNames += stanceOneName;
         if (totalStances >= 2)
-            stanceNames += stanceTwoName;
+            stanceNames += ", " + stanceTwoName;
         if (totalStances >= 3)
-            stanceNames += stanceThreeName;
+            stanceNames += ", " + stanceThreeName;
         if (removeCurrent) {
             if (stanceID == 0) {
                 toReplace = stanceOneName;
@@ -220,9 +226,33 @@ public class Weapon {
             if (stanceID == 2) {
                 toReplace = stanceThreeName;
             }
-            stanceNames = stanceNames.replace(toReplace,"");
+            stanceNames = stanceNames.replace(toReplace + ", ","");
         }
         return stanceNames;
+    }
+    
+    public String getStanceName() {
+        String currentStance = "";
+        if (stanceID == 0) {
+            currentStance = stanceOneName;
+        } else if (stanceID == 1) {
+            currentStance = stanceTwoName;
+        } else if (stanceID == 2) {
+            currentStance = stanceThreeName;
+        }
+        return currentStance;
+    }
+
+    public String getStanceOneName() {
+        return stanceOneName;
+    }
+
+    public String getStanceTwoName() {
+        return stanceTwoName;
+    }
+
+    public String getStanceThreeName() {
+        return stanceThreeName;
     }
 
     public int getAttacksTotal() {

@@ -6,7 +6,8 @@ public class Main {
     static int damage;
     static Entity enemy = new Entity(
             "Bog Jones", 14, 1);
-    static PlayerCharacter player = new PlayerCharacter("Lakshmi",3,0,2,0,1,-1);
+    static PlayerCharacter p1 = new PlayerCharacter("Lakshmi",3,0,2,0,1,-1);
+    static PlayerCharacter p2 = new PlayerCharacter("Fen", 1, 2, 3, -1, 0, 0);
 
     public static void main(String[] args) {
         initiativeRunner();
@@ -15,12 +16,16 @@ public class Main {
     public static void initiativeRunner() {
 
         String firstInit = "player";
-        player.increaseLevel();
-        player.increaseLevel();
-        player.increaseLevel();
+        p1.increaseLevel();
+        p1.increaseLevel();
+        p1.increaseLevel();
+        p2.increaseLevel();
+        p2.increaseLevel();
+        p2.increaseLevel();
 
-        while (player.getIsAlive() && enemy.getIsAlive()) {
-            player.runTurn();
+        while ((p1.getIsAlive() && p2.getIsAlive()) && enemy.getIsAlive()) {
+            p1.runTurn();
+            p2.runTurn();
             enemy.runTurn();
         }
 

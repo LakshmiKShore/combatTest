@@ -42,13 +42,13 @@ public class Entity {
         while (actionPoints > 0) {
             if (actionPoints == 4) {
                 actionPoints -= 2;
-                attack(1,4,Main.player);
+                attack(1,4,Main.p1);
             } else if (actionPoints >= 3) {
                 actionPoints -= 3;
-                attack(1,6,Main.player);
+                attack(1,6,Main.p1);
             } else if (actionPoints >= 2) {
                 actionPoints -= 2;
-                attack(1,4,Main.player);
+                attack(1,4,Main.p1);
             } else {
                 break;
             }
