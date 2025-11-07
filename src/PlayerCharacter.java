@@ -21,6 +21,9 @@ public class PlayerCharacter {
         int will;
         int know;
 
+        int mainAttacks = 0;
+        int offAttacks = 0;
+
         Weapon mainWeapon = new Weapon(0);
         Weapon offWeapon = new Weapon(0);
 
@@ -107,8 +110,8 @@ public class PlayerCharacter {
             playerScanner.useDelimiter("\n");
 
                 //resets attacks made this turn
-            int mainAttacks = 0;
-            int offAttacks = 0;
+            mainAttacks = 0;
+            offAttacks = 0;
 
             while (actionPoints > 0) { //runs until you die, have no action points, or manually end turn
                 if (!isAlive)
@@ -296,12 +299,7 @@ public class PlayerCharacter {
 
                     //lists current status
                 if (action.equals("status")) {
-                    System.out.println(name + " has " + health + "/" + maxHealth + " health remaining.");
-                    System.out.println(name + " is wielding a " + mainWeapon.getWeaponName() + " in " + mainWeapon.getStanceName() + " and has made " + mainAttacks + "/" + mainWeapon.getAttacksPerTurn() + " attacks with it this turn.");
-                    if (offWeapon.weaponID != 0) {
-                        System.out.println(name + " is wielding a " + offWeapon.getWeaponName() + " in " + offWeapon.getStanceName() + " and has made " + offAttacks + "/" + mainWeapon.getAttacksPerTurn() + " attacks with it this turn.");
-                    }
-                    System.out.println(name + "'s defending parry modifier is +" + (Math.max(mainWeapon.getParryModifier(), offWeapon.getParryModifier()) + proficiency));
+                    status();
                 }
 
                     //end turn script
@@ -329,7 +327,7 @@ public class PlayerCharacter {
                 actions += (", " + offWeapon.getAttackThreeName());
         }
 
-        actions += ", stance, status.";
+        actions += ", stance, status, end turn.";
         return actions;
     }
 
@@ -346,16 +344,21 @@ public class PlayerCharacter {
             if (actionPoints >= 1) {
                 System.out.println(name + " is being attacked for " + diceNumber + "d" + diceType + " + " + damageBonus +
                         " Damage. " + name + " has " + actionPoints + " action points remaining. " + "Should " + name + " parry?");
-                String cased = parryScanner.next();
-                String action = cased.toLowerCase();
+                String action = "";
 
-                if (action.equals("yes") || action.equals("parry") || action.equals("y")) {
-                    actionPoints -= 1;
-                    int parryRoll = (int) (Math.random() * 20) + 1;
-                    System.out.println(name + " got a " + parryRoll + " + " + parryModifier + ".");
-                    return parryRoll + parryModifier;
-                } else {
-                    return -20;
+                while (true) {
+                    String cased = parryScanner.next();
+                    action = cased.toLowerCase();
+                    if (action.equals("yes") || action.equals("parry") || action.equals("y")) {
+                        actionPoints -= 1;
+                        int parryRoll = (int) (Math.random() * 20) + 1;
+                        System.out.println(name + " got a " + parryRoll + " + " + parryModifier + ".");
+                        return parryRoll + parryModifier;
+                    } else if (action.equals("no") || action.equals("n")) {
+                        return -20;
+                    } else if (action.equals("status")) {
+                        status();
+                    }
                 }
             } else {
                 return -20;
@@ -372,11 +375,8 @@ public class PlayerCharacter {
             if (atkParryRoll > defParryRoll) {
                 int damage = damageRoll(diceType, diceNumber);
                 target.reduceHealth(damage);
-                System.out.println(name + " dealt " + damage + " damage.");
-                System.out.println(target.getName() + " has " + target.getHeath() +
-                    " health remaining.");
             } else {
-                System.out.println(target.getName() + " parried your attack.");
+                System.out.println(target.getName() + " parried " + name + "'s attack.");
             }
         }
 
@@ -406,17 +406,25 @@ public class PlayerCharacter {
             health -= damage;
             if (health <= 0) {
                 isAlive = false;
+                System.out.println(name + " took " + damage + " damage and died.");
+            } else {
+                System.out.println(name + " took " + damage + " damage and has " + health + " health remaining.");
             }
+        }
+
+        public void status() {
+            System.out.println(name + " has " + health + "/" + maxHealth + " health remaining.");
+            System.out.println(name + " is wielding a " + mainWeapon.getWeaponName() + " in " + mainWeapon.getStanceName() + " and has made " + mainAttacks + "/" + mainWeapon.getAttacksPerTurn() + " attacks with it this turn.");
+            if (offWeapon.weaponID != 0) {
+                System.out.println(name + " is wielding a " + offWeapon.getWeaponName() + " in " + offWeapon.getStanceName() + " and has made " + offAttacks + "/" + mainWeapon.getAttacksPerTurn() + " attacks with it this turn.");
+            }
+            System.out.println(name + "'s defending parry modifier is +" + (Math.max(mainWeapon.getParryModifier(), offWeapon.getParryModifier()) + proficiency));
         }
 
         public void killEntity() {
             health = 0;
             isAlive = false;
         }
-
-
-
-
 
         public String getName() {
             return name;

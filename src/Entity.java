@@ -40,15 +40,21 @@ public class Entity {
             return;
         }
         while (actionPoints > 0) {
+            PlayerCharacter target = new PlayerCharacter();
+            if (Math.random() > 0.5) {
+                target = Main.p1;
+            } else {
+                target = Main.p2;
+            }
             if (actionPoints == 4) {
                 actionPoints -= 2;
-                attack(1,4,Main.p1);
+                attack(1,4,target);
             } else if (actionPoints >= 3) {
                 actionPoints -= 3;
-                attack(1,6,Main.p1);
+                attack(1,6,target);
             } else if (actionPoints >= 2) {
                 actionPoints -= 2;
-                attack(1,4,Main.p1);
+                attack(1,4,target);
             } else {
                 break;
             }
@@ -69,8 +75,6 @@ public class Entity {
         if (atkParryRoll > defParryRoll) {
             int damage = damageRoll(diceType, diceNumber);
             target.reduceHealth(damage);
-            System.out.println(target.getName() + " took " + damage + " damage and has " + target.getHealth() +
-                    " health remaining.");
         } else {
             System.out.println(name + " missed.");
         }
@@ -81,10 +85,10 @@ public class Entity {
         if (actionPoints >= 1 && (averageDamage + 2) >= health/2.0 )   {
             System.out.println(name + " attempted to parry.");
             actionPoints -= 1;
-            int parryRoll = (int) (Math.random() * 20) + 1 + proficiency + 1; /*weapon parry modifier is set to 1
-                                                                                until a weapon system is made */
-            System.out.println(name + " got a " + parryRoll + ".");
-            return parryRoll;
+            int modifier = proficiency + 2; /*weapon parry modifier is set to 1 until a weapon system is made */
+            int parryRoll = (int) (Math.random() * 20) + 1;
+            System.out.println(name + " got a " + parryRoll + " + " + modifier + ".");
+            return parryRoll + modifier;
         } else {
             System.out.println(name + " did not parry.");
             return -20;
@@ -108,6 +112,9 @@ public class Entity {
         health -= damage;
         if (health <= 0) {
             isAlive = false;
+            System.out.println(name + " took " + damage + " damage and died.");
+        } else {
+            System.out.println(name + " took " + damage + " damage and has " + health + " health remaining.");
         }
     }
 
