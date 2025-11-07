@@ -113,6 +113,8 @@ public class PlayerCharacter {
             mainAttacks = 0;
             offAttacks = 0;
 
+            System.out.println();
+
             while (actionPoints > 0) { //runs until you die, have no action points, or manually end turn
                 if (!isAlive)
                     break;
