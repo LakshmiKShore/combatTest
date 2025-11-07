@@ -17,8 +17,11 @@ public class Main {
 
         while ((p1.getIsAlive() || p2.getIsAlive()) && enemy.getIsAlive()) {
             enemy.runTurn();
+            System.out.println();
             p1.runTurn();
+            System.out.println();
             p2.runTurn();
+            System.out.println();
         }
 
     }
