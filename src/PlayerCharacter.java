@@ -238,18 +238,18 @@ public class PlayerCharacter {
                     } else if (offAttacks >= offWeapon.getAttacksPerTurn()) {
                         System.out.println(name + " has made too many attacks with this weapon.");
                     }
-                } //no else, end of attacks
+                } else
 
                     //changing weapon stances
                 if (action.equals("stance")) {
                         //checks if the player has an offhand weapon
-                    if (offWeapon.getID() != 0 ){
-                        System.out.println("Which weapon's stance should " + name + " switch to? (main, off)");
+                    if (offWeapon.getID() != 0 && (offWeapon.getTotalStances() > 1)) {
+                        System.out.println("Which weapon's stance should " + name + " switch? (main, off)");
                         cased = playerScanner.next(); //gets input
                         action = cased.toLowerCase();
 
-                        if (action.equals("main")) { //switching mainhand weapon
-                            System.out.println("Which stance should " + name + " switch to? " + mainWeapon.getStanceNames(true)); //gets a list of the stances you can switch to
+                        if (action.equals("main") && (mainWeapon.getTotalStances() > 1)) { //switching mainhand weapon if it has more than one stance
+                            System.out.println("Which stance should " + name + " switch? " + mainWeapon.getStanceNames(true)); //gets a list of the stances you can switch to
                             cased = playerScanner.next(); //gets input
                             action = cased.toLowerCase();
                             if (action.equals(mainWeapon.getStanceOneName())) { //setting the stance
@@ -263,8 +263,8 @@ public class PlayerCharacter {
                             } else {
                                 System.out.println("Cannot switch to that stance.");
                             }
-                        } else if (action.equals("off")) { //switching offhand weapon
-                            System.out.println("Which stance should " + " switch to? " + offWeapon.getStanceNames(true)); //gets a list of the stances you can switch to
+                        } else if (action.equals("off")) { //switching offhand weapon if it has more than one stance
+                            System.out.println("Which stance should " + " switch? " + offWeapon.getStanceNames(true)); //gets a list of the stances you can switch to
                             cased = playerScanner.next(); //gets input
                             action = cased.toLowerCase();
                             if (action.equals(offWeapon.getStanceOneName())) { //setting the stance
@@ -281,7 +281,7 @@ public class PlayerCharacter {
                         } else {
                             System.out.println("Invalid Weapon."); //error handling
                         }
-                    } else { //switching mainhand weapon
+                    } else if ((mainWeapon.getTotalStances() > 1)) { //switching mainhand weapon if it has more than one stance
                             System.out.println("Which stance should " + name + " switch to? " + mainWeapon.getStanceNames(true)); //gets a list of the stances you can switch to
                             cased = playerScanner.next(); //gets input
                             action = cased.toLowerCase();
@@ -296,17 +296,23 @@ public class PlayerCharacter {
                             } else {
                                 System.out.println("Cannot switch to that stance.");
                             }
+                    } else { //error handling
+                        System.out.println("No weapons can switch stances.");
                     }
-                }
+                } else
 
                     //lists current status
                 if (action.equals("status")) {
                     status();
-                }
+                } else
 
                     //end turn script
                 if (action.equals("end turn") || action.equals("quit")) {
                     break;
+                }
+
+                else {
+                    System.out.println("Invalid Command.");
                 }
             }
             endTurn();

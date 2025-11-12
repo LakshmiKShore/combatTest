@@ -41,12 +41,19 @@ public class Entity {
         }
         while (actionPoints > 0) {
             PlayerCharacter target = new PlayerCharacter();
-            if (Math.random() > 0.5) {
+            if (Main.p1.getIsAlive() && Main.p2.getIsAlive()) { //selecting target
+                if (Math.random() > 0.5) {
+                    target = Main.p1;
+                } else {
+                    target = Main.p2;
+                }
+            } else if (Main.p2.getIsAlive()) { //if a player is dead, target other player
                 target = Main.p1;
             } else {
                 target = Main.p2;
             }
-            if (actionPoints == 4) {
+
+            if (actionPoints == 4) { //making attacks
                 actionPoints -= 2;
                 attack(1,4,target);
             } else if (actionPoints >= 3) {
