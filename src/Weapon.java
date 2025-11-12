@@ -170,6 +170,8 @@ public class Weapon {
             attacksPerTurn = 3;
             minHands = 1;
             totalStances = 2;
+            stanceOneCost = 1;
+            stanceOneName = "Standard Grip";
         }
 
         if (weaponID == 5) {
