@@ -157,21 +157,42 @@ public class Weapon {
 
         if (weaponID == 4) {
             weaponName = "Knife";
-            attacksTotal = 2;
             attackOneName = "nick";
             attackTwoName = "stab";
             parryModifier = 0;
-            attackOneDice = 1;
-            attackOneDamage = 1;
-            attackOneAP = 1;
-            attackTwoDice = 1;
-            attackTwoDamage = 8;
-            attackTwoAP = 3;
-            attacksPerTurn = 3;
             minHands = 1;
             totalStances = 2;
             stanceOneCost = 1;
-            stanceOneName = "Standard Grip";
+            stanceOneName = "standard grip";
+            stanceTwoCost = 1;
+            stanceTwoName = "reverse grip";
+            if (stanceID == 0) {
+                attacksTotal = 2;
+                attackOneName = "nick";
+                attackTwoName = "stab";
+                parryModifier = 1;
+                attackOneDice = 1;
+                attackOneDamage = 1;
+                attackOneAP = 1;
+                attackTwoDice = 1;
+                attackTwoDamage = 4;
+                attackTwoAP = 3;
+                attacksPerTurn = 3;
+                currentHands = 1;
+            } else if (stanceID == 1) {
+                attacksTotal = 2;
+                attackOneName = "nick";
+                attackTwoName = "stab";
+                parryModifier = 1;
+                attackOneDice = 1;
+                attackOneDamage = 1;
+                attackOneAP = 1;
+                attackTwoDice = 1;
+                attackTwoDamage = 8;
+                attackTwoAP = 3;
+                attacksPerTurn = 3;
+                currentHands = 1;
+            }
         }
 
         if (weaponID == 5) {
