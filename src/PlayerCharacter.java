@@ -105,6 +105,11 @@ public class PlayerCharacter {
 
         }
 
+        //runs an attack
+        public void attack() {
+
+        }
+
         public void runTurn() {
             Scanner playerScanner = new Scanner(System.in);
             playerScanner.useDelimiter("\n");
@@ -137,7 +142,7 @@ public class PlayerCharacter {
                         actionPoints -= mainWeapon.getAttackOneAP();
                         System.out.println(name + " attacked " + Main.enemy.getName() + " with their " + mainWeapon.getWeaponName()
                                             + "'s " + mainWeapon.getAttackOneName() + ".");
-                        attack(mainWeapon.getAttackOneDice(), mainWeapon.getAttackOneDamage(), Main.enemy);
+                        attackingParry(mainWeapon.getAttackOneDice(), mainWeapon.getAttackOneDamage(), Main.enemy);
                         mainAttacks++;
 
                             //print error messages
@@ -155,7 +160,7 @@ public class PlayerCharacter {
                         actionPoints -= mainWeapon.getAttackTwoAP();
                         System.out.println(name + " attacked " + Main.enemy.getName() + " with their " + mainWeapon.getWeaponName()
                                 + "'s " + mainWeapon.getAttackTwoName() + ".");
-                        attack(mainWeapon.getAttackTwoDice(), mainWeapon.getAttackTwoDamage(), Main.enemy);
+                        attackingParry(mainWeapon.getAttackTwoDice(), mainWeapon.getAttackTwoDamage(), Main.enemy);
                         mainAttacks++;
 
                             //print error messages
@@ -173,7 +178,7 @@ public class PlayerCharacter {
                         actionPoints -= mainWeapon.getAttackThreeAP();
                         System.out.println(name + " attacked " + Main.enemy.getName() + " with their " + mainWeapon.getWeaponName()
                                 + "'s " + mainWeapon.getAttackThreeName() + ".");
-                        attack(mainWeapon.getAttackThreeDice(), mainWeapon.getAttackThreeDamage(), Main.enemy);
+                        attackingParry(mainWeapon.getAttackThreeDice(), mainWeapon.getAttackThreeDamage(), Main.enemy);
                         mainAttacks++;
 
                         //print error messages
@@ -192,7 +197,7 @@ public class PlayerCharacter {
                         actionPoints -= offWeapon.getAttackOneAP();
                         System.out.println(name + " attacked " + Main.enemy.getName() + " with their " + offWeapon.getWeaponName()
                                 + "'s " + offWeapon.getAttackOneName() + ".");
-                        attack(offWeapon.getAttackOneDice(), offWeapon.getAttackOneDamage(), Main.enemy);
+                        attackingParry(offWeapon.getAttackOneDice(), offWeapon.getAttackOneDamage(), Main.enemy);
                         offAttacks++;
 
                         //print error messages
@@ -211,7 +216,7 @@ public class PlayerCharacter {
                         actionPoints -= offWeapon.getAttackTwoAP();
                         System.out.println(name + " attacked " + Main.enemy.getName() + " with their  " + offWeapon.getWeaponName()
                                 + "'s " + offWeapon.getAttackTwoName() + ".");
-                        attack(offWeapon.getAttackTwoDice(), offWeapon.getAttackTwoDamage(), Main.enemy);
+                        attackingParry(offWeapon.getAttackTwoDice(), offWeapon.getAttackTwoDamage(), Main.enemy);
                         offAttacks++;
 
                         //print error messages
@@ -229,7 +234,7 @@ public class PlayerCharacter {
                         actionPoints -= offWeapon.getAttackThreeAP();
                         System.out.println(name + " attacked " + Main.enemy.getName() + " with their " + offWeapon.getWeaponName()
                                 + "'s " + offWeapon.getAttackThreeName() + ".");
-                        attack(offWeapon.getAttackThreeDice(), offWeapon.getAttackThreeDamage(), Main.enemy);
+                        attackingParry(offWeapon.getAttackThreeDice(), offWeapon.getAttackThreeDamage(), Main.enemy);
                         offAttacks++;
 
                         //print error messages
@@ -374,7 +379,7 @@ public class PlayerCharacter {
         }
 
 
-        public void attack(int diceNumber, int diceType, Entity target) {
+        public void attackingParry(int diceNumber, int diceType, Entity target) {
             int atkParryRoll = attackRoll();
             int defParryRoll = target.parry(diceType, diceNumber, proficiency);
             if (defParryRoll != -20) {
