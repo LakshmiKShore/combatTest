@@ -105,9 +105,40 @@ public class PlayerCharacter {
 
         }
 
-        //runs an attack
-        public void attack() {
-
+        //runs an attack. @params object of class Weapon, object of class Entity
+        //int attack number (from 1 to 3), int attacks made (passed from mainAttacks or offAttacks)
+        public void attack(Weapon weapon, Entity target, int attackNumb, int attacksMade) {
+            if (attacksMade < weapon.getAttacksPerTurn()) {
+                if (attackNumb == 1) {
+                    if (actionPoints >= weapon.getAttackOneAP()) {
+                        actionPoints -= weapon.getAttackOneAP();
+                        System.out.println(name + " attacked " + target.getName() + " with their " + weapon.getWeaponName() + "'s " + weapon.getAttackOneName() + ".");
+                        attackingParry(weapon.getAttackOneDice(), weapon.getAttackOneDamage(), target);
+                    } else {
+                        System.out.println("Not enough Action Points.");
+                    }
+                } else if (attackNumb == 2) {
+                    if (actionPoints >= weapon.getAttackTwoAP()) {
+                        actionPoints -= weapon.getAttackTwoAP();
+                        System.out.println(name + " attacked " + target.getName() + " with their " + weapon.getWeaponName() + "'s " + weapon.getAttackTwoName() + ".");
+                        attackingParry(weapon.getAttackTwoDice(), weapon.getAttackTwoDamage(), target);
+                    } else {
+                        System.out.println("Not enough Action Points.");
+                    }
+                } else if (attackNumb == 3) {
+                    if (actionPoints >= weapon.getAttackThreeAP()) {
+                        actionPoints -= weapon.getAttackThreeAP();
+                        System.out.println(name + " attacked " + target.getName() + " with their " + weapon.getWeaponName() + "'s " + weapon.getAttackThreeName() + ".");
+                        attackingParry(weapon.getAttackThreeDice(), weapon.getAttackThreeDamage(), target);
+                    } else {
+                        System.out.println("Not enough Action Points.");
+                    }
+                } else {
+                    System.out.println("Error: PlayerCharacter.attack received an invalid attack number.");
+                }
+            } else {
+                System.out.println(name + " has made too many attacks with this weapon this turn.");
+            }
         }
 
         public void runTurn() {
@@ -136,113 +167,28 @@ public class PlayerCharacter {
 
                 //mainhand attacks
                 if (action.equals(mainWeapon.getAttackOneName()) && mainAttacks < mainWeapon.getAttacksPerTurn()) {   //Attack One
-                    if (actionPoints >= mainWeapon.getAttackOneAP()) {  //If you have enough AP and aren't breaking the 2 attacks/weapon rule
-
-                            //Subtract AP, call the attack function, increase attacks made this turn
-                        actionPoints -= mainWeapon.getAttackOneAP();
-                        System.out.println(name + " attacked " + Main.enemy.getName() + " with their " + mainWeapon.getWeaponName()
-                                            + "'s " + mainWeapon.getAttackOneName() + ".");
-                        attackingParry(mainWeapon.getAttackOneDice(), mainWeapon.getAttackOneDamage(), Main.enemy);
-                        mainAttacks++;
-
-                            //print error messages
-                    } else if (actionPoints < mainWeapon.getAttackOneAP()) {
-                        System.out.println("Not enough Action Points.");
-                    }
-                } else if (action.equals(mainWeapon.getAttackOneName()) && mainAttacks >= mainWeapon.getAttacksPerTurn() && !(mainWeapon.getID() == offWeapon.getID())) {
-                    System.out.println(name + " has made too many attacks with this weapon.");
+                    attack(mainWeapon, Main.enemy, 1, mainAttacks);
                 } else
 
                 if (action.equals(mainWeapon.getAttackTwoName()) && mainAttacks < mainWeapon.getAttacksPerTurn()) { //Attack Two
-                    if (actionPoints >= mainWeapon.getAttackTwoAP()) {  //If you have enough AP and aren't breaking the 2 attacks/weapon rule
-
-                            //Subtract AP, call the attack function, increase attacks made this turn
-                        actionPoints -= mainWeapon.getAttackTwoAP();
-                        System.out.println(name + " attacked " + Main.enemy.getName() + " with their " + mainWeapon.getWeaponName()
-                                + "'s " + mainWeapon.getAttackTwoName() + ".");
-                        attackingParry(mainWeapon.getAttackTwoDice(), mainWeapon.getAttackTwoDamage(), Main.enemy);
-                        mainAttacks++;
-
-                            //print error messages
-                    } else if (actionPoints < mainWeapon.getAttackTwoAP()) {
-                        System.out.println("Not enough Action Points.");
-                    }
-                } else if (action.equals(mainWeapon.getAttackTwoName()) && mainAttacks >= mainWeapon.getAttacksPerTurn() && !(mainWeapon.getID() == offWeapon.getID())) {
-                    System.out.println(name + " have made too many attacks with this weapon.");
+                    attack(mainWeapon, Main.enemy, 2, mainAttacks);
                 } else
 
                 if (action.equals(mainWeapon.getAttackThreeName()) && mainAttacks < mainWeapon.getAttacksPerTurn()) { //Attack Two
-                    if (actionPoints >= mainWeapon.getAttackThreeAP()) {  //If you have enough AP and aren't breaking the 2 attacks/weapon rule
-
-                        //Subtract AP, call the attack function, increase attacks made this turn
-                        actionPoints -= mainWeapon.getAttackThreeAP();
-                        System.out.println(name + " attacked " + Main.enemy.getName() + " with their " + mainWeapon.getWeaponName()
-                                + "'s " + mainWeapon.getAttackThreeName() + ".");
-                        attackingParry(mainWeapon.getAttackThreeDice(), mainWeapon.getAttackThreeDamage(), Main.enemy);
-                        mainAttacks++;
-
-                        //print error messages
-                    } else if (actionPoints < mainWeapon.getAttackThreeAP()) {
-                        System.out.println("Not enough Action Points.");
-                    }
-                } else if (action.equals(mainWeapon.getAttackThreeName()) && mainAttacks >= mainWeapon.getAttacksPerTurn() && !(mainWeapon.getID() == offWeapon.getID())) {
-                    System.out.println(name + " has made too many attacks with this weapon.");
+                    attack(mainWeapon, Main.enemy, 3, mainAttacks);
                 } else
 
                 //offhand attacks
                 if (action.equals(offWeapon.getAttackOneName())) {   //Attack One
-                    if (actionPoints >= offWeapon.getAttackOneAP() && offAttacks < offWeapon.getAttacksPerTurn()) {  //If you have enough AP and aren't breaking the 2 attacks/weapon rule
-
-                        //Subtract AP, call the attack function, increase attacks made this turn
-                        actionPoints -= offWeapon.getAttackOneAP();
-                        System.out.println(name + " attacked " + Main.enemy.getName() + " with their " + offWeapon.getWeaponName()
-                                + "'s " + offWeapon.getAttackOneName() + ".");
-                        attackingParry(offWeapon.getAttackOneDice(), offWeapon.getAttackOneDamage(), Main.enemy);
-                        offAttacks++;
-
-                        //print error messages
-                    } else if (actionPoints < offWeapon.getAttackOneAP()) {
-                        System.out.println("Not enough Action Points.");
-                    } else if (offAttacks >= offWeapon.getAttacksPerTurn()) {
-                        System.out.println(name + " have made too many attacks with this weapon.");
-                        System.out.println(offAttacks);
-                    }
+                    attack(offWeapon, Main.enemy, 1, mainAttacks);
                 } else
 
                 if (action.equals(offWeapon.getAttackTwoName())) { //Attack Two
-                    if (actionPoints >= offWeapon.getAttackTwoAP() && offAttacks < offWeapon.getAttacksPerTurn()) {  //If you have enough AP and aren't breaking the 2 attacks/weapon rule
-
-                        //Subtract AP, call the attack function, increase attacks made this turn
-                        actionPoints -= offWeapon.getAttackTwoAP();
-                        System.out.println(name + " attacked " + Main.enemy.getName() + " with their  " + offWeapon.getWeaponName()
-                                + "'s " + offWeapon.getAttackTwoName() + ".");
-                        attackingParry(offWeapon.getAttackTwoDice(), offWeapon.getAttackTwoDamage(), Main.enemy);
-                        offAttacks++;
-
-                        //print error messages
-                    } else if (actionPoints < offWeapon.getAttackTwoAP()) {
-                        System.out.println("Not enough Action Points.");
-                    } else if (offAttacks >= offWeapon.getAttacksPerTurn()) {
-                        System.out.println(name + " has made too many attacks with this weapon.");
-                    }
+                    attack(offWeapon, Main.enemy, 2, mainAttacks);
                 } else
 
                 if (action.equals(offWeapon.getAttackThreeName())) { //Attack Two
-                    if (actionPoints >= offWeapon.getAttackThreeAP() && offAttacks < offWeapon.getAttacksPerTurn()) {  //If you have enough AP and aren't breaking the 2 attacks/weapon rule
-
-                        //Subtract AP, call the attack function, increase attacks made this turn
-                        actionPoints -= offWeapon.getAttackThreeAP();
-                        System.out.println(name + " attacked " + Main.enemy.getName() + " with their " + offWeapon.getWeaponName()
-                                + "'s " + offWeapon.getAttackThreeName() + ".");
-                        attackingParry(offWeapon.getAttackThreeDice(), offWeapon.getAttackThreeDamage(), Main.enemy);
-                        offAttacks++;
-
-                        //print error messages
-                    } else if (actionPoints < offWeapon.getAttackTwoAP()) {
-                        System.out.println("Not enough Action Points.");
-                    } else if (offAttacks >= offWeapon.getAttacksPerTurn()) {
-                        System.out.println(name + " has made too many attacks with this weapon.");
-                    }
+                    attack(offWeapon, Main.enemy, 3, mainAttacks);
                 } else
 
                     //changing weapon stances
