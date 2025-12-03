@@ -231,7 +231,7 @@ public class Weapon {
     }
 
 
-    public String getStanceNames(boolean removeCurrent) {
+    public String getStanceNames(int freeHands, boolean removeCurrent) {
         String stanceNames = "";
         String toReplace = "";
         stanceNames += stanceOneName;
@@ -344,6 +344,10 @@ public class Weapon {
 
     public int getMinHands() {
         return minHands;
+    }
+
+    public int getCurrentHands() {
+        return currentHands;
     }
 
     public int getID() {

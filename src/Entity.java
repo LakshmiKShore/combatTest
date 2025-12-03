@@ -75,7 +75,7 @@ public class Entity {
 
     public void attack(int diceNumber, int diceType, PlayerCharacter target) {
         int atkParryRoll = attackRoll();
-        int defParryRoll = target.parry(diceNumber, diceType, proficiency);
+        int defParryRoll = target.defendingParry(diceNumber, diceType, proficiency);
         if (defParryRoll != -20) {
             System.out.println(name + " got a " + atkParryRoll + ".");
         }

@@ -2,30 +2,31 @@ import java.util.Scanner;
 
 public class PlayerCharacter {
 
-    String name;
-    int maxHealth;
-    int health;
-    int healthMod;
-    int maxActionPoints;
-    int actionPoints;
-    int proficiency;
-    int maxEnergyPoints;
-    int energyPoints;
-    int level;
-    boolean isAlive;
+    private String name;
+    private int maxHealth;
+    private int health;
+    private int healthMod;
+    private int maxActionPoints;
+    private int actionPoints;
+    private int proficiency;
+    private int maxEnergyPoints;
+    private int energyPoints;
+    private int level;
+    private boolean isAlive;
+    private int handsInUse;
 
-    int str;
-    int dex;
-    int con;
-    int wit;
-    int will;
-    int know;
+    private int str;
+    private int dex;
+    private int con;
+    private int wit;
+    private int will;
+    private int know;
 
-    int mainAttacks = 0;
-    int offAttacks = 0;
+    private int mainAttacks = 0;
+    private int offAttacks = 0;
 
-    Weapon mainWeapon = new Weapon(0);
-    Weapon offWeapon = new Weapon(0);
+    private Weapon mainWeapon = new Weapon(0);
+    private Weapon offWeapon = new Weapon(0);
 
     public PlayerCharacter(String tempName, int tempHealth, int tempProficiency) {
         name = tempName;
@@ -35,15 +36,16 @@ public class PlayerCharacter {
         isAlive = true;
     }
 
+    //Null constructor. No parameters, doesn't properly set variables. Only used as an intermediate for targeting purposes.
     public PlayerCharacter() {
-        System.out.println("Null PlayerCharacter Created");
-        name = "Null";
+        name = "Error: Null Player Character";
         health = 1;
         proficiency = 1;
         maxActionPoints = 7;
         isAlive = true;
     }
 
+    //Default constructor. Takes name, and ability scores. Does not have a character creation built in.
     public PlayerCharacter(String tempName, int tempStr, int tempDex, int tempCon, int tempWit, int tempWill, int tempKnow) {
         name = tempName;
         str = tempStr;
@@ -102,6 +104,13 @@ public class PlayerCharacter {
 
             System.out.println(name + " chose the: " + offWeapon.getWeaponName());
         }
+    }
+
+    private void updateHandsInUse() {
+        if (offWeapon.getID() != 0)
+            handsInUse = mainWeapon.getCurrentHands() + offWeapon.getCurrentHands();
+        else
+            handsInUse = mainWeapon.getCurrentHands();
     }
 
     //Rolls initiative. Rolls a d20 and adds dex. A random number between 0 and 0.9999 is then added to avoid ties.
@@ -179,7 +188,7 @@ public class PlayerCharacter {
                             action = cased.toLowerCase();
 
                             if (action.equals("main") && (mainWeapon.getTotalStances() > 1)) { //switching mainhand weapon if it has more than one stance
-                                System.out.println("Which stance should " + name + " switch? " + mainWeapon.getStanceNames(true)); //gets a list of the stances you can switch to
+                                System.out.println("Which stance should " + name + " switch? " + mainWeapon.getStanceNames(2 - offWeapon.getCurrentHands(),true)); //gets a list of the stances you can switch to
                                 cased = playerScanner.next(); //gets input
                                 action = cased.toLowerCase();
                                 if (action.equals(mainWeapon.getStanceOneName())) { //setting the stance
@@ -192,7 +201,7 @@ public class PlayerCharacter {
                                     System.out.println("Cannot switch to that stance.");
                                 }
                             } else if (action.equals("off")) { //switching offhand weapon if it has more than one stance
-                                System.out.println("Which stance should " + " switch? " + offWeapon.getStanceNames(true)); //gets a list of the stances you can switch to
+                                System.out.println("Which stance should " + " switch? " + offWeapon.getStanceNames(2 - mainWeapon.getCurrentHands(), true)); //gets a list of the stances you can switch to
                                 cased = playerScanner.next(); //gets input
                                 action = cased.toLowerCase();
                                 if (action.equals(offWeapon.getStanceOneName())) { //setting the stance
@@ -208,7 +217,7 @@ public class PlayerCharacter {
                                 System.out.println("Invalid Weapon."); //error handling
                             }
                         } else if ((mainWeapon.getTotalStances() > 1)) { //switching mainhand weapon if it has more than one stance
-                            System.out.println("Which stance should " + name + " switch to? " + mainWeapon.getStanceNames(true)); //gets a list of the stances you can switch to
+                            System.out.println("Which stance should " + name + " switch to? " + mainWeapon.getStanceNames(2,true)); //gets a list of the stances you can switch to
                             cased = playerScanner.next(); //gets input
                             action = cased.toLowerCase();
                             if (action.equals(mainWeapon.getStanceOneName())) { //setting the stance
@@ -223,6 +232,8 @@ public class PlayerCharacter {
                         } else { //error handling
                             System.out.println("No weapons can switch stances.");
                         }
+                        //updating handsInUse
+                        updateHandsInUse();
                     } else
 
                         //lists current status
@@ -301,7 +312,7 @@ public class PlayerCharacter {
     }
 
 
-    public int parry(int diceNumber, int diceType, int damageBonus) {
+    public int defendingParry(int diceNumber, int diceType, int damageBonus) {
         Scanner parryScanner = new Scanner(System.in);
         parryScanner.useDelimiter("\n");
 
@@ -330,7 +341,6 @@ public class PlayerCharacter {
             return -20;
         }
     }
-
 
     public void attackingParry(int diceNumber, int diceType, Entity target) {
         int atkParryRoll = attackRoll();
@@ -363,6 +373,7 @@ public class PlayerCharacter {
         level++;
         maxEnergyPoints = level + (con * 2) + (will * 2);
         maxHealth = 4 + (level / 2) + (healthMod * proficiency * 2) + con;
+        proficiency = (int) (level/5.5) + 1;
         energyPoints = maxEnergyPoints;
         health = maxHealth;
         System.out.println(name + " is now level " + level);
