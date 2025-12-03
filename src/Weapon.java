@@ -230,7 +230,7 @@ public class Weapon {
         }
     }
 
-
+    //update to only allow you to switch to a stance you have the hands for
     public String getStanceNames(int freeHands, boolean removeCurrent) {
         String stanceNames = "";
         String toReplace = "";
