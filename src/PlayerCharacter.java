@@ -46,6 +46,7 @@ public class PlayerCharacter {
     }
 
     //Default constructor. Takes name, and ability scores. Does not have a character creation built in.
+    //Using this constructor prompts players to choose weapons to use.
     public PlayerCharacter(String tempName, int tempStr, int tempDex, int tempCon, int tempWit, int tempWill, int tempKnow) {
         name = tempName;
         str = tempStr;
@@ -69,8 +70,7 @@ public class PlayerCharacter {
 
         System.out.println("What weapon should " + name + " use in their main hand?");
         System.out.println("Shortsword, Mace, Spear, Knife, Poleaxe, Shield");
-        String cased = creationScanner.next();
-        String input = cased.toLowerCase();
+        String input = creationScanner.next().toLowerCase();
 
         if (input.equals("shortsword"))
             mainWeapon.setWeapon(1);
@@ -90,8 +90,7 @@ public class PlayerCharacter {
         if (mainWeapon.getMinHands() < 2) {
             System.out.println("What weapon should " + name + " use in their off hand?");
             System.out.println("Shortsword, Mace, Knife, Shield");
-            cased = creationScanner.next();
-            input = cased.toLowerCase();
+            input = creationScanner.next().toLowerCase();
 
             if (input.equals("shortsword"))
                 offWeapon.setWeapon(1);
@@ -148,8 +147,8 @@ public class PlayerCharacter {
             System.out.println("It is " + name + "'s turn. They have " + actionPoints +
                     " action points remaining. What will they do? \n"
                     + actions);
-            String cased = playerScanner.next();
-            String action = cased.toLowerCase();
+            String action = playerScanner.next().toLowerCase();
+
 
             //mainhand attacks
             if (action.equals(mainWeapon.getAttackOneName()) && mainAttacks < mainWeapon.getAttacksPerTurn()
@@ -184,13 +183,11 @@ public class PlayerCharacter {
                         //checks if the player has an offhand weapon
                         if (offWeapon.getID() != 0 && (offWeapon.getTotalStances() > 1)) {
                             System.out.println("Which weapon's stance should " + name + " switch? (main, off)");
-                            cased = playerScanner.next(); //gets input
-                            action = cased.toLowerCase();
+                            action = playerScanner.next().toLowerCase();
 
                             if (action.equals("main") && (mainWeapon.getTotalStances() > 1)) { //switching mainhand weapon if it has more than one stance
                                 System.out.println("Which stance should " + name + " switch? " + mainWeapon.getStanceNames(2 - offWeapon.getCurrentHands(),true)); //gets a list of the stances you can switch to
-                                cased = playerScanner.next(); //gets input
-                                action = cased.toLowerCase();
+                                action = playerScanner.next().toLowerCase();
                                 if (action.equals(mainWeapon.getStanceOneName())) { //setting the stance
                                     mainWeapon.setStance(0);
                                 } else if (action.equals(mainWeapon.getStanceTwoName())) {
@@ -202,8 +199,7 @@ public class PlayerCharacter {
                                 }
                             } else if (action.equals("off")) { //switching offhand weapon if it has more than one stance
                                 System.out.println("Which stance should " + " switch? " + offWeapon.getStanceNames(2 - mainWeapon.getCurrentHands(), true)); //gets a list of the stances you can switch to
-                                cased = playerScanner.next(); //gets input
-                                action = cased.toLowerCase();
+                                action = playerScanner.next().toLowerCase();
                                 if (action.equals(offWeapon.getStanceOneName())) { //setting the stance
                                     offWeapon.setStance(0);
                                 } else if (action.equals(offWeapon.getStanceTwoName())) {
@@ -218,8 +214,7 @@ public class PlayerCharacter {
                             }
                         } else if ((mainWeapon.getTotalStances() > 1)) { //switching mainhand weapon if it has more than one stance
                             System.out.println("Which stance should " + name + " switch to? " + mainWeapon.getStanceNames(2,true)); //gets a list of the stances you can switch to
-                            cased = playerScanner.next(); //gets input
-                            action = cased.toLowerCase();
+                            action = playerScanner.next().toLowerCase();
                             if (action.equals(mainWeapon.getStanceOneName())) { //setting the stance
                                 mainWeapon.setStance(0);
                             } else if (action.equals(mainWeapon.getStanceTwoName())) {
@@ -324,8 +319,7 @@ public class PlayerCharacter {
             String action = "";
 
             while (true) {
-                String cased = parryScanner.next();
-                action = cased.toLowerCase();
+                action = parryScanner.next().toLowerCase();
                 if (action.equals("yes") || action.equals("parry") || action.equals("y")) {
                     actionPoints -= 1;
                     int parryRoll = (int) (Math.random() * 20) + 1;

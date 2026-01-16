@@ -1,9 +1,6 @@
-import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Main {
-    static Scanner myScanner = new Scanner(System.in);
-    static int toHit;
-    static int damage;
     static Entity enemy = new Entity(
             "Bog Jones", 26, 2);
     static PlayerCharacter p1 = new PlayerCharacter("Lakshmi",3,0,2,0,1,-1);
@@ -15,6 +12,21 @@ public class Main {
 
     public static void initiativeRunner() {
 
+        //Initiative is an array that keeps all creatures engaged in combat in a list. The list is ordered by initiative order.
+        ArrayList<PlayerCharacter> initiative = new ArrayList<>();
+
+        initiative.add(p1);
+        initiative.add(p2);
+
+        int prevInit = 0;
+
+        ArrayList<Double> initRolls = new ArrayList<>();
+        for (PlayerCharacter c : initiative) {
+            initRolls.add(c.initiativeRoll());
+        }
+
+
+
         while ((p1.getIsAlive() || p2.getIsAlive()) && enemy.getIsAlive()) {
             enemy.runTurn();
             System.out.println();
@@ -25,4 +37,25 @@ public class Main {
         }
 
     }
+
+    public static int arrayListMax(ArrayList<Integer> arl) {
+        int max = arl.get(0);
+        for (int x : arl) {
+            if (x > max) {
+                max = x;
+            }
+        }
+        return max;
+    }
+
+    public static int arrayListMax(ArrayList<Integer> arl, double below) {
+        int max = arl.get(0);
+        for (int x : arl) {
+            if (x > max && x < below) {
+                max = x;
+            }
+        }
+        return max;
+    }
+
 }
