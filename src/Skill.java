@@ -1,11 +1,11 @@
 public class Skill {
 
-    final int str = 0;
-    final int dex = 1;
-    final int con = 2;
-    final int know = 3;
-    final int wit = 4;
-    final int will = 5;
+    static final int str = 0;
+    static final int dex = 1;
+    static final int con = 2;
+    static final int know = 3;
+    static final int wit = 4;
+    static final int will = 5;
 
     String name;
     int baseAbility;

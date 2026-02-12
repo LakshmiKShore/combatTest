@@ -10,6 +10,12 @@ import java.util.ArrayList;
  */
 
 public class Main {
+
+    static final int physical = 0;
+    static final int elemental = 1;
+    static final int corrosive = 2;
+    static final int arcane = 3;
+
     static Entity enemy = new Entity(
             "Bog Jones", 26, 2);
     static PlayerCharacter p1 = new PlayerCharacter("Lakshmi",3,0,2,0,1,-1);
