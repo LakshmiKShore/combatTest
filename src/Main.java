@@ -1,5 +1,14 @@
 import java.util.ArrayList;
 
+/* TODO:
+    - Write creature class that Enemy and Player can extend from
+    - Rewrite weapon class to use arrays
+    - Create initiative system
+    - Create feature class
+    - Create character creation system
+    - Create leveling system
+ */
+
 public class Main {
     static Entity enemy = new Entity(
             "Bog Jones", 26, 2);
