@@ -22,8 +22,18 @@ public class Main {
     static PlayerCharacter p2 = new PlayerCharacter("Fen", 1, 2, 3, -1, 0, 0);
 
     public static void main(String[] args) {
-        initiativeRunner();
+
+
+
+
     }
+
+
+
+
+
+
+
 
     public static void initiativeRunner() {
 

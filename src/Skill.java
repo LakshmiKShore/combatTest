@@ -8,11 +8,22 @@ public class Skill {
     static final int will = 5;
 
     String name;
-    int baseAbility;
+    int ability;
+
 
     public Skill(String name, int baseAbility){
         this.name = name;
-        this.baseAbility = baseAbility;
+        this.ability = baseAbility;
+    }
+
+
+    //getters
+    public String getName() {
+        return name;
+    }
+
+    public int getAbility() {
+        return ability;
     }
 
 }

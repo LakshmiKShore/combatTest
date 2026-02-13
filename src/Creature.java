@@ -21,6 +21,7 @@ public class Creature {
             - Armor/Resistances
             - Speed
             - ArrayList of current conditions
+            - ArrayList of actions that can be taken
         - Constructors
             - Automatic Constructor                         X
             - Full constructor                              X
@@ -60,12 +61,13 @@ public class Creature {
     private boolean isDying = false;
     private boolean isDead = false;
 
-    private int str;
-    private int dex;
-    private int con;
-    private int wit;
-    private int will;
-    private int know;
+    private int[] abilities = new int[6];
+    static final int str = 0;
+    static final int dex = 1;
+    static final int con = 2;
+    static final int know = 3;
+    static final int wit = 4;
+    static final int will = 5;
 
     private boolean hasWillSaves;
     private boolean hasFortSaves;
@@ -78,24 +80,24 @@ public class Creature {
     private int arcaneRes;
 
     public static final Skill[] allSkills = {
-            new Skill("Athletics", Skill.str),
-            new Skill("Exertion", Skill.str),
-            new Skill("Agility", Skill.dex),
-            new Skill("Lockpicking", Skill.dex),
-            new Skill("Slight of Hand", Skill.dex),
-            new Skill("Stealth", Skill.dex),
-            new Skill("Arcana", Skill.know),
-            new Skill("Biology", Skill.know),
-            new Skill("Medicine", Skill.know),
-            new Skill("Recall", Skill.know),
-            new Skill("Deception", Skill.wit),
-            new Skill("Foraging", Skill.wit),
-            new Skill("Insight", Skill.wit),
-            new Skill("Perception", Skill.wit),
-            new Skill("Persuasion", Skill.wit),
-            new Skill("Inspiration", Skill.will),
-            new Skill("Intimidation", Skill.will),
-            new Skill("Magic", Skill.will)
+            new Skill("Athletics", str),
+            new Skill("Exertion", str),
+            new Skill("Agility", dex),
+            new Skill("Lockpicking", dex),
+            new Skill("Slight of Hand", dex),
+            new Skill("Stealth", dex),
+            new Skill("Arcana", know),
+            new Skill("Biology", know),
+            new Skill("Medicine", know),
+            new Skill("Recall", know),
+            new Skill("Deception", wit),
+            new Skill("Foraging", wit),
+            new Skill("Insight", wit),
+            new Skill("Perception", wit),
+            new Skill("Persuasion", wit),
+            new Skill("Inspiration", will),
+            new Skill("Intimidation", will),
+            new Skill("Magic", will)
     };
 
     ArrayList<Skill> skillProfs = new ArrayList<Skill>();
@@ -107,12 +109,12 @@ public class Creature {
 
         this.level = level;
         this.healthMod = healthMod;
-        this.str = str;
-        this.dex = dex;
-        this.con = con;
-        this.know = know;
-        this.wit = wit;
-        this.will = will;
+        abilities[str] = str;
+        abilities[dex] = dex;
+        abilities[con] = con;
+        abilities[know] = know;
+        abilities[wit] = wit;
+        abilities[will] = will;
         this.hasReflexSaves = hasReflexSaves;
         this.hasFortSaves = hasFortSaves;
         this.hasWillSaves = hasWillSaves;
@@ -145,12 +147,12 @@ public class Creature {
 
         this.level = level;
         this.healthMod = healthMod;
-        this.str = str;
-        this.dex = dex;
-        this.con = con;
-        this.know = know;
-        this.wit = wit;
-        this.will = will;
+        abilities[str] = str;
+        abilities[dex] = dex;
+        abilities[con] = con;
+        abilities[know] = know;
+        abilities[wit] = wit;
+        abilities[will] = will;
         this.hasReflexSaves = hasReflexSaves;
         this.hasFortSaves = hasFortSaves;
         this.hasWillSaves = hasWillSaves;
@@ -253,6 +255,30 @@ public class Creature {
     //increases temp hp (thp)
     public void giveThp(int amount) {
         thp += amount;
+    }
+
+
+    //makes an ability check
+    //generates a random number 1-20, adds the relevant skill, then adds proficiency if you are proficient, returns the result
+    public int skillCheck(Skill skill) {
+        int roll = (int) (Math.random() * 20) + 1;
+        roll += abilities[skill.getAbility()];
+
+        if (isProficient(skill)) {
+            roll += proficiency;
+        }
+
+        return roll;
+    }
+
+    //checks if the creature is proficient in a skill (checks if the skill is in skillProfs)
+    public boolean isProficient(Skill skill) {
+        for (Skill x : skillProfs) {
+            if (x.equals(skill)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
