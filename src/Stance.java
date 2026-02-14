@@ -3,11 +3,13 @@ public class Stance {
     //Weapons have stances, stances have attacks.
 
     private final Attack[] attacks;
-    private int parryBonus;
+    private final int parryBonus;
+    private final int hands;
 
-    public Stance(Attack[] attacks, int parryBonus) {
+    public Stance(Attack[] attacks, int parryBonus, int hands) {
         this.attacks = attacks;
         this.parryBonus = parryBonus;
+        this.hands = hands;
     }
 
     public Attack[] getAttacks() {
@@ -16,6 +18,10 @@ public class Stance {
 
     public int getParryBonus() {
         return parryBonus;
+    }
+
+    public int getHands() {
+        return hands;
     }
 
 }

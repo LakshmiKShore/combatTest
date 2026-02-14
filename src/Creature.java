@@ -1,4 +1,3 @@
-import javax.management.BadAttributeValueExpException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -18,9 +17,9 @@ public class Creature {
             - ArrayList of skill proficiencies they have    X
             - ArrayList of all possible features
             - ArrayList of features they have
-            - Weapons
-            - Armor/Resistances
-            - Speed
+            - Weapons                                       X
+            - Resistances                                   X
+            - Speed (CUT SYSTEM, MAYBE ADD LATER?)          X
             - ArrayList of current conditions
             - ArrayList of actions that can be taken
         - Constructors
@@ -37,21 +36,31 @@ public class Creature {
                 - End Turn
             - Defending Parry                               X
             - Attacking Parry                               X
-            - Roll Initiative
+            - Roll Initiative                               X
             - Roll Saving Throws                            X
             - End Combat
             - Rest
             - Check for feature
             - Check for skill proficiency                   X
+            - Level Up (maybe put in Player subclass)
      */
 
+    /*
+        TODO:
+            - Create a method in Creature that checks if the creature can use an attack (call the one in weapon)
+                - Needs to check against ALL weapons
+            - Create a method that prints out all possible actions
+                - base actions and weapon attacks
+     */
+
+
     protected String name;
-    protected int mhp;
+    protected int maxHp;
     protected int hp;
-    protected int thp;
-    protected int mep;
+    protected int tempHp;
+    protected int maxEp;
     protected int ep;
-    protected int map;
+    protected int maxAp;
     protected int ap;
     protected int healthMod;
     protected int proficiency;
@@ -104,29 +113,35 @@ public class Creature {
             athletics, exertion, agility, lockpicking, slightOfHand, stealth, arcana, biology, medicine,
             recall, deception, foraging, insight, perception, persuasion, inspiration, intimidation, magic
     };
+    ArrayList<Skill> skillProfs;
 
-    ArrayList<Skill> skillProfs = new ArrayList<Skill>();
+    protected ArrayList<Weapon> currentWeapons;
 
-    private Weapon[] currentWeapons;
+    protected Action parry = new Action("Parry", "Attempt to block an incoming attack.", 1);
+
+    protected Action[] baseActions = new Action[] {
+            parry
+    };
 
 
     //Automated Constructor. Fill in abilities, saves, skill proficiencies, health mod, and level, get out all the stuff
     public Creature(String name, int level, int healthMod, int str, int dex, int con, int know, int wit, int will,
-                    boolean hasReflexSaves, boolean hasFortSaves, boolean hasWillSaves, Skill[] skillProfs) {
+                    boolean hasReflexSaves, boolean hasFortSaves, boolean hasWillSaves, Skill[] skillProfs, Weapon[] currentWeapons) {
 
         this.name = name;
         this.level = level;
         this.healthMod = healthMod;
-        abilities[str] = str;
-        abilities[dex] = dex;
-        abilities[con] = con;
-        abilities[know] = know;
-        abilities[wit] = wit;
-        abilities[will] = will;
+        abilities[Creature.str] = str;
+        abilities[Creature.dex] = dex;
+        abilities[Creature.con] = con;
+        abilities[Creature.know] = know;
+        abilities[Creature.wit] = wit;
+        abilities[Creature.will] = will;
         savingThrows[reflexSave] = hasReflexSaves;
         savingThrows[fortitudeSave] = hasFortSaves;
         savingThrows[willSave] = hasWillSaves;
-        this.skillProfs = new ArrayList<Skill>(Arrays.asList(skillProfs));
+        this.skillProfs = new ArrayList<>(Arrays.asList(skillProfs));
+        this.currentWeapons = new ArrayList<>(Arrays.asList(currentWeapons));
 
         if (level >= 11) {
             proficiency = 3;
@@ -136,45 +151,46 @@ public class Creature {
             proficiency = 1;
         }
 
-        map = 7;
-        ap = map;
+        maxAp = 7;
+        ap = maxAp;
 
-        mep = level + (2 * con) + (2 * will);
-        ep = mep;
+        maxEp = level + (2 * con) + (2 * will);
+        ep = maxEp;
 
-        mhp = 4 + (level * healthMod) + (con * proficiency * 2);
-        hp = mhp;
-        thp = 0;
+        maxHp = 4 + (level * healthMod) + (con * proficiency * 2);
+        hp = maxHp;
+        tempHp = 0;
     }
 
     //fully customizable constructor. no formulas here baybee
     public Creature(String name, int level, int healthMod, int str, int dex, int con, int know, int wit, int will,
                     boolean hasReflexSaves, boolean hasFortSaves, boolean hasWillSaves, int proficiency,
-                    int map, int mep, int mhp, int universalRes, int physicalRes, int elementalRes, int corrosiveRes,
-                    int arcaneRes, Skill[] skillProfs) {
+                    int maxAp, int maxEp, int maxHp, int universalRes, int physicalRes, int elementalRes, int corrosiveRes,
+                    int arcaneRes, Skill[] skillProfs, Weapon[] currentWeapons) {
 
         this.name = name;
         this.level = level;
         this.healthMod = healthMod;
-        abilities[str] = str;
-        abilities[dex] = dex;
-        abilities[con] = con;
-        abilities[know] = know;
-        abilities[wit] = wit;
-        abilities[will] = will;
+        abilities[Creature.str] = str;
+        abilities[Creature.dex] = dex;
+        abilities[Creature.con] = con;
+        abilities[Creature.know] = know;
+        abilities[Creature.wit] = wit;
+        abilities[Creature.will] = will;
         savingThrows[reflexSave] = hasReflexSaves;
         savingThrows[fortitudeSave] = hasFortSaves;
         savingThrows[willSave] = hasWillSaves;
         this.proficiency = proficiency;
         this.skillProfs = new ArrayList<Skill>(Arrays.asList(skillProfs));
+        this.currentWeapons = new ArrayList<>(Arrays.asList(currentWeapons));
 
-        this.map = map;
-        ap = map;
-        this.mep = mep;
-        ep = mep;
-        this.mhp = mhp;
-        hp = mhp;
-        thp = 0;
+        this.maxAp = maxAp;
+        ap = maxAp;
+        this.maxEp = maxEp;
+        ep = maxEp;
+        this.maxHp = maxHp;
+        hp = maxHp;
+        tempHp = 0;
 
         this.universalRes = universalRes;
         this.physicalRes = physicalRes;
@@ -183,27 +199,61 @@ public class Creature {
         this.arcaneRes = arcaneRes;
     }
 
+
+
+
+    //TURN RELATED METHODS
+
     //handles all effects that happen at the start of your turn.
     public void startTurn() {
+        /*
+        WILL ADD FUNCTIONALITY ONCE FEATURES ARE ADDED.
+        SOME THINGS DO HAPPEN HERE I PROMISE.
+        JUST NONE YET.
+         */
+
+        runTurn();
 
     }
 
     //runs a loop of the turn
     public void runTurn() {
 
-        /*
-        functionality limited until other methods can be made
-         */
+        boolean quitTurn = false;
+
+        //Turn Loop
+        while (ap > 0 && !quitTurn) {
+
+        }
+
+
 
     }
 
     //handles all effects that happen at the end of your turn.
     public void endTurn() {
 
+        ap = maxAp;
+
     }
 
 
-    //COMBAT ASSIST METHODS (attacks, parries, saves, etc)
+
+
+    //ACTION RELATED METHODS
+    //METHODS RELATED TO TAKING ACTIONS
+    //THE ACTION RELATED METHODS
+    //THE METHODS SPECIFICALLY DESIGNED FOR RELATING TO ACTIONS
+    //THOSE METHODS?
+
+
+
+
+
+
+
+
+    //PARRY RELATED METHODS
 
     public int attackingParry(int advantages, int disadvantages) {
         return rollD20(proficiency, advantages, disadvantages);
@@ -213,8 +263,31 @@ public class Creature {
         return rollD20(proficiency + maxParryBonus(), advantages, disadvantages);
     }
 
+    //Checks if the player can parry, then asks if they want to.
+    //Here is where action points are spent on parrying.
+    public boolean parryPrompt(int diceType, int diceNumber) {
+
+        int discount = 0;
+
+        int parryCost = parry.getCost() - discount;
+        boolean willParry = parryBehavior(diceType, diceNumber, parryCost);
+
+        if (parry.canUse(ap, discount) && willParry) {
+            ap -= parryCost;
+            return true;
+        }
+        return false;
+
+    }
+
+    //Asks if the Creature wants to parry. MUST BE OVERRIDDEN in child classes to add functionality.
+    public boolean parryBehavior(int diceType, int diceNumber, int parryCost) {
+        return true;
+    }
+
+    //finds the maximum parry bonus for all weapons in currentWeapons
     public int maxParryBonus() {
-        int max = currentWeapons[0].getCurrentStance().getParryBonus();
+        int max = currentWeapons.get(0).getCurrentStance().getParryBonus();
 
         for (Weapon x : currentWeapons) {
             if (max < x.getCurrentStance().getParryBonus()) {
@@ -225,15 +298,59 @@ public class Creature {
         return max;
     }
 
+
+    //finds all sources of advantage for an attacking parry.
+    public int attackingParryAdvantages() {
+        return 0;
+    }
+
+    //finds all sources of advantage for a defending parry.
+    public int defendingParryAdvantages() {
+        return 0;
+    }
+
+    //finds all sources of disadvantage for an attacking parry.
+    public int attackingParryDisadvantages() {
+        return 0;
+    }
+
+    //finds all sources of disadvantage for a defending parry.
+    public int defendingParryDisadvantages() {
+        return 0;
+    }
+
+
+
+    //OTHER COMBAT METHODS
+
     //returns true if they succeeded the save, false if they failed.
     public boolean succeededSavingThrow(int dc, int type, int advantages, int disadvantages) {
         int modifier = 0;
+        if (type == Creature.reflexSave) {
+            modifier += abilities[dex];
+        }
+        if (type == Creature.fortitudeSave) {
+            modifier += abilities[con];
+        }
+        if (type == Creature.willSave) {
+            modifier += abilities[will];
+        }
+
         if (savingThrows[type]) {
             modifier += proficiency;
         }
 
         int roll = rollD20(modifier, advantages, disadvantages);
         return (roll >= dc);
+    }
+
+    //rolls initiative. Returns a double (a roll plus an offset from 0 to 0.999) to break ties.
+    public double rollInitiative() {
+
+        int roll = rollD20(abilities[dex], 0, 0);
+        double offset = Math.random();
+        return roll + offset;
+
     }
 
 
@@ -257,67 +374,72 @@ public class Creature {
 
         int damage = Math.max(0, (amount - resisted));
 
-        if (thp >= damage) {
-            thp -= damage;
+        if (tempHp >= damage) {
+            tempHp -= damage;
             damage = 0;
         } else {
-            damage -= thp;
-            thp = 0;
+            damage -= tempHp;
+            tempHp = 0;
         }
 
         hp -= damage;
 
-        if (hp <= mhp/2) {
+        if (hp <= maxHp /2) {
             isWounded = true;
         }
-        if (hp <= mhp/4) {
+        if (hp <= maxHp /4) {
             isMortal = true;
         }
         if (hp <= 0) {
             isDying = true;
         }
-        if (hp <= (-1 * (mhp / 2))) {
+        if (hp <= (-1 * (maxHp / 2))) {
             isDead = true;
         }
     }
 
     //a version of the damage method that doesn't factor in resistances.
     public void damageUnresistable(int amount, int type) {
-        if (thp >= amount) {
-            thp -= amount;
+        if (tempHp >= amount) {
+            tempHp -= amount;
             amount = 0;
         } else {
-            amount -= thp;
-            thp = 0;
+            amount -= tempHp;
+            tempHp = 0;
         }
 
         hp -= amount;
 
-        if (hp <= mhp/2) {
+        if (hp <= maxHp /2) {
             isWounded = true;
         }
-        if (hp <= mhp/4) {
+        if (hp <= maxHp /4) {
             isMortal = true;
         }
         if (hp <= 0) {
             isDying = true;
         }
-        if (hp <= (-1 * (mhp / 2))) {
+        if (hp <= (-1 * (maxHp / 2))) {
             isDead = true;
         }
     }
 
     //increases hp, updates isWounded/Mortal/Dying
+    //has no effect on a dead creature1
     public void heal(int amount) {
-        hp += amount;
-        if (hp > mhp) {
-            hp = mhp;
+        if (isDead) {
+            return;
         }
 
-        if (hp >= mhp/2) {
+        hp += amount;
+        if (hp > maxHp) {
+            hp = maxHp;
+        }
+
+        if (hp >= maxHp /2) {
             isWounded = false;
         }
-        if (hp >= mhp/4) {
+        if (hp >= maxHp /4) {
             isMortal = false;
         }
         if (hp >= 0) {
@@ -327,7 +449,7 @@ public class Creature {
 
     //increases temp hp (thp)
     public void giveThp(int amount) {
-        thp += amount;
+        tempHp += amount;
     }
 
 
@@ -357,32 +479,170 @@ public class Creature {
     }
 
 
+    //adds a weapon to currentWeapons
+    public void equipWeapon(Weapon weapon) {
+        currentWeapons.add(weapon);
+    }
+
+    //removes a weapon from currentWeapons. Returns a boolean: true if successfully removed, false if failed to find.
+    public boolean unequipWeapon(Weapon weapon) {
+
+        int index = indexOfWeapon(weapon);
+        if (index == -1) {
+            return false;
+        }
+
+        currentWeapons.remove(index);
+        return true;
+
+    }
+
+
 
     //UTILITY METHODS
 
     public int rollD20(int modifier, int advantages, int disadvantages) {
         int maxRoll = -99;
         int minRoll = 99;
-        int numRolls = Math.abs(advantages - disadvantages);
+        int numRolls = 1 + Math.abs(advantages - disadvantages);
 
         for (int i = 0; i < numRolls; i++) {
-            int roll = (int) (Math.random() * 20) + 1 + modifier;
+            int roll = (int) (Math.random() * 20) + 1;
             if (roll > maxRoll) {
                 maxRoll = roll;
             }
             if (roll < minRoll) {
                 minRoll = roll;
             }
+            System.out.println("Roll " + i + ": " + roll);
         }
 
+        System.out.println("Max Roll: " + maxRoll);
+        System.out.println("Min Roll: " + minRoll);
+
         if (advantages > disadvantages) {
-            return maxRoll;
+            return maxRoll + modifier;
         } else {
-            return minRoll;
+            return minRoll + modifier;
         }
     }
 
+    //finds the first index of a given weapon in currentWeapons. Returns -1 if none found.
+    public int indexOfWeapon(Weapon weapon) {
+
+        for (int i = 0; i < currentWeapons.size(); i++) {
+            if (weapon.equals(currentWeapons.get(i))) {
+                return i;
+            }
+        }
+
+        return -1;
+
+    }
+
+
+
 
     //getter methods (booooring!)
+
+    public String getName() {
+        return name;
+    }
+
+    public int getMaxHp() {
+        return maxHp;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public int getTempHp() {
+        return tempHp;
+    }
+
+    public int getMaxEp() {
+        return maxEp;
+    }
+
+    public int getEp() {
+        return ep;
+    }
+
+    public int getMaxAp() {
+        return maxAp;
+    }
+
+    public int getAp() {
+        return ap;
+    }
+
+    public int getHealthMod() {
+        return healthMod;
+    }
+
+    public int getProficiency() {
+        return proficiency;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public boolean isWounded() {
+        return isWounded;
+    }
+
+    public boolean isMortal() {
+        return isMortal;
+    }
+
+    public boolean isDying() {
+        return isDying;
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public int[] getAbilities() {
+        return abilities;
+    }
+
+    public boolean[] getSavingThrows() {
+        return savingThrows;
+    }
+
+    public int getUniversalRes() {
+        return universalRes;
+    }
+
+    public int getPhysicalRes() {
+        return physicalRes;
+    }
+
+    public int getElementalRes() {
+        return elementalRes;
+    }
+
+    public int getCorrosiveRes() {
+        return corrosiveRes;
+    }
+
+    public int getArcaneRes() {
+        return arcaneRes;
+    }
+
+    public ArrayList<Skill> getSkillProfs() {
+        return skillProfs;
+    }
+
+    public ArrayList<Weapon> getCurrentWeapons() {
+        return currentWeapons;
+    }
+
+    public Action[] getBaseActions() {
+        return baseActions;
+    }
 
 }

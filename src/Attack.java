@@ -12,24 +12,53 @@ public class Attack extends Action {
     private int diceType;
     private int diceNumber;
     private int modifier;
-    private Weapon carrier;
+    private int damageType;
 
     //constructor without modifier (defaults to zero)
-    public Attack(String name, String description, int cost, int diceType, int diceNumber, Weapon carrier) {
+    public Attack(String name, String description, int cost, int diceType, int diceNumber, int damageType) {
         super(name, description, cost);
         this.diceType = diceType;
         this.diceNumber = diceNumber;
-        this.carrier = carrier;
+        this.damageType = damageType;
         modifier = 0;
     }
 
     //constructor with modifier
-    public Attack(String name, String description, int cost, int diceType, int diceNumber, int modifier, Weapon carrier) {
+    public Attack(String name, String description, int cost, int diceType, int diceNumber, int modifier, int damageType) {
         super(name, description, cost);
         this.diceType = diceType;
         this.diceNumber = diceNumber;
-        this.carrier = carrier;
+        this.damageType = damageType;
         this.modifier = modifier;
+    }
+
+
+    //uses the attack. requires a target creature and an attacker creature
+    //returns TRUE if the attack hits, FALSE if the attack misses.
+    public boolean use(Creature target, Creature attacker) {
+
+        int damage = damage(0, false, false, false);
+
+        if (!target.parryPrompt(diceType, diceNumber)) { //if the target DOESN'T parry
+            target.damage(damage, damageType);
+            return true;
+        }
+
+        //if the target DOES parry
+
+        int defenderParry = target.defendingParry(target.defendingParryAdvantages(),target.defendingParryDisadvantages());
+        int attackerParry = attacker.attackingParry(attacker.attackingParryAdvantages(), attacker.attackingParryDisadvantages());
+
+        System.out.println("Attacker Parry: " + attackerParry);
+        System.out.println("Defender Parry: " + defenderParry);
+
+        if (attackerParry > defenderParry) {
+            target.damage(damage, damageType);
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
 
@@ -59,9 +88,19 @@ public class Attack extends Action {
     }
 
 
-    //overrides canUse. Takes into account both AP cost and the number of attacks the carrier weapon has made this turn.
-    public boolean canUse(int userAP) {
-        return (userAP >= cost); //TODO: Add functionality once Weapon gets the attacks made variable
+
+    //Getters
+
+    public int getDiceType() {
+        return diceType;
+    }
+
+    public int getDiceNumber() {
+        return diceNumber;
+    }
+
+    public int getModifier() {
+        return modifier;
     }
 
 }
