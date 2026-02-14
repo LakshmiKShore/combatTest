@@ -16,71 +16,14 @@ public class Main {
     static final int corrosive = 2;
     static final int arcane = 3;
 
-    static Entity enemy = new Entity(
-            "Bog Jones", 26, 2);
-    static PlayerCharacter p1 = new PlayerCharacter("Lakshmi",3,0,2,0,1,-1);
-    static PlayerCharacter p2 = new PlayerCharacter("Fen", 1, 2, 3, -1, 0, 0);
-
     public static void main(String[] args) {
 
+        Creature bogJ = new Creature("Bog Jones",1, 2, 0, 1, 2, 0, 1, 0, false, true, false, new Skill[]{});
 
+        System.out.println(Creature.foraging);
+        System.out.println(Creature.stealth);
+        System.out.println(Creature.athletics);
 
-
-    }
-
-
-
-
-
-
-
-
-    public static void initiativeRunner() {
-
-        //Initiative is an array that keeps all creatures engaged in combat in a list. The list is ordered by initiative order.
-        ArrayList<PlayerCharacter> initiative = new ArrayList<>();
-
-        initiative.add(p1);
-        initiative.add(p2);
-
-        int prevInit = 0;
-
-        ArrayList<Double> initRolls = new ArrayList<>();
-        for (PlayerCharacter c : initiative) {
-            initRolls.add(c.initiativeRoll());
-        }
-
-
-
-        while ((p1.getIsAlive() || p2.getIsAlive()) && enemy.getIsAlive()) {
-            enemy.runTurn();
-            System.out.println();
-            p1.runTurn();
-            System.out.println();
-            p2.runTurn();
-            System.out.println();
-        }
-
-    }
-
-    public static int arrayListMax(ArrayList<Integer> arl) {
-        int max = arl.get(0);
-        for (int x : arl) {
-            if (x > max) {
-                max = x;
-            }
-        }
-        return max;
-    }
-
-    public static int arrayListMax(ArrayList<Integer> arl, double below) {
-        int max = arl.get(0);
-        for (int x : arl) {
-            if (x > max && x < below) {
-                max = x;
-            }
-        }
-        return max;
     }
 
 }

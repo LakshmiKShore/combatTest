@@ -7,6 +7,8 @@ public class Skill {
     static final int wit = 4;
     static final int will = 5;
 
+    static final String[] abilities = {"Strength", "Dexterity", "Constitution", "Knowledge", "Wit", "Willpower"};
+
     String name;
     int ability;
 
@@ -16,6 +18,10 @@ public class Skill {
         this.ability = baseAbility;
     }
 
+    //toString method, prints name and base ability
+    public String toString() {
+        return name + " (" + abilities[ability] + ")";
+    }
 
     //getters
     public String getName() {

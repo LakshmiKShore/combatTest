@@ -14,9 +14,9 @@ public class Action {
             - Use
      */
 
-    private String name;
-    private String description;
-    private int cost;
+    protected String name;
+    protected String description;
+    protected int cost;
 
     //custom constructor
     public Action(String name, String description, int cost) {
@@ -31,6 +31,11 @@ public class Action {
         return userAP >= cost;
     }
 
+
+    //toString, prints name and description
+    public String toString() {
+        return (name + ". " + description);
+    }
 
     //getter methods
     public String getName() {
