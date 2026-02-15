@@ -1,18 +1,9 @@
 public class Attack extends Action {
 
-    /*
-    Attack needs:
-        - Instance Variables
-            - Type of Dice
-            - Number of Dice
-            - Special Modifiers
-            - Weapon carrier
-     */
-
-    private int diceType;
-    private int diceNumber;
-    private int modifier;
-    private int damageType;
+    private final int diceType;
+    private final int diceNumber;
+    private final int modifier;
+    private final int damageType;
 
     //constructor without modifier (defaults to zero)
     public Attack(String name, String description, int cost, int diceType, int diceNumber, int damageType) {

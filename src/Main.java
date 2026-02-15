@@ -1,6 +1,7 @@
 /* TODO:
     - Write creature class that Enemy and Player can extend from
-    - Create initiative system
+        - Create Player class
+        - Create Enemy class
     - Create feature class
     - Create character creation system
     - Create leveling system
@@ -25,11 +26,11 @@ public class Main {
 
         Creature bogJ = new Creature("Bog Jones",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {new Weapon(weapon)});
         Creature deltaJ = new Creature("Delta Jones",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {new Weapon(weapon)});
-        Creature swampJ = new Creature("Swamp Jones",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {new Weapon(weapon)});
         Creature fennick = new Creature("Fennick",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {new Weapon(weapon)});
         Creature ajax = new Creature("Ajax",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {new Weapon(weapon)});
 
-        Combat combat = new Combat(new Creature[] {fennick, ajax}, new Creature[] {bogJ, deltaJ, swampJ});
+        Combat combat = new Combat(new Creature[] {fennick, ajax}, new Creature[] {bogJ, deltaJ});
+        combat.runCombat();
 
     }
 

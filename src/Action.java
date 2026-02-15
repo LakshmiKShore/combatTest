@@ -1,17 +1,8 @@
 public class Action {
     /*
-    Action class needs:
-        - Instance Variables
-            - Name
-            - Description
-            - Action Point Cost
-        - Child Classes
-            - Attack
-            - Elementalist Spell
-            - Hemomancer Spell
-        - Methods
-            - Check if valid
-            - Use
+        TODO:
+            - Create Child Classes for different types of actions
+            - Create an implementation for the switch stances action
      */
 
     protected String name;

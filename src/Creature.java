@@ -30,10 +30,10 @@ public class Creature {
             - Take Damage                                   X
             - Heal/Give THP                                 X
             - Print Status
-            - Run Turn
+            - Run Turn                                      X
                 - Start Turn                                X
-                - Run Turn
-                - End Turn
+                - Run Turn                                  X
+                - End Turn                                  X
             - Defending Parry                               X
             - Attacking Parry                               X
             - Roll Initiative                               X
@@ -49,9 +49,10 @@ public class Creature {
         TODO:
             - Create a method in Creature that checks if the creature can use an attack (call the one in weapon)
                 - Needs to check against ALL weapons
-            - Create a method in Creature that. attacks.
             - Create a method that prints out all possible actions
                 - base actions and weapon attacks
+            - Create a system to make sure that you have enough hands for the weapons you're wielding
+            - Create an Action that lets the player switch stances
      */
 
 
@@ -206,33 +207,37 @@ public class Creature {
     //TURN RELATED METHODS
 
     //Runs the 3 main turn-related methods in order.
-    public void runTurn() {
-        startTurn();
-        mainTurn();
-        endTurn();
+    public void runTurn(Creature[] allies, Creature[] enemies) {
+        if (isDead) {
+            return;
+        }
+
+        startTurn(allies, enemies);
+        mainTurn(allies, enemies);
+        endTurn(allies, enemies);
     }
 
     //handles all effects that happen at the start of your turn.
-    public void startTurn() {
+    public void startTurn(Creature[] allies, Creature[] enemies) {
         /*
         WILL ADD FUNCTIONALITY ONCE FEATURES ARE ADDED.
         SOME THINGS DO HAPPEN HERE I PROMISE.
         JUST NONE YET.
          */
 
-        runTurn();
-
     }
 
     //runs a loop of the turn
-    public void mainTurn() {
+    public void mainTurn(Creature[] allies, Creature[] enemies) {
 
         boolean quitTurn = false;
 
         //Turn Loop
         while (ap > 0 && !quitTurn) {
 
-            //turnBehavior();
+            boolean didSomething = turnBehavior(allies, enemies);
+
+            quitTurn = !didSomething;
 
         }
 
@@ -241,11 +246,11 @@ public class Creature {
     }
 
     //handles all effects that happen at the end of your turn.
-    public void endTurn() {
+    public void endTurn(Creature[] allies, Creature[] enemies) {
 
         if (isDying) {
-            System.out.println(name + " is bleeding out and took 1 damage.");
-            hp--;
+            System.out.print(name + " is bleeding out and took ");
+            damageUnresistable(1, Main.physical);
         }
 
         if (!isDying) {
@@ -260,20 +265,20 @@ public class Creature {
 
     //Decides what to do on the turn. Returns true if something was done this loop, false if not (Doing nothing ends the turn)
     //MUST BE OVERRIDDEN IN CHILD CLASSES!
-    //A Creature will always attempt to use their first attack in their first weapon. If they can't, they end turn.
-    /*
+    //A Creature will always attempt to use their first attack in their first weapon on the first enemy. If they can't, they end turn.
 
-    public boolean turnBehavior() { TODO: FINISH METHOD
+    public boolean turnBehavior(Creature[] allies, Creature[] enemies) {
         boolean didSomething = false;
 
         Attack firstAttack = currentWeapons.get(0).getCurrentStance().getAttacks()[0];
 
         if (firstAttack.canUse(ap, 0)) {
-            firstAttack.use() //TODO: Create Combat class that sorts creatures into heroes and villains
+            attack(firstAttack, currentWeapons.get(0), enemies[0]);
+            didSomething = true;
         }
-    }
 
-     */
+        return didSomething;
+    }
 
 
 
@@ -433,18 +438,7 @@ public class Creature {
         hp -= damage;
         System.out.println(damage + " " + Main.damageTypes[type] + " damage.");
 
-        if (hp <= maxHp /2) {
-            isWounded = true;
-        }
-        if (hp <= maxHp /4) {
-            isMortal = true;
-        }
-        if (hp <= 0) {
-            isDying = true;
-        }
-        if (hp <= (-1 * (maxHp / 2))) {
-            isDead = true;
-        }
+        updateWoundedStatus();
     }
 
     //a version of the damage method that doesn't factor in resistances.
@@ -458,23 +452,13 @@ public class Creature {
         }
 
         hp -= amount;
+        System.out.println(amount + " unresistable " + Main.damageTypes[type] + " damage.");
 
-        if (hp <= maxHp /2) {
-            isWounded = true;
-        }
-        if (hp <= maxHp /4) {
-            isMortal = true;
-        }
-        if (hp <= 0) {
-            isDying = true;
-        }
-        if (hp <= (-1 * (maxHp / 2))) {
-            isDead = true;
-        }
+        updateWoundedStatus();
     }
 
     //increases hp, updates isWounded/Mortal/Dying
-    //has no effect on a dead creature1
+    //has no effect on a dead creature.
     public void heal(int amount) {
         if (isDead) {
             return;
@@ -485,20 +469,37 @@ public class Creature {
             hp = maxHp;
         }
 
-        if (hp >= maxHp /2) {
-            isWounded = false;
-        }
-        if (hp >= maxHp /4) {
-            isMortal = false;
-        }
-        if (hp >= 0) {
-            isDying = false;
-        }
+        updateWoundedStatus();
     }
 
     //increases temp hp (thp)
     public void giveThp(int amount) {
         tempHp += amount;
+    }
+
+    //updates isWounded/Mortal/Dying/Dead
+    public void updateWoundedStatus() {
+        isWounded = (hp <= maxHp / 2);
+
+        isMortal = (hp <= maxHp /4);
+
+        if (hp <= 0) {
+            if (!isDying) {
+                System.out.println(name + " is dying.");
+            }
+            isDying = true;
+        } else {
+            if (isDying) {
+                System.out.println(name + " was stabilized.");
+            }
+        }
+
+        if (hp <= (-1 * (maxHp / 2))) {
+            if (!isDead) {
+                System.out.println(name + " died.");
+            }
+            isDead = true;
+        }
     }
 
 

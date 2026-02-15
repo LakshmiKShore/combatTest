@@ -1,18 +1,11 @@
 import java.util.*;
 
 public class Combat {
-    /*
-    Combat Class needs:
-        - An ArrayList that contains all creatures that are alive and actively participating in the combat
-            - This ArrayList must be sorted in initiative order
-        - Two ArrayLists that sort the above arrayList into two different sides
-        - A method that lets a creature pick a target from the enemies' ArrayList
-        - A loop that runs combat until one side is all dead
-     */
 
     ArrayList<Creature> heroes = new ArrayList<>();
     ArrayList<Creature> villains = new ArrayList<>();
     ArrayList<Creature> combatants = new ArrayList<>();
+    ArrayList<Creature> toBeRemoved = new ArrayList<>();
     Map<Creature, Integer> teamAffiliation = new HashMap<>();
     Map<Creature, Double> initiativeRolls;
 
@@ -26,8 +19,8 @@ public class Combat {
         this.heroes = new ArrayList<>(Arrays.asList(heroes));
         this.villains = new ArrayList<>(Arrays.asList(villains));
 
-        combatants = this.heroes;
-        combatants.addAll(this.villains);
+        Collections.addAll(combatants, heroes);
+        Collections.addAll(combatants, villains);
 
         for(Creature creature : heroes) {
             teamAffiliation.put(creature, 1);
@@ -38,6 +31,7 @@ public class Combat {
 
         initiativeRolls = promptInitiativeRolls();
         sortByInitiative();
+
     }
 
 
@@ -45,30 +39,82 @@ public class Combat {
     //TURN RUNNING METHODS
 
     //Loops through combatants, and runs each combatant's turn in order.
+    //Passes two arrays representing the creatures in the combat to the creature running its turn
+    //These arrays are sorted as allies (same team) and enemies (opposite team).
     public void runCombat() {
 
+        int round = 0;
+
         while (whoWon() == 0) {
+            round++;
+            System.out.println("Round " + round);
+            System.out.println(this);
+
             for (Creature creature : combatants) {
+                System.out.println(creature.getName() + "'s Turn.");
                 creature.printHpReport();
+                int team = teamAffiliation.get(creature);
 
-                if (creature.isDead()) {
-                    int team = teamAffiliation.get(creature);
+                Creature[] allies = new Creature[0];
+                Creature[] enemies = new Creature[0];
 
-                    if (team == -1) {
-                        villains.remove(creature);
-                    }
-                    if (team == 1) {
-                        heroes.remove(creature);
-                    }
-                    continue;
+                if (team == -1) {
+                    allies = villains.toArray(allies);
+                    enemies = heroes.toArray(enemies);
+                }
+                if (team == 1) {
+                    allies = heroes.toArray(allies);
+                    enemies = villains.toArray(enemies);
                 }
 
-                creature.runTurn();
+                creature.runTurn(allies, enemies);
+
+                markDeadCreatures(); //marks dead creatures by adding them to toBeRemoved, also removes them as targets
+                System.out.println();
+
+                if (whoWon() != 0) {
+                    break;
+                }
 
             }
+
+            removeDeadCreatures();
+
         }
 
     }
+
+    //Adds dead creatures to an ArrayList that stores enemies that need to be removed from initiative
+    //This also removes dead creatures from the villains and heroes list, which prevents them from being targeted
+    public void markDeadCreatures() {
+
+        for (Creature creature : combatants) {
+
+            if (!creature.isDead()) { //skips if the creature isn't. dead.
+                continue;
+            }
+
+            villains.remove(creature);
+            heroes.remove(creature);
+            toBeRemoved.add(creature);
+
+        }
+
+    }
+
+    //Removes creatures marked by markDeadCreatures from initiative, then clears the list of marked creatures.
+    public void removeDeadCreatures() {
+
+        for (Creature creature : toBeRemoved) {
+            villains.remove(creature);
+            heroes.remove(creature);
+            combatants.remove(creature);
+        }
+
+        toBeRemoved.clear();
+
+    }
+
 
     //Checks if either side has won. Returns -1 if villains have won, 1 if heroes have won, and 0 if combat is ongoing
     //One side wins when all heroes are dead, or when all villains are dead.

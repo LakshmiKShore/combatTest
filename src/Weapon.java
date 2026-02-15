@@ -1,11 +1,8 @@
 public class Weapon {
 
     /*
-    Updates to be made to Weapon:
-        - Switch to using the new Attack class instead of hardcoding attacks
-        - start storing attacks used in Weapon instead of PlayerCharacter
-        - add a method to increment attacks used, and one to reset it
-        - add a method checking attacks used against max attacks/turn
+        TODO:
+            - Update changeStance() to check for available hands.
      */
 
     private static int nextInstanceId = 0;
