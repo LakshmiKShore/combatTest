@@ -47,8 +47,6 @@ public class Creature {
 
     /*
         TODO:
-            - Create a method in Creature that checks if the creature can use an attack (call the one in weapon)
-                - Needs to check against ALL weapons
             - Create a method that prints out all possible actions
                 - base actions and weapon attacks
             - Create a system to make sure that you have enough hands for the weapons you're wielding
@@ -92,6 +90,10 @@ public class Creature {
     protected int corrosiveRes;
     protected int arcaneRes;
 
+    protected int attacksMade;
+    protected int maxHands;
+    protected int freeHands;
+
     public static final Skill athletics = new Skill("Athletics", str);
     public static final Skill exertion = new Skill("Exertion", str);
     public static final Skill agility = new Skill("Agility", dex);
@@ -120,9 +122,11 @@ public class Creature {
     protected ArrayList<Weapon> currentWeapons;
 
     protected Action parry = new Action("Parry", "Attempt to block an incoming attack.", 1);
+    protected Action changeStance = new Action("Change Stance", "Switch how you wield one of your weapons, changing which attacks you have access to.", 1);
 
     protected Action[] baseActions = new Action[] {
-            parry
+            parry,
+            changeStance
     };
 
 
@@ -162,13 +166,16 @@ public class Creature {
         maxHp = 4 + (level * healthMod) + (con * proficiency * 2);
         hp = maxHp;
         tempHp = 0;
+
+        maxHands = 2;
+        freeHands = 2;
     }
 
     //fully customizable constructor. no formulas here baybee
     public Creature(String name, int level, int healthMod, int str, int dex, int con, int know, int wit, int will,
                     boolean hasReflexSaves, boolean hasFortSaves, boolean hasWillSaves, int proficiency,
                     int maxAp, int maxEp, int maxHp, int universalRes, int physicalRes, int elementalRes, int corrosiveRes,
-                    int arcaneRes, Skill[] skillProfs, Weapon[] currentWeapons) {
+                    int arcaneRes, int maxHands, Skill[] skillProfs, Weapon[] currentWeapons) {
 
         this.name = name;
         this.level = level;
@@ -199,6 +206,9 @@ public class Creature {
         this.elementalRes = elementalRes;
         this.corrosiveRes = corrosiveRes;
         this.arcaneRes = arcaneRes;
+
+        this.maxHands = maxHands;
+        freeHands = maxHands;
     }
 
 
@@ -272,8 +282,8 @@ public class Creature {
 
         Attack firstAttack = currentWeapons.get(0).getCurrentStance().getAttacks()[0];
 
-        if (firstAttack.canUse(ap, 0)) {
-            attack(firstAttack, currentWeapons.get(0), enemies[0]);
+        if (canUseAttack(firstAttack)) {
+            attack(firstAttack, weaponToUse(firstAttack), enemies[0]);
             didSomething = true;
         }
 
@@ -287,8 +297,10 @@ public class Creature {
     //runs an attack. Here is where action points are spent.
     public void attack(Attack attack, Weapon weapon, Creature target) {
 
-        int discount = 0;
-        int damageBonus = proficiency;
+        int discount = getNextAttackDiscount();
+        int damageBonus = getNextAttackModifier();
+
+        System.out.println(weapon);
 
         //if you cannot make that attack
         if (!weapon.canAttack(attack, ap, discount)) {
@@ -299,8 +311,53 @@ public class Creature {
         System.out.print(name + " attacked " + target.getName() + " with their " + weapon.getName() + "'s " + attack.getName() + " and " );
 
         weapon.attack(attack, target, this, damageBonus);
-        ap -= attack.getCost();
+        ap -= (attack.getCost() - discount);
 
+    }
+
+    //Checks if the player can use a given attack from any of their weapons.
+    public boolean canUseAttack(Attack attack) {
+
+        for (Weapon weapon : currentWeapons) {
+            if (!weapon.hasAttack(attack)) {
+                continue;
+            }
+            if (weapon.canAttack(attack, ap, getNextAttackDiscount())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    //returns the first Weapon in currentWeapons that can use a given attack.
+    //canUseAttack must return TRUE before you can use this method, or it could return an error
+    public Weapon weaponToUse(Attack attack){
+        for (Weapon weapon : currentWeapons) {
+            if (!weapon.hasAttack(attack)) {
+                continue;
+            }
+            if (weapon.canAttack(attack, ap, getNextAttackDiscount())) {
+                return weapon;
+            }
+        }
+
+        System.out.println("Error: No Valid Weapon");
+        return null;
+
+    }
+
+    //Calculates the discount for the player's next attack.
+    public int getNextAttackDiscount() {
+        return 0;
+    }
+
+    //Calculates the modifier for the player's next attack.
+    public int getNextAttackModifier() {
+        int modifier = 0;
+        modifier += proficiency;
+
+        return modifier;
     }
 
 
@@ -403,6 +460,60 @@ public class Creature {
         double offset = Math.random();
         return roll + offset;
 
+    }
+
+    //returns the total number of free hands the player has, when ignoring the given weapon.
+    public int newlyAvailableHands(Weapon weapon) {
+        int handsInUse = handsInUse();
+        handsInUse -= weapon.getCurrentHandsUsed();
+        return maxHands - handsInUse;
+    }
+
+    //updates the number of free hands the player has.
+    public void updateFreeHands() {
+        freeHands = maxHands - handsInUse();
+    }
+
+    //returns the total number of hands being currently used.
+    public int handsInUse() {
+        int sum = 0;
+        for (Weapon weapon : currentWeapons) {
+            sum += weapon.getCurrentHandsUsed();
+        }
+        return sum;
+    }
+
+    //switches a weapon's stance.
+    public void switchStances(Weapon weapon, Stance newStance) {
+        if (!canSwitchStances(weapon, newStance)) {
+            System.out.println("Cannot Switch to this Stance.");
+            return;
+        }
+        weapon.setCurrentStance(newStance);
+        ap -= changeStance.getCost();
+    }
+
+    //returns TRUE if the player has enough AP and hands to switch to the given stance.
+    public boolean canSwitchStances(Weapon weapon, Stance newStance) {
+
+        if (hasWeapon(weapon)) {
+            return false;
+        }
+        if (!weapon.hasStance(newStance)) {
+            return false;
+        }
+        return newStance.getHands() > newlyAvailableHands(weapon);
+    }
+
+    //returns TRUE if the player has the given weapon, false otherwise.
+    public boolean hasWeapon(Weapon weapon) {
+
+        for (Weapon weapon1 : currentWeapons) {
+            if (weapon.equals(weapon1)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

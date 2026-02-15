@@ -80,6 +80,10 @@ public class Attack extends Action {
     }
 
 
+    public String toString() {
+        return (name + ": " + description + ". Deals " + diceNumber + "d" + diceType);
+    }
+
 
     //Getters
 

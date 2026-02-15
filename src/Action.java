@@ -16,7 +16,6 @@ public class Action {
         this.cost = cost;
     }
 
-
     //checks if the user has enough AP to use this action. returns true if they have enough, false otherwise
     public boolean canUse(int userAP, int discount){
         return userAP >= (cost - discount);

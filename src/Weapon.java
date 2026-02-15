@@ -123,13 +123,9 @@ public class Weapon {
     }
 
 
-    //switches to a certain stance in Stance[] stances
-    public void setCurrentStance(int newStance) {
-        if (newStance >= stances.length) {
-            System.out.println("Invalid Stance.");
-            return;
-        }
-        currentStance = stances[newStance];
+    //sets the current stance to a new stance.
+    public void setCurrentStance(Stance newStance) {
+        currentStance = newStance;
     }
 
 
@@ -147,9 +143,46 @@ public class Weapon {
         }
     }
 
+    //Checks if the weapon's current stance contains a given attack.
+    public boolean hasAttack(Attack attack) {
+
+        for (Attack attack1 : currentStance.getAttacks()) {
+            if (attack.equals(attack1)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    //Checks if the weapon has a certain stance.
+    public boolean hasStance(Stance stance) {
+
+        for (Stance stance1 : stances) {
+            if (stance.equals(stance1)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 
 
+    public String toString() {
+
+        String output = name + ". \n";
+        for (Stance stance : stances) {
+            output += stance;
+        }
+        return output;
+
+    }
+
+    //returns the number of hands used by the current stance.
+    public int getCurrentHandsUsed() {
+        return currentStance.getHands();
+    }
 
     public String getName() {
         return name;

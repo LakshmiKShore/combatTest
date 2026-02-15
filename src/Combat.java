@@ -132,6 +132,7 @@ public class Combat {
     }
 
 
+
     //INITIATIVE ROLLING/SORTING METHODS
 
 

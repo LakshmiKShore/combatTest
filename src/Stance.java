@@ -12,6 +12,15 @@ public class Stance {
         this.hands = hands;
     }
 
+    public String toString() {
+        String output = "";
+        for (int i = 0; i < attacks.length; i++) {
+            output += ("Attack " + (i + 1) + ": " + attacks[i]);
+        }
+        return output;
+    }
+
+
     public Attack[] getAttacks() {
         return attacks;
     }
