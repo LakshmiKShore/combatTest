@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 /* TODO:
     - Write creature class that Enemy and Player can extend from
     - Create initiative system
@@ -15,19 +13,23 @@ public class Main {
     static final int corrosive = 2;
     static final int arcane = 3;
 
+    static final String[] damageTypes = new String[] {
+            "Physical", "Elemental", "Corrosive", "Arcane"
+    };
+
     public static void main(String[] args) {
 
         Attack poke = new Attack("Poke", "pokepokepokepoke", 3, 4, 1, Main.physical);
         Stance stance = new Stance(new Attack[] {poke}, 1, 1);
-        Weapon weapon = new Weapon(stance);
+        Weapon weapon = new Weapon(stance, "Stick");
 
-        Creature bogJ = new Creature("Bog Jones",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {weapon});
-        Creature deltaJ = new Creature("Delta Jones",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {weapon});
+        Creature bogJ = new Creature("Bog Jones",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {new Weapon(weapon)});
+        Creature deltaJ = new Creature("Delta Jones",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {new Weapon(weapon)});
+        Creature swampJ = new Creature("Swamp Jones",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {new Weapon(weapon)});
+        Creature fennick = new Creature("Fennick",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {new Weapon(weapon)});
+        Creature ajax = new Creature("Ajax",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {new Weapon(weapon)});
 
-        System.out.println("Health: " + bogJ.getHp());
-        System.out.println(weapon.canAttack(poke, 2, 1));
-        System.out.println(weapon.attack(poke, bogJ, deltaJ));
-        System.out.println("Health: " + bogJ.getHp());
+        Combat combat = new Combat(new Creature[] {fennick, ajax}, new Creature[] {bogJ, deltaJ, swampJ});
 
     }
 

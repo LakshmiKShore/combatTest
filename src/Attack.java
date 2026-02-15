@@ -34,12 +34,14 @@ public class Attack extends Action {
 
 
     //uses the attack. requires a target creature and an attacker creature
+    //prints out if the attack hit or missed.
     //returns TRUE if the attack hits, FALSE if the attack misses.
-    public boolean use(Creature target, Creature attacker) {
+    public boolean use(Creature target, Creature attacker, int damageBonus) {
 
-        int damage = damage(0, false, false, false);
+        int damage = damage(damageBonus, false, false, false);
 
         if (!target.parryPrompt(diceType, diceNumber)) { //if the target DOESN'T parry
+            System.out.print("hit, dealing ");
             target.damage(damage, damageType);
             return true;
         }
@@ -49,13 +51,12 @@ public class Attack extends Action {
         int defenderParry = target.defendingParry(target.defendingParryAdvantages(),target.defendingParryDisadvantages());
         int attackerParry = attacker.attackingParry(attacker.attackingParryAdvantages(), attacker.attackingParryDisadvantages());
 
-        System.out.println("Attacker Parry: " + attackerParry);
-        System.out.println("Defender Parry: " + defenderParry);
-
         if (attackerParry > defenderParry) {
+            System.out.print("hit, dealing ");
             target.damage(damage, damageType);
             return true;
         } else {
+            System.out.println("missed.");
             return false;
         }
 
