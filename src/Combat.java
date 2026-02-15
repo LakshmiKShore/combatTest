@@ -37,7 +37,6 @@ public class Combat {
         }
 
         initiativeRolls = promptInitiativeRolls();
-        System.out.println(this);
         sortByInitiative();
     }
 
