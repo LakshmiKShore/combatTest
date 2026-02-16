@@ -2,18 +2,23 @@ public class Action {
     /*
         TODO:
             - Create Child Classes for different types of actions
-            - Create an implementation for the switch stances action
      */
 
     protected String name;
     protected String description;
     protected int cost;
+    protected int type;
+
+    public static final int base = 0;
+    public static final int reaction = 1;
+    public static final int attack = 2;
 
     //custom constructor
-    public Action(String name, String description, int cost) {
+    public Action(String name, String description, int cost, int type) {
         this.name = name;
         this.description = description;
         this.cost = cost;
+        this.type = type;
     }
 
     //checks if the user has enough AP to use this action. returns true if they have enough, false otherwise
@@ -28,6 +33,10 @@ public class Action {
     }
 
     //getter methods
+    public int getType() {
+        return type;
+    }
+
     public String getName() {
         return name;
     }

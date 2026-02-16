@@ -7,6 +7,8 @@
     - Create leveling system
  */
 
+import java.util.Arrays;
+
 public class Main {
 
     static final int physical = 0;
@@ -20,16 +22,15 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Attack poke = new Attack("Poke", "pokepokepokepoke", 1, 1, 1, Main.physical);
+        Attack poke = new Attack("Poke", "pokepokepokepoke", 3, 4, 1, Main.physical);
         Stance stance = new Stance(new Attack[] {poke}, 1, 1);
         Weapon weapon = new Weapon(stance, "Stick");
 
         Creature bogJ = new Creature("Bog Jones",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {new Weapon(weapon), new Weapon(weapon)});
-        Creature deltaJ = new Creature("Delta Jones",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {new Weapon(weapon), new Weapon(weapon)});
-        Creature fennick = new Creature("Fennick",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {new Weapon(weapon), new Weapon(weapon)});
-        Creature ajax = new Creature("Ajax",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {new Weapon(weapon), new Weapon(weapon)});
+        Player fennick = new Player("Fennick",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {new Weapon(weapon), new Weapon(weapon)});
 
-        System.out.println(weapon);
+        Combat combat = new Combat(new Creature[] {fennick}, new Creature[] {bogJ});
+        combat.runCombat();
 
     }
 

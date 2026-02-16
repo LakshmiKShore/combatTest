@@ -21,7 +21,7 @@ public class Creature {
             - Resistances                                   X
             - Speed (CUT SYSTEM, MAYBE ADD LATER?)          X
             - ArrayList of current conditions
-            - ArrayList of actions that can be taken
+            - ArrayList of actions that can be taken        X
         - Constructors
             - Automatic Constructor                         X
             - Full constructor                              X
@@ -44,15 +44,6 @@ public class Creature {
             - Check for skill proficiency                   X
             - Level Up (maybe put in Player subclass)
      */
-
-    /*
-        TODO:
-            - Create a method that prints out all possible actions
-                - base actions and weapon attacks
-            - Create a system to make sure that you have enough hands for the weapons you're wielding
-            - Create an Action that lets the player switch stances
-     */
-
 
     protected String name;
     protected int maxHp;
@@ -121,11 +112,10 @@ public class Creature {
 
     protected ArrayList<Weapon> currentWeapons;
 
-    protected Action parry = new Action("Parry", "Attempt to block an incoming attack.", 1);
-    protected Action changeStance = new Action("Change Stance", "Switch how you wield one of your weapons, changing which attacks you have access to.", 1);
+    protected Action parry = new Action("Parry", "Attempt to block an incoming attack.", 1, 0);
+    protected Action changeStance = new Action("Change Stance", "Switch how you wield one of your weapons, changing which attacks you have access to.", 1, 0);
 
     protected Action[] baseActions = new Action[] {
-            parry,
             changeStance
     };
 
@@ -169,6 +159,7 @@ public class Creature {
 
         maxHands = 2;
         freeHands = 2;
+        attacksMade = 0;
     }
 
     //fully customizable constructor. no formulas here baybee
@@ -209,6 +200,7 @@ public class Creature {
 
         this.maxHands = maxHands;
         freeHands = maxHands;
+        attacksMade = 0;
     }
 
 
@@ -271,6 +263,8 @@ public class Creature {
             weapon.resetAttacksMade();
         }
 
+        attacksMade = 0;
+
     }
 
     //Decides what to do on the turn. Returns true if something was done this loop, false if not (Doing nothing ends the turn)
@@ -300,8 +294,6 @@ public class Creature {
         int discount = getNextAttackDiscount();
         int damageBonus = getNextAttackModifier();
 
-        System.out.println(weapon);
-
         //if you cannot make that attack
         if (!weapon.canAttack(attack, ap, discount)) {
             System.out.println("Cannot use.");
@@ -312,6 +304,7 @@ public class Creature {
 
         weapon.attack(attack, target, this, damageBonus);
         ap -= (attack.getCost() - discount);
+        attacksMade++;
 
     }
 
@@ -516,6 +509,48 @@ public class Creature {
         return false;
     }
 
+
+    //Formats and prints out the result of usableActions.
+    public void printUsableActions() {
+
+        for (Action action : getUsableActions()) {
+            System.out.println(action);
+        }
+
+    }
+
+    //Returns an Action[] array of all possible actions that the Creature can currently take.
+    public Action[] getUsableActions() {
+
+        ArrayList<Action> output = new ArrayList<>();
+
+        for (Action action : baseActions) {
+            if (action.canUse(ap, 0)) {
+                output.add(action);
+            }
+        }
+        for (Attack attack : getCurrentAttacks()) {
+            if (attack.canUse(ap, getNextAttackDiscount())) {
+                output.add(attack);
+            }
+        }
+
+        return output.toArray(new Action[0]);
+
+    }
+
+    //Returns an Attack[] array of the attacks currently available though currentWeapons
+    public Attack[] getCurrentAttacks() {
+
+        ArrayList<Attack> output = new ArrayList<>();
+
+        for (Weapon weapon : currentWeapons) {
+            output.addAll(Arrays.asList(weapon.getCurrentAttacks()));
+        }
+
+        return output.toArray(new Attack[0]);
+
+    }
 
 
     //HEALTH RELATED METHODS (damage, heal)
@@ -726,6 +761,16 @@ public class Creature {
     //prints out the result of the hpReport method.
     public void printHpReport() {
         System.out.println(hpReport());
+    }
+
+    //returns a string detailing action point and energy point values.
+    public String apReport() {
+        return (name + " has " + ap + "/" + maxAp + " action points and " + ep + "/" + maxEp + " energy points.");
+    }
+
+    //prints apReport
+    public void printApReport() {
+        System.out.println(apReport());
     }
 
 

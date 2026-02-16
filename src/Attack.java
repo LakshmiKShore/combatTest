@@ -7,7 +7,7 @@ public class Attack extends Action {
 
     //constructor without modifier (defaults to zero)
     public Attack(String name, String description, int cost, int diceType, int diceNumber, int damageType) {
-        super(name, description, cost);
+        super(name, description, cost, 2);
         this.diceType = diceType;
         this.diceNumber = diceNumber;
         this.damageType = damageType;
@@ -16,7 +16,7 @@ public class Attack extends Action {
 
     //constructor with modifier
     public Attack(String name, String description, int cost, int diceType, int diceNumber, int modifier, int damageType) {
-        super(name, description, cost);
+        super(name, description, cost, 2);
         this.diceType = diceType;
         this.diceNumber = diceNumber;
         this.damageType = damageType;
@@ -81,7 +81,7 @@ public class Attack extends Action {
 
 
     public String toString() {
-        return (name + ": " + description + ". Deals " + diceNumber + "d" + diceType);
+        return (name + ". Deals " + diceNumber + "d" + diceType);
     }
 
 

@@ -184,6 +184,11 @@ public class Weapon {
         return currentStance.getHands();
     }
 
+    //returns the attacks of the current stance.
+    public Attack[] getCurrentAttacks() {
+        return currentStance.getAttacks();
+    }
+
     public String getName() {
         return name;
     }
