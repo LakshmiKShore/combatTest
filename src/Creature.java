@@ -251,7 +251,7 @@ public class Creature {
     public void endTurn(Creature[] allies, Creature[] enemies) {
 
         if (isDying) {
-            System.out.print(name + " is bleeding out and took ");
+            System.out.println(name + " is bleeding out.");
             damageUnresistable(1, Main.physical);
         }
 
@@ -300,7 +300,7 @@ public class Creature {
             return;
         }
 
-        System.out.print(name + " attacked " + target.getName() + " with their " + weapon.getName() + "'s " + attack.getName() + " and " );
+        System.out.println(name + " attacked " + target.getName() + " with their " + weapon.getName() + "'s " + attack.getName() + "." );
 
         weapon.attack(attack, target, this, damageBonus);
         ap -= (attack.getCost() - discount);
@@ -582,7 +582,7 @@ public class Creature {
         }
 
         hp -= damage;
-        System.out.println(damage + " " + Main.damageTypes[type] + " damage.");
+        System.out.println(name + " took " + damage + " " + Main.damageTypes[type] + " damage.");
 
         updateWoundedStatus();
     }
@@ -598,7 +598,7 @@ public class Creature {
         }
 
         hp -= amount;
-        System.out.println(amount + " unresistable " + Main.damageTypes[type] + " damage.");
+        System.out.println(name + " took " + amount + " unresistable " + Main.damageTypes[type] + " damage.");
 
         updateWoundedStatus();
     }
@@ -771,6 +771,33 @@ public class Creature {
     //prints apReport
     public void printApReport() {
         System.out.println(apReport());
+    }
+
+    //returns a string detailing weapons wielded.
+    public String weaponReport() {
+        String output = "";
+
+        for (Weapon weapon : currentWeapons) {
+            output += weapon;
+            output += "\n";
+        }
+
+        return output;
+    }
+
+    public void printWeaponReport() {
+        System.out.println(weaponReport());
+    }
+
+    public String toString() {
+        StringBuilder output = new StringBuilder();
+
+        output.append(name).append(". \n");
+        output.append(hpReport()).append("\n");
+        output.append(apReport()).append("\n");
+        output.append(weaponReport());
+
+        return output.toString();
     }
 
 

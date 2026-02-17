@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class Player extends Creature {
@@ -43,6 +45,7 @@ public class Player extends Creature {
             if (input.equals("help")) {
                 System.out.println("Help. Prints all usable actions.");
                 System.out.println("Quit. Ends your turn.");
+                System.out.println("Look. Shows the status of an ally or enemy.");
                 printUsableActions();
                 continue;
             }
@@ -50,6 +53,19 @@ public class Player extends Creature {
             //"end turn" and "quit" return FALSE, ending the turn loop.
             if (input.equals("quit") || input.equals("end turn")) {
                 return false;
+            }
+
+            //"look" prompts a target out of all combatants, then prints that target.
+            if (input.equals("look")) {
+
+                ArrayList<Creature> combatants = new ArrayList<>();
+
+                Collections.addAll(combatants, allies);
+                Collections.addAll(combatants, enemies);
+
+                System.out.println(getTarget(combatants.toArray(new Creature[0])));
+
+                continue;
             }
 
 
@@ -102,30 +118,47 @@ public class Player extends Creature {
     }
 
 
+    //prompts user if they want to parry an incoming attack.
+    public boolean parryBehavior(int diceType, int diceNumber, int parryCost) {
+
+        if (!parry.canUse(ap, 0)) {
+            return false;
+        }
+
+        System.out.println(name + " is being attacked for " + diceNumber + "d" + diceType + " damage. It will cost " + parryCost + " AP to parry. Should " + name + " parry?");
+        while (true) {
+            String input = scanner.next().toLowerCase();
+            if (input.equals("yes") || input.equals("y")) {
+                return true;
+            }
+            if (input.equals("no") || input.equals("n")) {
+                return false;
+            }
+        }
+
+    }
+
+
     //prompts user to choose a target from an array
     public Creature getTarget(Creature[] possibleTargets) {
         System.out.println("Targeting?");
-        boolean doneChoosing = false;
         Creature target = null;
 
-        while (!doneChoosing) {
+        while (true) {
 
             String input = scanner.next().toLowerCase();
 
             for (Creature creature : possibleTargets) {
                 if (input.equals(creature.getName().toLowerCase())) {
                     target = creature;
-                    doneChoosing = true;
+
+                    return target;
                 }
             }
 
-            if (!doneChoosing) {
-                System.out.println("Invalid Target.");
-            }
+            System.out.println("Invalid Target.");
 
         }
-
-        return target;
 
     }
 

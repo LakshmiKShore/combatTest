@@ -32,7 +32,6 @@ public class Attack extends Action {
         int damage = damage(damageBonus, false, false, false);
 
         if (!target.parryPrompt(diceType, diceNumber)) { //if the target DOESN'T parry
-            System.out.print("hit, dealing ");
             target.damage(damage, damageType);
             return true;
         }
@@ -41,13 +40,14 @@ public class Attack extends Action {
 
         int defenderParry = target.defendingParry(target.defendingParryAdvantages(),target.defendingParryDisadvantages());
         int attackerParry = attacker.attackingParry(attacker.attackingParryAdvantages(), attacker.attackingParryDisadvantages());
+        System.out.print("Parried... ");
 
         if (attackerParry > defenderParry) {
-            System.out.print("hit, dealing ");
+            System.out.println("Hit!");
             target.damage(damage, damageType);
             return true;
         } else {
-            System.out.println("missed.");
+            System.out.println("Miss!");
             return false;
         }
 
