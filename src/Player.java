@@ -92,7 +92,7 @@ public class Player extends Creature {
 
             //change stance: call the chooseWeapon method and the chooseStanceChange method
             if (chosenAction.equals(changeStance)) {
-                chooseStanceChange();
+
                 return true;
             }
 
@@ -112,9 +112,28 @@ public class Player extends Creature {
     }
 
 
+    public Weapon chooseWeapon() { //TODO: this doesn't work for dual wielding weapons with the same name. AAAAA
+        System.out.println("Which weapon?");
+
+        while (true) {
+            String input = scanner.next().toLowerCase();
+
+            for (Weapon weapon : currentWeapons) {
+                if (input.equals(weapon.getName().toLowerCase())) {
+                    return weapon;
+                }
+            }
+        }
+    }
+
     //
-    public void chooseStanceChange() {
-        //TODO: Finish chooseStanceChange and chooseWeapon
+    public Weapon chooseStance(Weapon weapon) {
+        System.out.println("To what stance?");
+
+        while (true) {
+            //todo finsh
+        }
+
     }
 
 
