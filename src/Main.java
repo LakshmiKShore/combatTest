@@ -5,9 +5,9 @@
     - Create feature class
     - Create character creation system
     - Create leveling system
+    - Move damage types to Attack (or Weapon?) class
+    - Clean up formatting on "help" action in player.chooseWeapon and player.chooseStance
  */
-
-import java.util.Arrays;
 
 public class Main {
 
@@ -23,7 +23,7 @@ public class Main {
     public static void main(String[] args) {
 
         Attack poke = new Attack("Poke", "pokepokepokepoke", 3, 4, 1, Main.physical);
-        Stance stance = new Stance(new Attack[] {poke}, 1, 1);
+        Stance stance = new Stance(new Attack[] {poke}, 1, 1, "placeholderName");
         Weapon weapon = new Weapon(stance, "Stick");
 
         Creature bogJ = new Creature("Bog Jones",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {new Weapon(weapon), new Weapon(weapon)});

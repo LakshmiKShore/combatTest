@@ -203,7 +203,9 @@ public class Creature {
         attacksMade = 0;
     }
 
-
+    //this constructor solves an error for some reason idk
+    public Creature() {
+    }
 
 
     //TURN RELATED METHODS

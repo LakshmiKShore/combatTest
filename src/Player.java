@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Scanner;
 
@@ -13,6 +14,17 @@ public class Player extends Creature {
 
     Scanner scanner;
 
+    Class champion = new Class("Champion", 3);
+    Class warrior = new Class("Warrior", 3);
+    Class skirmisher = new Class("Skirmisher", 2);
+    Class duelist = new Class("Duelist", 2);
+    Class elementalist = new Class("Elementalist", 1);
+    Class hemomancer = new Class("Hemomancer", 1);
+
+    Class[] classes = {champion, warrior, skirmisher, duelist, elementalist, hemomancer};
+    Class playerClass;
+
+    int abilityPoints = 4;
 
 
     //super constructors
@@ -27,6 +39,59 @@ public class Player extends Creature {
         scanner = new Scanner(System.in);
         scanner.useDelimiter("\n");
     }
+
+
+    //Character Creation constructor. Allows the user to customize their character.
+    public Player() {
+        level = 1;
+        savingThrows[reflexSave] = false;
+        savingThrows[fortitudeSave] = false;
+        savingThrows[willSave] = false;
+        proficiency = 1;
+        maxAp = 7;
+        maxHands = 2;
+
+        System.out.println("What... is your name?");
+        name = scanner.next();
+
+        while (true) {
+            String inputClass = scanner.next().toLowerCase();
+            boolean done = false;
+
+            for (Class c : classes) {
+                if (inputClass.equals(c.getName().toLowerCase())) {
+                    playerClass = c;
+                    healthMod = c.getHealthMod();
+                    done = true;
+                }
+            }
+
+            if (done) {
+                break;
+            }
+        }
+
+
+
+
+    }
+
+    //runs the user through the process of choosing statistics.
+    public void buyStatistics() {
+
+        while (getSumOfAbilityScores() != abilityPoints) {
+
+            for (int i = 0; i < abilities.length; i++) {
+                System.out.println("What do you want your " + Skill.abilities[i] + " score to be?");
+
+                int input = scanner.nextInt() //todo finish
+
+            }
+
+        }
+
+    }
+
 
 
     //Prompts the player to choose what to do on their turn.
@@ -92,6 +157,12 @@ public class Player extends Creature {
 
             //change stance: call the chooseWeapon method and the chooseStanceChange method
             if (chosenAction.equals(changeStance)) {
+                Weapon chosenWeapon = chooseWeapon();
+                Stance chosenStance = chooseStance(chosenWeapon);
+
+                chosenWeapon.setCurrentStance(chosenStance);
+
+                ap -= changeStance.getCost();
 
                 return true;
             }
@@ -111,8 +182,9 @@ public class Player extends Creature {
 
     }
 
-
-    public Weapon chooseWeapon() { //TODO: this doesn't work for dual wielding weapons with the same name. AAAAA
+    //prompts user to choose a weapon for something
+    public Weapon chooseWeapon() { //TODO: this doesn't work for dual wielding weapons with the same name.
+                                   //might be able to get away with it if i just don't have any one handed weapons with stances?
         System.out.println("Which weapon?");
 
         while (true) {
@@ -122,16 +194,30 @@ public class Player extends Creature {
                 if (input.equals(weapon.getName().toLowerCase())) {
                     return weapon;
                 }
+
+                if (input.equals("help")) {
+                    System.out.println(currentWeapons);
+                }
             }
         }
     }
 
-    //
-    public Weapon chooseStance(Weapon weapon) {
+    //Prompts user which stance they would like to switch to
+    public Stance chooseStance(Weapon weapon) {
         System.out.println("To what stance?");
 
         while (true) {
-            //todo finsh
+            String input = scanner.next().toLowerCase();
+
+            for (Stance stance : weapon.getStances()) {
+                if (input.equals(stance.getName().toLowerCase())) {
+                    return stance;
+                }
+
+                if (input.equals("help")) {
+                    System.out.println(Arrays.toString(weapon.getStances()));
+                }
+            }
         }
 
     }
@@ -173,6 +259,10 @@ public class Player extends Creature {
 
                     return target;
                 }
+
+                if (input.equals("help")) {
+                    System.out.println(Arrays.toString(possibleTargets));
+                }
             }
 
             System.out.println("Invalid Target.");
@@ -181,5 +271,20 @@ public class Player extends Creature {
 
     }
 
+
+    public void printAbilityScores() {
+        for (int i = 0; i < abilities.length; i++) {
+            System.out.println(Skill.abilities[i] + ": " + abilities[i]);
+        }
+    }
+
+    public int getSumOfAbilityScores() {
+        int sum = 0;
+
+        for (int x : abilities) {
+            sum += x;
+        }
+        return sum;
+    }
 
 }
