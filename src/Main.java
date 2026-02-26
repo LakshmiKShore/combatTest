@@ -22,15 +22,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Attack poke = new Attack("Poke", "pokepokepokepoke", 3, 4, 1, Main.physical);
-        Stance stance = new Stance(new Attack[] {poke}, 1, 1, "placeholderName");
-        Weapon weapon = new Weapon(stance, "Stick");
-
-        Creature bogJ = new Creature("Bog Jones",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {new Weapon(weapon), new Weapon(weapon)});
-        Player fennick = new Player("Fennick",1, 3, 0, 1, 4, 0, 1, 0, false, true, false, new Skill[]{Creature.biology, Creature.perception}, new Weapon[] {new Weapon(weapon), new Weapon(weapon)});
-
-        Combat combat = new Combat(new Creature[] {fennick}, new Creature[] {bogJ});
-        combat.runCombat();
+        Player me = new Player();
 
     }
 

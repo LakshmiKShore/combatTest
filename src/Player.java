@@ -14,12 +14,24 @@ public class Player extends Creature {
 
     Scanner scanner;
 
-    Class champion = new Class("Champion", 3);
-    Class warrior = new Class("Warrior", 3);
-    Class skirmisher = new Class("Skirmisher", 2);
-    Class duelist = new Class("Duelist", 2);
-    Class elementalist = new Class("Elementalist", 1);
-    Class hemomancer = new Class("Hemomancer", 1);
+    Class champion = new Class("Champion", 3, Player.fortitudeSave,
+            new Skill[] {athletics, exertion, agility, medicine, persuasion, intimidation, inspiration}, 3
+    );
+    Class warrior = new Class("Warrior", 3, Player.fortitudeSave,
+            new Skill[] {athletics, exertion, agility, recall, biology, persuasion, foraging, intimidation, inspiration}, 3
+    );
+    Class skirmisher = new Class("Skirmisher", 2, Player.reflexSave,
+            new Skill[] {slightOfHand, lockpicking, stealth, agility, biology, medicine, deception, persuasion, perception, foraging}, 4
+    );
+    Class duelist = new Class("Duelist", 2, Player.reflexSave,
+            new Skill[] {exertion, slightOfHand, agility, medicine, deception, persuasion, perception, insight, magic}, 3
+    );
+    Class elementalist = new Class("Elementalist", 1, Player.willSave,
+            new Skill[] {stealth, agility, recall, biology, arcana, medicine, insight, magic}, 3
+    );
+    Class hemomancer = new Class("Hemomancer", 1, Player.willSave,
+            new Skill[] {stealth, agility, recall, biology, arcana, medicine, insight, magic}, 3
+    );
 
     Class[] classes = {champion, warrior, skirmisher, duelist, elementalist, hemomancer};
     Class playerClass;
@@ -43,6 +55,9 @@ public class Player extends Creature {
 
     //Character Creation constructor. Allows the user to customize their character.
     public Player() {
+        scanner = new Scanner(System.in);
+        scanner.useDelimiter("\n");
+
         level = 1;
         savingThrows[reflexSave] = false;
         savingThrows[fortitudeSave] = false;
@@ -55,6 +70,7 @@ public class Player extends Creature {
         name = scanner.next();
 
         while (true) {
+            System.out.println("What... is your class?");
             String inputClass = scanner.next().toLowerCase();
             boolean done = false;
 
@@ -62,17 +78,21 @@ public class Player extends Creature {
                 if (inputClass.equals(c.getName().toLowerCase())) {
                     playerClass = c;
                     healthMod = c.getHealthMod();
+                    savingThrows[c.getSavingThrow()] = true;
                     done = true;
                 }
             }
 
             if (done) {
                 break;
+            } else {
+                System.out.println("Invalid Class.");
             }
         }
 
-
-
+        buyStatistics();
+        chooseSkills(playerClass.getSkills(), playerClass.getNumOfSkills());
+        chooseSkills(allSkills, abilities[know]);
 
     }
 
@@ -87,11 +107,19 @@ public class Player extends Creature {
                 System.out.println("What do you want your " + Skill.abilities[i] + " score to be?");
 
                 int input = scanner.nextInt();
-                abilities[i] = input;
-                System.out.println(Skill.abilities[i] + ": " + input);
 
+                if (-1 <= input && input <= 2) {
+                    abilities[i] = input;
+                    System.out.println(Skill.abilities[i] + ": " + input);
+                } else {
+                    System.out.println("Must be between -1 and 2.");
+                    i--;
+                }
+
+                System.out.println("You have " + (abilityPoints - getSumOfAbilityScores()) + " ability points remaining.");
             }
 
+            System.out.println();
             printAbilityScores();
             int abilityPointDifference = abilityPoints - getSumOfAbilityScores();
 
@@ -112,6 +140,31 @@ public class Player extends Creature {
             } else {
                 System.out.println("You spent " + (-1 * abilityPointDifference) + " too many points.");
             }
+        }
+
+    }
+
+    //runs the user through the process of choosing which skills to have proficiency in.
+    public void chooseSkills(Skill[] potentialSkills, int numOfSkills) {
+
+        for (int i = 0; i < numOfSkills; i++) {
+            System.out.println("Choose " + (numOfSkills - i) + " more skills.");
+            System.out.println(Arrays.toString(potentialSkills));
+            String input = scanner.next().toLowerCase();
+
+            if (!checkForSkill(potentialSkills, input)) {
+                System.out.println("chekc your spelling");
+                i--;
+                continue;
+            }
+            if (checkForSkill(skillProfs.toArray(new Skill[0]), input)) {
+                System.out.println("You already have that skill.");
+                i--;
+                continue;
+            }
+
+            System.out.println(getSkillWithName(potentialSkills, input));
+            skillProfs.add(getSkillWithName(potentialSkills, input));
         }
 
     }

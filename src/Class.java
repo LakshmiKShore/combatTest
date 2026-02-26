@@ -8,10 +8,16 @@ public class Class {
 
     String name;
     int healthMod;
+    int savingThrow;
+    Skill[] skills;
+    int numOfSkills;
 
-    public Class(String name, int healthMod) {
+    public Class(String name, int healthMod, int savingThrow, Skill[] skills, int numOfSkills) {
         this.name = name;
         this.healthMod = healthMod;
+        this.savingThrow = savingThrow;
+        this.skills = skills;
+        this.numOfSkills = numOfSkills;
     }
 
 
@@ -21,6 +27,18 @@ public class Class {
 
     public int getHealthMod() {
         return healthMod;
+    }
+
+    public int getSavingThrow() {
+        return savingThrow;
+    }
+
+    public Skill[] getSkills() {
+        return skills;
+    }
+
+    public int getNumOfSkills() {
+        return numOfSkills;
     }
 
 }

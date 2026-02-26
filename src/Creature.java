@@ -1,3 +1,4 @@
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -108,7 +109,7 @@ public class Creature {
             athletics, exertion, agility, lockpicking, slightOfHand, stealth, arcana, biology, medicine,
             recall, deception, foraging, insight, perception, persuasion, inspiration, intimidation, magic
     };
-    ArrayList<Skill> skillProfs;
+    ArrayList<Skill> skillProfs = new ArrayList<>();
 
     protected ArrayList<Weapon> currentWeapons;
 
@@ -802,6 +803,27 @@ public class Creature {
         return output.toString();
     }
 
+    //checks if a Skill in Skill[] has the name
+    public boolean checkForSkill(Skill[] array, String name) {
+        for (Skill skill : array) {
+            if (skill.getName().toLowerCase().equals(name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    //returns the Skill in Skill[] with the same name
+    public Skill getSkillWithName(Skill[] array, String name) {
+        for (Skill skill : array) {
+            if (skill.getName().toLowerCase().equals(name)) {
+                return skill;
+            }
+        }
+
+        return null;
+    }
 
 
     //getter methods (booooring!)
