@@ -78,20 +78,40 @@ public class Player extends Creature {
 
     //runs the user through the process of choosing statistics.
     public void buyStatistics() {
+        boolean doneScoring = false;
 
-        while (getSumOfAbilityScores() != abilityPoints) {
+        while (!doneScoring) {
+            System.out.println("You have " + abilityPoints + " ability points.");
 
             for (int i = 0; i < abilities.length; i++) {
                 System.out.println("What do you want your " + Skill.abilities[i] + " score to be?");
 
                 int input = scanner.nextInt();
                 abilities[i] = input;
+                System.out.println(Skill.abilities[i] + ": " + input);
 
             }
 
             printAbilityScores();
-            int abilityPointDifference =
+            int abilityPointDifference = abilityPoints - getSumOfAbilityScores();
 
+            if (abilityPointDifference == 0) {
+                System.out.println("Are you happy with these scores?");
+                while(true) {
+                    String input = scanner.next().toLowerCase();
+                    if (input.equals("yes") || input.equals("y")) {
+                        doneScoring = true;
+                        break;
+                    } else
+                    if (input.equals("no") || input.equals("n")) {
+                        break;
+                    }
+                }
+            } else if (abilityPointDifference > 0) {
+                System.out.println("You have " + abilityPointDifference + " points remaining.");
+            } else {
+                System.out.println("You spent " + (-1 * abilityPointDifference) + " too many points.");
+            }
         }
 
     }
