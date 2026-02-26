@@ -84,9 +84,13 @@ public class Player extends Creature {
             for (int i = 0; i < abilities.length; i++) {
                 System.out.println("What do you want your " + Skill.abilities[i] + " score to be?");
 
-                int input = scanner.nextInt() //todo finish
+                int input = scanner.nextInt();
+                abilities[i] = input;
 
             }
+
+            printAbilityScores();
+            int abilityPointDifference =
 
         }
 
