@@ -1,4 +1,3 @@
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -111,7 +110,7 @@ public class Creature {
     };
     ArrayList<Skill> skillProfs = new ArrayList<>();
 
-    protected ArrayList<Weapon> currentWeapons;
+    protected ArrayList<Weapon> currentWeapons = new ArrayList<>();
 
     protected Action parry = new Action("Parry", "Attempt to block an incoming attack.", 1, 0);
     protected Action changeStance = new Action("Change Stance", "Switch how you wield one of your weapons, changing which attacks you have access to.", 1, 0);
@@ -151,10 +150,10 @@ public class Creature {
         maxAp = 7;
         ap = maxAp;
 
-        maxEp = level + (2 * con) + (2 * will);
+        maxEp = level + (2 * Math.max(con, 0)) + (2 * Math.max(will, 0));
         ep = maxEp;
 
-        maxHp = 4 + (level * healthMod) + (con * proficiency * 2);
+        maxHp = 4 + (level * healthMod) + (Math.max(con, 0) * proficiency * 2);
         hp = maxHp;
         tempHp = 0;
 
@@ -255,7 +254,7 @@ public class Creature {
 
         if (isDying) {
             System.out.println(name + " is bleeding out.");
-            damageUnresistable(1, Main.physical);
+            damageUnresistable(1, Attack.physical);
         }
 
         if (!isDying) {
@@ -472,6 +471,10 @@ public class Creature {
 
     //returns the total number of hands being currently used.
     public int handsInUse() {
+        if (currentWeapons.isEmpty()) {
+            return 0;
+        }
+
         int sum = 0;
         for (Weapon weapon : currentWeapons) {
             sum += weapon.getCurrentHandsUsed();
@@ -563,13 +566,13 @@ public class Creature {
     public void damage(int amount, int type) {
 
         int resisted = 0;
-        if (type == Main.physical) {
+        if (type == Attack.physical) {
             resisted = physicalRes;
-        } else if (type == Main.elemental) {
+        } else if (type == Attack.elemental) {
             resisted = elementalRes;
-        } else if (type == Main.corrosive) {
+        } else if (type == Attack.corrosive) {
             resisted = corrosiveRes;
-        } else if (type == Main.arcane) {
+        } else if (type == Attack.arcane) {
             resisted = arcaneRes;
         }
         resisted += universalRes;
@@ -585,7 +588,7 @@ public class Creature {
         }
 
         hp -= damage;
-        System.out.println(name + " took " + damage + " " + Main.damageTypes[type] + " damage.");
+        System.out.println(name + " took " + damage + " " + Attack.damageTypes[type] + " damage.");
 
         updateWoundedStatus();
     }
@@ -601,7 +604,7 @@ public class Creature {
         }
 
         hp -= amount;
-        System.out.println(name + " took " + amount + " unresistable " + Main.damageTypes[type] + " damage.");
+        System.out.println(name + " took " + amount + " unresistable " + Attack.damageTypes[type] + " damage.");
 
         updateWoundedStatus();
     }

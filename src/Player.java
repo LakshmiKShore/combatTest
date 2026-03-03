@@ -1,7 +1,5 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Scanner;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class Player extends Creature {
 
@@ -93,6 +91,16 @@ public class Player extends Creature {
         buyStatistics();
         chooseSkills(playerClass.getSkills(), playerClass.getNumOfSkills());
         chooseSkills(allSkills, abilities[know]);
+        System.out.println(skillProfs);
+
+        chooseWeapons();
+
+        maxEp = level + (2 * Math.max(con, 0)) + (2 * Math.max(will, 0));
+        ep = maxEp;
+
+        maxHp = 4 + (level * healthMod) + (Math.max(con, 0) * proficiency * 2);
+        hp = maxHp;
+        tempHp = 0;
 
     }
 
@@ -145,14 +153,18 @@ public class Player extends Creature {
     }
 
     //runs the user through the process of choosing which skills to have proficiency in.
-    public void chooseSkills(Skill[] potentialSkills, int numOfSkills) {
+    public void chooseSkills(Skill[] skillArray, int numOfSkills) {
+
+        ArrayList<Skill> potentialSkills = new ArrayList<>(Arrays.asList(skillArray));
+        potentialSkills.removeAll(skillProfs);
 
         for (int i = 0; i < numOfSkills; i++) {
+
             System.out.println("Choose " + (numOfSkills - i) + " more skills.");
-            System.out.println(Arrays.toString(potentialSkills));
+            System.out.println(potentialSkills);
             String input = scanner.next().toLowerCase();
 
-            if (!checkForSkill(potentialSkills, input)) {
+            if (!checkForSkill(potentialSkills.toArray(skillArray), input)) {
                 System.out.println("chekc your spelling");
                 i--;
                 continue;
@@ -163,11 +175,47 @@ public class Player extends Creature {
                 continue;
             }
 
-            System.out.println(getSkillWithName(potentialSkills, input));
-            skillProfs.add(getSkillWithName(potentialSkills, input));
+            Skill chosenSkill = getSkillWithName(potentialSkills.toArray(skillArray), input);
+
+            System.out.println(chosenSkill);
+            skillProfs.add(chosenSkill);
+            potentialSkills.remove(chosenSkill);
         }
 
     }
+
+    //prompts the player to choose their starting weapons
+    public void chooseWeapons() {
+        System.out.println("Choose your weapons.");
+
+        while (handsInUse() < maxHands) {
+            System.out.println("You have " + (maxHands - handsInUse()) + " free hand(s) remaining. What weapon would you like to use? (enter \"none\" for none.)");
+            String input = scanner.next().toLowerCase();
+            Weapon toAdd = null;
+
+            if (input.equals("none")) {
+                break;
+            }
+
+            for (Weapon weapon : Adventure.basicWeapons) {
+                if (weapon.getName().toLowerCase().equals(input) && weapon.getMinHandsStance().getHands() <= (maxHands - handsInUse()) ) {
+                    System.out.println(weapon);
+                    toAdd = weapon;
+                }
+            }
+
+            if (toAdd == null) {
+                continue;
+            }
+
+            toAdd.setCurrentStance(toAdd.getMinHandsStance());
+            currentWeapons.add(toAdd);
+
+            System.out.println(currentWeapons);
+        }
+
+    }
+
 
 
 

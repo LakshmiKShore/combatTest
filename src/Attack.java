@@ -1,13 +1,20 @@
 public class Attack extends Action {
 
+    static final int physical = 0;
+    static final int elemental = 1;
+    static final int corrosive = 2;
+    static final int arcane = 3;
+    static final String[] damageTypes = new String[] {
+            "Physical", "Elemental", "Corrosive", "Arcane"
+    };
     private final int diceType;
     private final int diceNumber;
     private final int modifier;
     private final int damageType;
 
     //constructor without modifier (defaults to zero)
-    public Attack(String name, String description, int cost, int diceType, int diceNumber, int damageType) {
-        super(name, description, cost, 2);
+    public Attack(String name, int cost, int diceType, int diceNumber, int damageType) {
+        super(name, "", cost, 2);
         this.diceType = diceType;
         this.diceNumber = diceNumber;
         this.damageType = damageType;

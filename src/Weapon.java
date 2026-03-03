@@ -179,6 +179,17 @@ public class Weapon {
 
     }
 
+    //returns the stance with the minimum number of hands.
+    public Stance getMinHandsStance() {
+        int minIndex = 0;
+        for (int i = 0; i < stances.length; i++) {
+            if (stances[i].getHands() < stances[minIndex].getHands()) {
+                minIndex = i;
+            }
+        }
+        return stances[minIndex];
+    }
+
     //returns the number of hands used by the current stance.
     public int getCurrentHandsUsed() {
         return currentStance.getHands();

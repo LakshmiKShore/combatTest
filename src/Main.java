@@ -1,28 +1,22 @@
 /* TODO:
-    - Write creature class that Enemy and Player can extend from
-        - Create Player class
-        - Create Enemy class
+    - Create Player class
+    - Create Enemy class
     - Create feature class
     - Create character creation system
     - Create leveling system
-    - Move damage types to Attack (or Weapon?) class
     - Clean up formatting on "help" action in player.chooseWeapon and player.chooseStance
+    - Add weapon and attack properties
  */
 
 public class Main {
 
-    static final int physical = 0;
-    static final int elemental = 1;
-    static final int corrosive = 2;
-    static final int arcane = 3;
-
-    static final String[] damageTypes = new String[] {
-            "Physical", "Elemental", "Corrosive", "Arcane"
-    };
-
     public static void main(String[] args) {
 
         Player me = new Player();
+        Player you = new Player();
+
+        Combat combat = new Combat(new Creature[] {me}, new Creature[] {you});
+        combat.runCombat();
 
     }
 
