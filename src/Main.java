@@ -1,8 +1,6 @@
 /* TODO:
-    - Create Player class
     - Create Enemy class
     - Create feature class
-    - Create character creation system
     - Create leveling system
     - Clean up formatting on "help" action in player.chooseWeapon and player.chooseStance
     - Add weapon and attack properties
