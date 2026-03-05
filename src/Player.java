@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Player extends Creature {
@@ -35,6 +34,7 @@ public class Player extends Creature {
     Class playerClass;
 
     int abilityPoints = 4;
+    int maxAbilityScoreValue = 4;
 
 
     //super constructors
@@ -88,7 +88,8 @@ public class Player extends Creature {
             }
         }
 
-        buyStatistics();
+        buyStatistics(2);
+
         chooseSkills(playerClass.getSkills(), playerClass.getNumOfSkills());
         chooseSkills(allSkills, abilities[know]);
         System.out.println(skillProfs);
@@ -105,22 +106,23 @@ public class Player extends Creature {
     }
 
     //runs the user through the process of choosing statistics.
-    public void buyStatistics() {
+    public void buyStatistics(int maxValue) {
         boolean doneScoring = false;
 
         while (!doneScoring) {
+            resetAbilityScores();
             System.out.println("You have " + abilityPoints + " ability points.");
 
             for (int i = 0; i < abilities.length; i++) {
-                System.out.println("What do you want your " + Skill.abilities[i] + " score to be?");
+                System.out.println("What do you want your " + Skill.abilityNames[i] + " score to be?");
 
                 int input = scanner.nextInt();
 
-                if (-1 <= input && input <= 2) {
+                if (-1 <= input && input <= maxValue) {
                     abilities[i] = input;
-                    System.out.println(Skill.abilities[i] + ": " + input);
+                    System.out.println(Skill.abilityNames[i] + ": " + input);
                 } else {
-                    System.out.println("Must be between -1 and 2.");
+                    System.out.println("Must be between -1 and " + maxValue + ".");
                     i--;
                 }
 
@@ -152,6 +154,11 @@ public class Player extends Creature {
 
     }
 
+    //resets the Player's ability scores to zero.
+    public void resetAbilityScores() {
+        abilities = new int[abilities.length];
+    }
+
     //runs the user through the process of choosing which skills to have proficiency in.
     public void chooseSkills(Skill[] skillArray, int numOfSkills) {
 
@@ -164,7 +171,7 @@ public class Player extends Creature {
             System.out.println(potentialSkills);
             String input = scanner.next().toLowerCase();
 
-            if (!checkForSkill(potentialSkills.toArray(skillArray), input)) {
+            if (!checkForSkill(potentialSkills.toArray(new Skill[0]), input)) {
                 System.out.println("chekc your spelling");
                 i--;
                 continue;
@@ -180,6 +187,7 @@ public class Player extends Creature {
             System.out.println(chosenSkill);
             skillProfs.add(chosenSkill);
             potentialSkills.remove(chosenSkill);
+
         }
 
     }
@@ -187,6 +195,7 @@ public class Player extends Creature {
     //prompts the player to choose their starting weapons
     public void chooseWeapons() {
         System.out.println("Choose your weapons.");
+        System.out.println(Arrays.toString(Adventure.basicWeapons));
 
         while (handsInUse() < maxHands) {
             System.out.println("You have " + (maxHands - handsInUse()) + " free hand(s) remaining. What weapon would you like to use? (enter \"none\" for none.)");
@@ -215,6 +224,113 @@ public class Player extends Creature {
         }
 
     }
+
+
+    //LEVELING METHODS
+
+    //initiates the leveling process.
+    //For now, since features have not been implemented, levels where you would gain a new feature are commented out.
+    @SuppressWarnings("DuplicateBranchesInSwitch")
+    public void levelUp() {
+
+        level++;
+        System.out.println("New Level: " + level);
+
+        switch (level) {
+            case 1:
+                //gainClassFeature(1);
+                System.out.println("gain class feature");
+                break;
+            case 2:
+                //gainAuxFeature();
+                System.out.println("gain aux feature");
+                break;
+            case 3:
+                abilityScoreIncrease();
+                break;
+            case 4:
+                //gainClassFeature(2);
+                System.out.println("gain class feature");
+                break;
+            case 5:
+                //gainAuxFeature();
+                System.out.println("gain aux feature");
+                break;
+            case 6:
+                proficiency++;
+                System.out.println("proficiency bonus increase");
+                break;
+            case 7:
+                //gainClassFeature(3);
+                System.out.println("gain class feature");
+                break;
+            case 8:
+                abilityScoreIncrease();
+                break;
+            case 9:
+                //gainAuxFeature();
+                System.out.println("gain aux feature");
+                break;
+            case 10:
+                //gainClassFeature(4);
+                System.out.println("gain class feature");
+                break;
+            case 11:
+                proficiency++;
+                System.out.println("proficiency bonus increase");
+            case 12:
+                //gainClassFeature(5);
+                System.out.println("gain class feature");
+                break;
+            case 13:
+                //gainAuxFeature();
+                System.out.println("gain aux feature");
+                break;
+            case 14:
+                abilityScoreIncrease();
+                break;
+            case 15:
+                //gainClassFeature(6);
+                System.out.println("gain class feature");
+                break;
+            case 16:
+                //gainLegendaryFeature();
+                System.out.println("gain legendary feature");
+                break;
+        }
+
+    }
+
+    //allows the user to add one point to an ability score of their choice.
+    public void abilityScoreIncrease() {
+        while (true) {
+            printAbilityScores();
+            System.out.println("Which ability score would you like to increase?");
+
+            String input = scanner.next().toLowerCase();
+
+            for (int i = 0; i < Skill.abilityNames.length; i++) {
+                String abilityName = Skill.abilityNames[i].toLowerCase();
+
+                if (!input.equals(abilityName)) {
+                    continue;
+                }
+                if (abilities[i] >= maxAbilityScoreValue) {
+                    System.out.println("Cannot increase. Maximum value is " + maxAbilityScoreValue + ".");
+                    continue;
+                }
+
+                abilities[i]++;
+
+                if (i == Creature.know) {
+                    chooseSkills(Creature.allSkills, 1);
+                }
+
+                return;
+            }
+        }
+    }
+
 
 
 
@@ -399,7 +515,7 @@ public class Player extends Creature {
 
     public void printAbilityScores() {
         for (int i = 0; i < abilities.length; i++) {
-            System.out.println(Skill.abilities[i] + ": " + abilities[i]);
+            System.out.println(Skill.abilityNames[i] + ": " + abilities[i]);
         }
     }
 

@@ -806,7 +806,7 @@ public class Creature {
         return output.toString();
     }
 
-    //checks if a Skill in Skill[] has the name
+    //checks if a Skill in Skill[] has the name "name"
     public boolean checkForSkill(Skill[] array, String name) {
         for (Skill skill : array) {
             if (skill.getName().toLowerCase().equals(name)) {
