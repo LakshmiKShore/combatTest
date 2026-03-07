@@ -171,12 +171,12 @@ public class Player extends Creature {
             System.out.println(potentialSkills);
             String input = scanner.next().toLowerCase();
 
-            if (!checkForSkill(potentialSkills.toArray(new Skill[0]), input)) {
+            if (!arrayHasSkill(potentialSkills.toArray(new Skill[0]), input)) {
                 System.out.println("chekc your spelling");
                 i--;
                 continue;
             }
-            if (checkForSkill(skillProfs.toArray(new Skill[0]), input)) {
+            if (arrayHasSkill(skillProfs.toArray(new Skill[0]), input)) {
                 System.out.println("You already have that skill.");
                 i--;
                 continue;

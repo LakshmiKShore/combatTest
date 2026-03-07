@@ -119,6 +119,8 @@ public class Creature {
             changeStance
     };
 
+    protected ArrayList<Condition> conditions = new ArrayList<>();
+
 
     //Automated Constructor. Fill in abilities, saves, skill proficiencies, health mod, and level, get out all the stuff
     public Creature(String name, int level, int healthMod, int str, int dex, int con, int know, int wit, int will,
@@ -807,7 +809,7 @@ public class Creature {
     }
 
     //checks if a Skill in Skill[] has the name "name"
-    public boolean checkForSkill(Skill[] array, String name) {
+    public boolean arrayHasSkill(Skill[] array, String name) {
         for (Skill skill : array) {
             if (skill.getName().toLowerCase().equals(name)) {
                 return true;
@@ -826,6 +828,63 @@ public class Creature {
         }
 
         return null;
+    }
+
+
+    //checks if a skill in conditions has the same name as checkFor
+    public boolean hasCondition(Condition checkFor){
+        String name = checkFor.getName();
+
+        for (Condition condition : conditions) {
+            if (condition.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //returns a skill in conditions which has the same name as checkFor.
+    //hasCondition MUST return true BEFORE using this method
+    //otherwise the return null; could result in errors
+    public Condition getCondition(Condition checkFor){
+        String name = checkFor.getName();
+
+        for (Condition condition : conditions) {
+            if (condition.getName().equals(name)) {
+                return condition;
+            }
+        }
+        return null;
+    }
+
+    //inflicts a non-stacking condition. Prints an error if given a stacking condition.
+    public void inflictCondition(Condition condition){
+        if (condition.getStacking()) {
+            System.out.println("Error: Wrong Infliction Method Selected");
+            return;
+        }
+        if (hasCondition(condition)) {
+            System.out.println(name + " already has this condition.");
+            return;
+        }
+
+        conditions.add(new Condition(condition));
+    }
+
+    //inflicts a stacking condition. Prints an error if given a non-stacking condition.
+    public void inflictCondition(Condition condition, int stacks) {
+        if (!condition.getStacking()) {
+            System.out.println("Error: Wrong Infliction Method Selected");
+            return;
+        }
+        if (hasCondition(condition)) {
+            getCondition(condition).increaseStacks(stacks);
+            return;
+        }
+
+        conditions.add(new Condition(condition));
+        getCondition(condition).increaseStacks(stacks);
+
     }
 
 
@@ -929,6 +988,34 @@ public class Creature {
 
     public Action[] getBaseActions() {
         return baseActions;
+    }
+
+    public ArrayList<Condition> getConditions() {
+        return conditions;
+    }
+
+    public ArrayList<Condition> getConditions(int type) {
+        ArrayList<Condition> output = new ArrayList<>(conditions);
+
+        for (int i = output.size()-1; i >= 0; i--) {
+            if (output.get(i).getType() != type) {
+                output.remove(i);
+            }
+        }
+
+        return output;
+    }
+
+    public ArrayList<Condition> getConditions(int type, int severity) {
+        ArrayList<Condition> output = new ArrayList<>(conditions);
+
+        for (int i = output.size()-1; i >= 0; i--) {
+            if (output.get(i).getType() != type || output.get(i).getSeverity() != severity) {
+                output.remove(i);
+            }
+        }
+
+        return output;
     }
 
 }
