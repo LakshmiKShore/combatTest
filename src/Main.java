@@ -7,6 +7,7 @@
     - Clean up formatting on "help" action in player.chooseWeapon and player.chooseStance
     - Clean up formatting on Weapon.toString() (and also on Stance.toString())
     - Add weapon and attack properties
+    - Remake initiative system to use a non-enhanced for loop, and start removing creatures as soon as they die.
  */
 
 public class Main {
@@ -14,10 +15,14 @@ public class Main {
     public static void main(String[] args) {
 
         Player me = new Player();
+        Player you = new Player();
 
-        for (int i = 1; i < 16; i++) {
-            me.levelUp();
-        }
+        System.out.println(me);
+        me.inflictCondition(new Condition(Adventure.blinded, 5));
+        you.inflictCondition(new Condition(Adventure.dazed), 3);
+
+        Combat combat = new Combat(new Creature[]{me}, new Creature[]{you});
+        combat.runCombat();
 
     }
 

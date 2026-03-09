@@ -62,6 +62,7 @@ public class Player extends Creature {
         savingThrows[willSave] = false;
         proficiency = 1;
         maxAp = 7;
+        ap = maxAp;
         maxHands = 2;
 
         System.out.println("What... is your name?");
@@ -88,11 +89,11 @@ public class Player extends Creature {
             }
         }
 
-        buyStatistics(2);
+        //buyStatistics(2);
 
-        chooseSkills(playerClass.getSkills(), playerClass.getNumOfSkills());
-        chooseSkills(allSkills, abilities[know]);
-        System.out.println(skillProfs);
+        //chooseSkills(playerClass.getSkills(), playerClass.getNumOfSkills());
+        //chooseSkills(allSkills, abilities[know]);
+        //System.out.println(skillProfs);
 
         chooseWeapons();
 
@@ -209,7 +210,7 @@ public class Player extends Creature {
             for (Weapon weapon : Adventure.basicWeapons) {
                 if (weapon.getName().toLowerCase().equals(input) && weapon.getMinHandsStance().getHands() <= (maxHands - handsInUse()) ) {
                     System.out.println(weapon);
-                    toAdd = weapon;
+                    toAdd = new Weapon(weapon);
                 }
             }
 
@@ -339,7 +340,7 @@ public class Player extends Creature {
     public boolean turnBehavior(Creature[] allies, Creature[] enemies) {
 
         Action[] actions = getUsableActions();
-        printApReport();
+        System.out.println(this);
         System.out.println("What should " + name + " do?");
 
         while (true) {

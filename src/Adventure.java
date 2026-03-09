@@ -72,6 +72,7 @@ public class Adventure {
     public static final Condition dazed = new Condition("Dazed", "Maximum AP reduced by one for each level of Stunned. One level removed at end of turn.", Condition.internal, Condition.minor, true);
     public static final Condition exhausted = new Condition("Exhausted", "Maximum AP reduced by one for each level of Stunned.", Condition.internal, Condition.major, true);
     public static final Condition sightless = new Condition("Sightless", "Gain disadvantage on all parry checks.", Condition.internal, Condition.minor, false);
+    public static final Condition blinded = new Condition("Blinded", "Gain disadvantage on all parry checks.", Condition.external, Condition.minor, false);
     public static final Condition bleeding = new Condition("Bleeding", "Whenever you take damage, take an additional 1d4 unresistable damage.", Condition.internal, Condition.minor, false);
 
 

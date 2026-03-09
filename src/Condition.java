@@ -8,11 +8,24 @@ public class Condition {
     If they do, then we call Creature.bleedDamage()
      */
 
+    /*
+        TODO: Implement the following
+            - Exhausted* (needs removal conditions)
+            - Bleeding
+            - Poisoned
+            - Distracted
+            - Taunted
+            - Blinded
+            - Prone
+            - Incapacitated
+     */
+
     String name;
     String description;
     int type;
     int severity;
-    boolean stacking;
+    boolean isStacking;
+    int duration = 999;
     int stacks = 0;
 
     public static final int internal = 0;
@@ -21,12 +34,12 @@ public class Condition {
     public static final int major = 1;
     public static final int unremovable = 2;
 
-    public Condition(String name, String description, int type, int severity, boolean stacking) {
+    public Condition(String name, String description, int type, int severity, boolean isStacking) {
         this.name = name;
         this.description = description;
         this.type = type;
         this.severity = severity;
-        this.stacking = stacking;
+        this.isStacking = isStacking;
     }
 
     public Condition(Condition toCopy) {
@@ -34,8 +47,19 @@ public class Condition {
         description = toCopy.getDescription();
         type = toCopy.getType();
         severity = toCopy.getSeverity();
-        stacking = toCopy.getStacking();
+        isStacking = toCopy.getIsStacking();
         stacks = toCopy.getStacks();
+        duration = toCopy.getDuration();
+    }
+
+    public Condition(Condition toCopy, int duration) {
+        name = toCopy.getName();
+        description = toCopy.getDescription();
+        type = toCopy.getType();
+        severity = toCopy.getSeverity();
+        isStacking = toCopy.getIsStacking();
+        stacks = toCopy.getStacks();
+        this.duration = duration;
     }
 
 
@@ -43,6 +67,22 @@ public class Condition {
         this.stacks += stacks;
     }
 
+    public void reduceDuration() {
+        duration--;
+    }
+
+
+    public String toString() {
+        String output = name;
+
+        if (isStacking) {
+            output += " (" + stacks + ")";
+        }
+        if (duration < 25) {
+            output += ", ends in " + duration + " rounds.";
+        }
+        return output;
+    }
 
     public String getName() {
         return name;
@@ -60,12 +100,16 @@ public class Condition {
         return severity;
     }
 
-    public boolean getStacking() {
-        return stacking;
+    public boolean getIsStacking() {
+        return isStacking;
     }
 
     public int getStacks() {
         return stacks;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
 }
