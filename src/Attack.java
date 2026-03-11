@@ -88,7 +88,7 @@ public class Attack extends Action {
 
 
     public String toString() {
-        return (name + ". Deals " + diceNumber + "d" + diceType);
+        return (name + ", " + cost + " AP. " + "Deals " + diceNumber + "d" + diceType + " " + Attack.damageTypes[damageType] + " damage.");
     }
 
 

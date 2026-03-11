@@ -95,7 +95,7 @@ public class Player extends Creature {
         //chooseSkills(allSkills, abilities[know]);
         //System.out.println(skillProfs);
 
-        chooseWeapons();
+        chooseStartingWeapons();
 
         maxEp = level + (2 * Math.max(con, 0)) + (2 * Math.max(will, 0));
         ep = maxEp;
@@ -194,9 +194,9 @@ public class Player extends Creature {
     }
 
     //prompts the player to choose their starting weapons
-    public void chooseWeapons() {
+    public void chooseStartingWeapons() {
         System.out.println("Choose your weapons.");
-        System.out.println(Arrays.toString(Adventure.basicWeapons));
+        System.out.println(Adventure.weaponArrayToString(Adventure.basicWeapons));
 
         while (handsInUse() < maxHands) {
             System.out.println("You have " + (maxHands - handsInUse()) + " free hand(s) remaining. What weapon would you like to use? (enter \"none\" for none.)");
@@ -209,7 +209,6 @@ public class Player extends Creature {
 
             for (Weapon weapon : Adventure.basicWeapons) {
                 if (weapon.getName().toLowerCase().equals(input) && weapon.getMinHandsStance().getHands() <= (maxHands - handsInUse()) ) {
-                    System.out.println(weapon);
                     toAdd = new Weapon(weapon);
                 }
             }
@@ -221,7 +220,7 @@ public class Player extends Creature {
             toAdd.setCurrentStance(toAdd.getMinHandsStance());
             currentWeapons.add(toAdd);
 
-            System.out.println(currentWeapons);
+            System.out.println(Adventure.weaponArrayToString(currentWeapons.toArray(new Weapon[0])));
         }
 
     }

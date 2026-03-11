@@ -18,8 +18,6 @@ public class Main {
         Player you = new Player();
 
         System.out.println(me);
-        me.inflictCondition(new Condition(Adventure.blinded, 5));
-        you.inflictCondition(new Condition(Adventure.dazed), 3);
 
         Combat combat = new Combat(new Creature[]{me}, new Creature[]{you});
         combat.runCombat();

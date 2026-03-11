@@ -1,4 +1,3 @@
-import java.security.spec.RSAOtherPrimeInfo;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -261,10 +260,6 @@ public class Creature {
             damageUnresistable(1, Attack.physical);
         }
 
-        if (!isDying) {
-            ap = maxAp;
-        }
-
         for (Weapon weapon : currentWeapons) {
             weapon.resetAttacksMade();
         }
@@ -275,6 +270,9 @@ public class Creature {
         cleanUpConditions();
 
         attacksMade = 0;
+        if (!isDying) {
+            ap = maxAp;
+        }
 
     }
 
@@ -596,8 +594,10 @@ public class Creature {
             resisted = arcaneRes;
         }
         resisted += universalRes;
-
         int damage = Math.max(0, (amount - resisted));
+        boolean tookDamage = damage > 0;
+
+        System.out.println(name + " took " + damage + " " + Attack.damageTypes[type] + " damage.");
 
         if (tempHp >= damage) {
             tempHp -= damage;
@@ -608,13 +608,17 @@ public class Creature {
         }
 
         hp -= damage;
-        System.out.println(name + " took " + damage + " " + Attack.damageTypes[type] + " damage.");
-
+        if (tookDamage) {
+            bleedDamage();
+        }
         updateWoundedStatus();
     }
 
     //a version of the damage method that doesn't factor in resistances.
     public void damageUnresistable(int amount, int type) {
+        System.out.println(name + " took " + amount + " unresistable " + Attack.damageTypes[type] + " damage.");
+        boolean tookDamage = amount > 0;
+
         if (tempHp >= amount) {
             tempHp -= amount;
             amount = 0;
@@ -624,8 +628,27 @@ public class Creature {
         }
 
         hp -= amount;
-        System.out.println(name + " took " + amount + " unresistable " + Attack.damageTypes[type] + " damage.");
+        if (tookDamage) {
+            bleedDamage();
+        }
+        updateWoundedStatus();
+    }
 
+    //deals 1d4 unresistable damage. Does not trigger bleeding.
+    public void bleedDamage() {
+        int amount = (int) (Math.random() * 4 + 1);
+
+        System.out.println(name + " is bleeding and took " + amount + " damage.");
+
+        if (tempHp >= amount) {
+            tempHp -= amount;
+            amount = 0;
+        } else {
+            amount -= tempHp;
+            tempHp = 0;
+        }
+
+        hp -= amount;
         updateWoundedStatus();
     }
 
@@ -801,14 +824,7 @@ public class Creature {
 
     //returns a string detailing weapons wielded.
     public String weaponReport() {
-        String output = "";
-
-        for (Weapon weapon : currentWeapons) {
-            output += weapon;
-            output += "\n";
-        }
-
-        return output;
+        return Adventure.weaponArrayToString(currentWeapons.toArray(new Weapon[0]));
     }
 
     public void printWeaponReport() {
@@ -817,13 +833,13 @@ public class Creature {
 
     public String toString() {
 
-        String output = name + ". \n" +
+        String output =
                 hpReport() + "\n" +
-                apReport() + "\n" +
-                weaponReport() + "\n";
+                apReport() + "\n";
         if (!conditions.isEmpty()) {
             output += conditions;
         }
+        output += weaponReport();
         return output;
     }
 
@@ -855,7 +871,7 @@ public class Creature {
         String name = checkFor.getName();
 
         for (Condition condition : conditions) {
-            if (condition.getName().equals(name)) {
+            if (condition.nameEquals(checkFor)) {
                 return true;
             }
         }
@@ -867,7 +883,7 @@ public class Creature {
         String name = checkFor.getName();
 
         for (Condition condition : conditions) {
-            if (condition.getName().equals(name)) {
+            if (condition.nameEquals(checkFor)) {
                 return condition.getStacks();
             }
         }
@@ -878,10 +894,8 @@ public class Creature {
     //hasCondition MUST return true BEFORE using this method
     //otherwise the return null; could result in errors
     public Condition getCondition(Condition checkFor){
-        String name = checkFor.getName();
-
         for (Condition condition : conditions) {
-            if (condition.getName().equals(name)) {
+            if (condition.nameEquals(checkFor)) {
                 return condition;
             }
         }
@@ -906,7 +920,7 @@ public class Creature {
     public void inflictCondition(Condition condition, int stacks) {
 
         //special infliction effects for AP reducing conditions.
-        if (condition.equals(Adventure.stunned) || condition.equals(Adventure.dazed) || condition.equals(Adventure.exhausted)) {
+        if (condition.nameEquals(Adventure.stunned) || condition.nameEquals(Adventure.dazed) || condition.nameEquals(Adventure.exhausted)) {
             ap -= stacks;
             maxAp -= stacks;
             ap = Math.max(ap, 0);
@@ -933,6 +947,7 @@ public class Creature {
                 if (conditions.get(i).getStacks() <= 0) {
                     conditions.remove(i);
                     i--;
+                    continue;
                 }
             }
             if (conditions.get(i).getDuration() <= 0) {

@@ -171,8 +171,12 @@ public class Weapon {
 
     public String toString() {
 
-        String output = name + ". \n";
+        String output = name;
         for (Stance stance : stances) {
+            output += "\n";
+            if (stance.equals(currentStance)) {
+                output += "(Current) ";
+            }
             output += stance;
         }
         return output;

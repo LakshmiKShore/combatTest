@@ -52,7 +52,6 @@ public class Combat {
 
             for (Creature creature : combatants) {
                 System.out.println(creature.getName() + "'s Turn.");
-                creature.printHpReport();
                 int team = teamAffiliation.get(creature);
 
                 Creature[] allies = new Creature[0];

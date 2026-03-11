@@ -15,9 +15,9 @@ public class Stance {
     }
 
     public String toString() {
-        String output = name + " ";
+        String output = name + ":";
         for (int i = 0; i < attacks.length; i++) {
-            output += ("Attack " + (i + 1) + ": " + attacks[i]);
+            output += ("\n   " + attacks[i] + " ");
         }
         return output;
     }

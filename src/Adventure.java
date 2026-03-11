@@ -76,4 +76,15 @@ public class Adventure {
     public static final Condition bleeding = new Condition("Bleeding", "Whenever you take damage, take an additional 1d4 unresistable damage.", Condition.internal, Condition.minor, false);
 
 
+
+    //UTIL METHODS
+
+    public static String weaponArrayToString(Weapon[] array) {
+        String output = "";
+        for (Weapon weapon : array){
+            output += weapon + "\n \n";
+        }
+        return output;
+    }
+
 }

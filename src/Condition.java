@@ -72,6 +72,10 @@ public class Condition {
     }
 
 
+    public boolean nameEquals(Condition toCompare) {
+        return (this.name.equals(toCompare.getName()));
+    }
+
     public String toString() {
         String output = name;
 
