@@ -1,6 +1,6 @@
 /* TODO:
+    - FINISH COMBAT.APPENDNUMBERSTONAMES
     - Create Enemy class
-    - Create Condition class
     - Implement Conditions into Creature class
     - Create feature class
     - Create leveling system

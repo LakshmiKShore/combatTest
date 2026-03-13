@@ -76,6 +76,11 @@ public class Adventure {
     public static final Condition bleeding = new Condition("Bleeding", "Whenever you take damage, take an additional 1d4 unresistable damage.", Condition.internal, Condition.minor, false);
 
 
+    //ENEMIES
+
+    public static Creature tempSkeleton = new Creature("Skeleton Warrior", 1, 0, 2, 2, -1, -1, 1, 1, true, false, false, new Skill[] {}, new Weapon[] {Adventure.spear, Adventure.smallShield});
+    public static Creature tempSkeletonChamp = new Creature("Skeleton Champion", 1, 0, 2, 2, -1, -1, 1, 1, true, false, false, new Skill[] {}, new Weapon[] {Adventure.spear, Adventure.smallShield});
+
 
     //UTIL METHODS
 

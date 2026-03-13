@@ -185,6 +185,36 @@ public class Combat {
         return true;
     }
 
+    //Appends a number to the end of every creature with the same name as at least one other creature
+    public void appendNumbersToNames() {
+
+
+
+    }
+
+    //Returns an array of arrays of creatures with the same names in combatants.
+    public Creature[][] getCreaturesWithSameNames() {
+
+        ArrayList<Creature[]> output = new ArrayList<Creature[]>();
+
+        for (Creature creature : combatants) {
+            ArrayList<Creature> list = new ArrayList<Creature>();
+
+            for (Creature creature1 : combatants) {
+                if (creature1.getName().equals(creature.getName())) {
+                    list.add(creature1);
+                }
+            }
+
+            if (list.size() > 1) {
+                output.add(list.toArray(new Creature[0]));
+            }
+        }
+
+        return output.toArray(new Creature[0][0]);
+
+    }
+
     //prints out combatants in order, with their initiative rolls.
     public String toString() {
 

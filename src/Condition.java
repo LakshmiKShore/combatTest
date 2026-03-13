@@ -11,11 +11,9 @@ public class Condition {
     /*
         TODO: Implement the following
             - Exhausted* (needs removal conditions)
-            - Bleeding
             - Poisoned
             - Distracted
             - Taunted
-            - Blinded
             - Prone
             - Incapacitated
      */

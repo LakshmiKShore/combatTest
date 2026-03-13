@@ -865,6 +865,14 @@ public class Creature {
         return null;
     }
 
+    //Appends the int to the end of the Creature's name (to allow for multiple creatures of the same name)
+    public void appendName(int number) {
+        name += " " + number;
+    }
+
+
+
+    //CONDITION METHODS
 
     //checks if a skill in conditions has the same name as checkFor
     public boolean hasCondition(Condition checkFor){
@@ -997,6 +1005,7 @@ public class Creature {
         getCondition(condition).increaseStacks(-1 * actualReduction);
         cleanUpConditions();
     }
+
 
 
 
