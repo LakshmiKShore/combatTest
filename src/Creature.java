@@ -225,13 +225,6 @@ public class Creature {
     //handles all effects that happen at the start of your turn.
     public void startTurn(Creature[] allies, Creature[] enemies) {
 
-        if (hasCondition(Adventure.stunned)) {
-            removeCondition(Adventure.stunned, getCondition(Adventure.stunned).getStacks());
-        }
-        if (hasCondition(Adventure.dazed)) {
-            removeCondition(Adventure.dazed, 1);
-        }
-
     }
 
     //runs a loop of the turn
@@ -263,11 +256,6 @@ public class Creature {
         for (Weapon weapon : currentWeapons) {
             weapon.resetAttacksMade();
         }
-
-        for (Condition condition : conditions) {
-            condition.reduceDuration();
-        }
-        cleanUpConditions();
 
         attacksMade = 0;
         if (!isDying) {
@@ -424,20 +412,12 @@ public class Creature {
     public int attackingParryDisadvantages() {
         int output = 0;
 
-        if (hasCondition(Adventure.blinded) || hasCondition(Adventure.sightless)) {
-            output++;
-        }
-
         return output;
     }
 
     //finds all sources of disadvantage for a defending parry.
     public int defendingParryDisadvantages() {
         int output = 0;
-
-        if (hasCondition(Adventure.blinded) || hasCondition(Adventure.sightless)) {
-            output++;
-        }
 
         return output;
     }
@@ -874,139 +854,6 @@ public class Creature {
 
     //CONDITION METHODS
 
-    //checks if a skill in conditions has the same name as checkFor
-    public boolean hasCondition(Condition checkFor){
-        String name = checkFor.getName();
-
-        for (Condition condition : conditions) {
-            if (condition.nameEquals(checkFor)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    //returns the number of stacks of a condition the creature has. Returns zero if the creature does not have the condition.
-    public int stacksInCondition(Condition checkFor) {
-        String name = checkFor.getName();
-
-        for (Condition condition : conditions) {
-            if (condition.nameEquals(checkFor)) {
-                return condition.getStacks();
-            }
-        }
-        return 0;
-    }
-
-    //returns a skill in conditions which has the same name as checkFor.
-    //hasCondition MUST return true BEFORE using this method
-    //otherwise the return null; could result in errors
-    public Condition getCondition(Condition checkFor){
-        for (Condition condition : conditions) {
-            if (condition.nameEquals(checkFor)) {
-                return condition;
-            }
-        }
-        return null;
-    }
-
-    //inflicts a non-stacking condition. Prints an error if given a stacking condition.
-    public void inflictCondition(Condition condition){
-        if (condition.getIsStacking()) {
-            System.out.println("Error: Wrong Infliction Method Selected");
-            return;
-        }
-        if (hasCondition(condition)) {
-            System.out.println(name + " already has this condition.");
-            return;
-        }
-
-        conditions.add(new Condition(condition));
-    }
-
-    //inflicts a stacking condition. Prints an error if given a non-stacking condition.
-    public void inflictCondition(Condition condition, int stacks) {
-
-        //special infliction effects for AP reducing conditions.
-        if (condition.nameEquals(Adventure.stunned) || condition.nameEquals(Adventure.dazed) || condition.nameEquals(Adventure.exhausted)) {
-            ap -= stacks;
-            maxAp -= stacks;
-            ap = Math.max(ap, 0);
-            maxAp = Math.max(maxAp, 0);
-        }
-
-        if (!condition.getIsStacking()) {
-            System.out.println("Error: Wrong Infliction Method Selected");
-            return;
-        }
-        if (hasCondition(condition)) {
-            getCondition(condition).increaseStacks(stacks);
-            return;
-        }
-
-        conditions.add(new Condition(condition));
-        getCondition(condition).increaseStacks(stacks);
-    }
-
-    //goes through conditions and checks for/removes stacking conditions with zero stacks or a duration that has ended
-    public void cleanUpConditions() {
-        for (int i = 0; i < conditions.size(); i++) {
-            if (conditions.get(i).getIsStacking()) {
-                if (conditions.get(i).getStacks() <= 0) {
-                    conditions.remove(i);
-                    i--;
-                    continue;
-                }
-            }
-            if (conditions.get(i).getDuration() <= 0) {
-                conditions.remove(i);
-                i--;
-            }
-        }
-    }
-
-    //removes a non-stacking condition. Prints an error if given a stacking condition.
-    public void removeCondition(Condition condition){
-        condition = getCondition(condition);
-
-        if (condition.getIsStacking()) {
-            System.out.println("Error: Wrong Removal Method Selected");
-            return;
-        }
-        if (!hasCondition(condition)) {
-            System.out.println(name + " does not have this condition.");
-            return;
-        }
-
-        conditions.remove(condition);
-    }
-
-    //removes stacks from a stacking condition. Prints an error if given a non-stacking condition.
-    //takes a positive number of stacks.
-    public void removeCondition(Condition condition, int stacksToReduceBy){
-        condition = getCondition(condition);
-
-        if (!condition.getIsStacking()) {
-            System.out.println("Error: Wrong Removal Method Selected");
-            return;
-        }
-        if (!hasCondition(condition)) {
-            System.out.println(name + " does not have this condition.");
-            return;
-        }
-
-        int actualReduction = Math.min(stacksToReduceBy, getCondition(condition).stacks);
-
-        //Special removal effects for AP reducing conditions.
-        if (condition.getName().equals(Adventure.stunned.getName()) || condition.getName().equals(Adventure.dazed.getName()) || condition.getName().equals(Adventure.exhausted.getName())) {
-            maxAp += actualReduction;
-        }
-
-        getCondition(condition).increaseStacks(-1 * actualReduction);
-        cleanUpConditions();
-    }
-
-
 
 
     //getter methods (booooring!)
@@ -1113,30 +960,6 @@ public class Creature {
 
     public ArrayList<Condition> getConditions() {
         return conditions;
-    }
-
-    public ArrayList<Condition> getConditions(int type) {
-        ArrayList<Condition> output = new ArrayList<>(conditions);
-
-        for (int i = output.size()-1; i >= 0; i--) {
-            if (output.get(i).getType() != type) {
-                output.remove(i);
-            }
-        }
-
-        return output;
-    }
-
-    public ArrayList<Condition> getConditions(int type, int severity) {
-        ArrayList<Condition> output = new ArrayList<>(conditions);
-
-        for (int i = output.size()-1; i >= 0; i--) {
-            if (output.get(i).getType() != type || output.get(i).getSeverity() != severity) {
-                output.remove(i);
-            }
-        }
-
-        return output;
     }
 
 }

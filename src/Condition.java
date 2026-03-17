@@ -1,11 +1,29 @@
 public class Condition {
 
     /*
-    Condition class only has Name, Type, Severity, and Description.
     Functionality of Conditions are mostly in the Creature class.
     For example, the bleeding condition deals 1d4 additional damage whenever you take non-bleed damage.
     This condition is implemented by checking if a Creature has the bleeding condition when they take damage.
     If they do, then we call Creature.bleedDamage()
+     */
+
+    /*
+        Condition class needs:
+            - Name (or way to identify)
+            - Description (for being printed)
+            - Type (internal or external)
+            - Severity (minor or major)
+            - isRemovable
+            - isStacking
+            - isDuration
+            - Creature inflictor
+            - Creature target
+            - durationDecreaseTiming (end/beginning of target's/inflictor's turn)
+            - duration
+            - stacks
+            - arrayList of all conditions
+
+            - decreaseDuration(Creature creature, boolean isStartOfTurn)
      */
 
     /*
@@ -20,98 +38,31 @@ public class Condition {
 
     String name;
     String description;
-    int type;
-    int severity;
-    boolean isStacking;
-    int duration = 999;
-    int stacks = 0;
 
+    int type;
     public static final int internal = 0;
     public static final int external = 1;
+
+    int severity;
     public static final int minor = 0;
     public static final int major = 1;
-    public static final int unremovable = 2;
 
-    public Condition(String name, String description, int type, int severity, boolean isStacking) {
-        this.name = name;
-        this.description = description;
-        this.type = type;
-        this.severity = severity;
-        this.isStacking = isStacking;
-    }
+    boolean isRemovable;
+    boolean isStacking;
+    boolean isDuration;
 
-    public Condition(Condition toCopy) {
-        name = toCopy.getName();
-        description = toCopy.getDescription();
-        type = toCopy.getType();
-        severity = toCopy.getSeverity();
-        isStacking = toCopy.getIsStacking();
-        stacks = toCopy.getStacks();
-        duration = toCopy.getDuration();
-    }
+    Creature inflictor;
+    Creature target;
 
-    public Condition(Condition toCopy, int duration) {
-        name = toCopy.getName();
-        description = toCopy.getDescription();
-        type = toCopy.getType();
-        severity = toCopy.getSeverity();
-        isStacking = toCopy.getIsStacking();
-        stacks = toCopy.getStacks();
-        this.duration = duration;
-    }
+    int durationDecreaseTiming;
+    public static final int inflictorStartTurn = 0;
+    public static final int inflictorEndTurn = 1;
+    public static final int targetStartTurn = 2;
+    public static final int targetEndTurn = 3;
 
+    int duration;
+    int stacks;
 
-    public void increaseStacks(int stacks) {
-        this.stacks += stacks;
-    }
-
-    public void reduceDuration() {
-        duration--;
-    }
-
-
-    public boolean nameEquals(Condition toCompare) {
-        return (this.name.equals(toCompare.getName()));
-    }
-
-    public String toString() {
-        String output = name;
-
-        if (isStacking) {
-            output += " (" + stacks + ")";
-        }
-        if (duration < 25) {
-            output += ", ends in " + duration + " rounds.";
-        }
-        return output;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public int getSeverity() {
-        return severity;
-    }
-
-    public boolean getIsStacking() {
-        return isStacking;
-    }
-
-    public int getStacks() {
-        return stacks;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
+    puArrayList<Condition>
 
 }
