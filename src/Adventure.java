@@ -72,8 +72,8 @@ public class Adventure {
 
     //ENEMIES
 
-    public static Creature tempSkeleton = new Creature("Skeleton Warrior", 1, 0, 2, 2, -1, -1, 1, 1, true, false, false, new Skill[] {}, new Weapon[] {Adventure.spear, Adventure.smallShield});
-    public static Creature tempSkeletonChamp = new Creature("Skeleton Champion", 1, 0, 2, 2, -1, -1, 1, 1, true, false, false, new Skill[] {}, new Weapon[] {Adventure.spear, Adventure.smallShield});
+    public static Creature tempSkeleton = new Creature("Skeleton Warrior", 1, 2, 2, 2, -1, -1, 1, 1, true, false, false, new Skill[] {}, new Weapon[] {Adventure.spear, Adventure.smallShield});
+    public static Creature tempSkeletonChamp = new Creature("Skeleton Champion", 1, 3, 2, 2, -1, -1, 1, 1, true, false, false, new Skill[] {}, new Weapon[] {Adventure.spear, Adventure.smallShield});
 
 
     //UTIL METHODS

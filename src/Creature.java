@@ -160,7 +160,7 @@ public class Creature {
         tempHp = 0;
 
         maxHands = 2;
-        freeHands = 2;
+        freeHands = 2 - handsInUse();
         attacksMade = 0;
     }
 
@@ -201,7 +201,44 @@ public class Creature {
         this.arcaneRes = arcaneRes;
 
         this.maxHands = maxHands;
-        freeHands = maxHands;
+        freeHands = maxHands - handsInUse();
+        attacksMade = 0;
+    }
+
+    //Non-destructive copier.
+    public Creature(Creature base) {
+        name = base.getName();
+        level = base.getLevel();
+        healthMod = base.getHealthMod();
+        abilities[str] = base.getAbilities()[str];
+        abilities[dex] = base.getAbilities()[dex];
+        abilities[con] = base.getAbilities()[con];
+        abilities[know] = base.getAbilities()[know];
+        abilities[wit] = base.getAbilities()[wit];
+        abilities[will] = base.getAbilities()[will];
+        savingThrows[reflexSave] = base.getSavingThrows()[reflexSave];
+        savingThrows[fortitudeSave] = base.getSavingThrows()[fortitudeSave];
+        savingThrows[willSave] = base.getSavingThrows()[willSave];
+        proficiency = base.getProficiency();
+        skillProfs = base.getSkillProfs();
+        currentWeapons = base.getCurrentWeapons();
+
+        maxAp = base.getMaxAp();
+        ap = maxAp;
+        maxEp = base.getMaxEp();
+        ep = maxEp;
+        maxHp = base.getMaxHp();
+        hp = maxHp;
+        tempHp = 0;
+
+        universalRes = base.getUniversalRes();
+        physicalRes = base.getPhysicalRes();
+        elementalRes = base.getElementalRes();
+        corrosiveRes = base.getCorrosiveRes();
+        arcaneRes = base.getArcaneRes();
+
+        maxHands = base.getMaxHands();
+        freeHands = maxHands - handsInUse();
         attacksMade = 0;
     }
 
@@ -224,7 +261,7 @@ public class Creature {
 
     //handles all effects that happen at the start of your turn.
     public void startTurn(Creature[] allies, Creature[] enemies) {
-
+        System.out.println(this);
     }
 
     //runs a loop of the turn
@@ -900,6 +937,10 @@ public class Creature {
 
     public int getLevel() {
         return level;
+    }
+
+    public int getMaxHands() {
+        return maxHands;
     }
 
     public boolean isWounded() {

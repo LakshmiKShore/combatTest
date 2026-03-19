@@ -31,6 +31,7 @@ public class Combat {
 
         initiativeRolls = promptInitiativeRolls();
         sortByInitiative();
+        appendNumbersToNames();
 
     }
 
@@ -188,7 +189,17 @@ public class Combat {
     //Appends a number to the end of every creature with the same name as at least one other creature
     public void appendNumbersToNames() {
 
+        Creature[][] duplicateNames = getCreaturesWithSameNames();
 
+        for (Creature[] creaturesWithName : duplicateNames) {
+
+            int i = creaturesWithName.length;
+            for (Creature creature : creaturesWithName) {
+                creature.appendName(i);
+                i--;
+            }
+
+        }
 
     }
 
@@ -196,13 +207,18 @@ public class Combat {
     public Creature[][] getCreaturesWithSameNames() {
 
         ArrayList<Creature[]> output = new ArrayList<Creature[]>();
+        ArrayList<Creature> checking = new ArrayList<Creature>(combatants);
 
-        for (Creature creature : combatants) {
+        for (int i = checking.size() - 1; i >= 0; i--) {
             ArrayList<Creature> list = new ArrayList<Creature>();
 
-            for (Creature creature1 : combatants) {
-                if (creature1.getName().equals(creature.getName())) {
-                    list.add(creature1);
+            for (int j = checking.size() - 1; j >= 0; j--) {
+                if (checking.get(j).getName().equals(checking.get(i).getName())) {
+                    list.add(checking.get(j));
+                    checking.remove(j);
+                    if (i >= j) {
+                        i--;
+                    }
                 }
             }
 
@@ -222,7 +238,15 @@ public class Combat {
 
         for (Creature creature : combatants) {
 
-            output += creature.getName() + ": ";
+            output += creature.getName();
+
+            if (teamAffiliation.get(creature) == 1) {
+                output += " (Hero): ";
+            } else if (teamAffiliation.get(creature) == -1) {
+                output += " (Villain): ";
+            } else {
+                output += ": ";
+            }
 
             int roll = initiativeRolls.get(creature).intValue();
             output += roll;

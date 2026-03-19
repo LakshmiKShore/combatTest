@@ -8,18 +8,15 @@
     - Clean up formatting on Weapon.toString() (and also on Stance.toString())
     - Add weapon and attack properties
     - Remake initiative system to use a non-enhanced for loop, and start removing creatures as soon as they die.
+    - Finish combat's automatic numbering of monsters
+    - Rewrite the Condition class
  */
 
 public class Main {
 
     public static void main(String[] args) {
 
-        Player me = new Player();
-        Player you = new Player();
-
-        System.out.println(me);
-
-        Combat combat = new Combat(new Creature[]{me}, new Creature[]{you});
+        Combat combat = new Combat(new Creature[] {new Creature(Adventure.tempSkeleton), new Creature(Adventure.tempSkeleton)}, new Creature[] {new Creature(Adventure.tempSkeleton), new Creature(Adventure.tempSkeletonChamp), new Creature(Adventure.tempSkeletonChamp)});
         combat.runCombat();
 
     }
