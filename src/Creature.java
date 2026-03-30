@@ -625,9 +625,9 @@ public class Creature {
         }
 
         hp -= damage;
-        if (tookDamage) {
+        /* if (tookDamage) {
             bleedDamage();
-        }
+        } */
         updateWoundedStatus();
     }
 
@@ -645,9 +645,9 @@ public class Creature {
         }
 
         hp -= amount;
-        if (tookDamage) {
+        /* if (tookDamage) {
             bleedDamage();
-        }
+        } */
         updateWoundedStatus();
     }
 

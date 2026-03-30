@@ -1,4 +1,3 @@
-import java.sql.Array;
 import java.util.ArrayList;
 
 public class Condition {
@@ -67,7 +66,7 @@ public class Condition {
     int duration;
     int stacks;
 
-    public static ArrayList<Condition> conditions = new ArrayList<>();
+    public static ArrayList<Condition> allConditions = new ArrayList<>();
     public static ArrayList<Condition> stackingConditions = new ArrayList<>();
     public static ArrayList<Condition> durationConditions = new ArrayList<>();
 
@@ -100,15 +99,77 @@ public class Condition {
         duration = -1;
         stacks = -1;
 
-        conditions.add(this);
+        allConditions.add(this);
         //target.inflictCondition(this);
     }
 
     //Creates a copy of a stacking, non-duration condition, and inflicts it upon a creature.
-    //public Condition(Condition base, int stacks, Creature target, Creature inflictor);
+    public Condition(Condition base, int stacks, Creature target, Creature inflictor) {
+        name = base.getName();
+        description = base.getDescription();
+        type = base.getType();
+        severity = base.getSeverity();
+        isRemovable = base.isRemovable();
+        isStacking = base.isStacking();
+        isDuration = base.isDuration();
+        isPersistent = base.isPersistent();
+
+        this.inflictor = inflictor;
+        this.target = target;
+        duration = -1;
+        this.stacks = stacks;
+
+        allConditions.add(this);
+        stackingConditions.add(this);
+        //target.inflictCondition(this);
+    }
+
+    //Creates a copy of a non-stacking, duration condition, and inflicts it upon a creature.
+    public Condition(Condition base, int duration, int durationDecreaseTiming, Creature target, Creature inflictor) {
+        name = base.getName();
+        description = base.getDescription();
+        type = base.getType();
+        severity = base.getSeverity();
+        isRemovable = base.isRemovable();
+        isStacking = base.isStacking();
+        isDuration = base.isDuration();
+        isPersistent = base.isPersistent();
+
+        this.inflictor = inflictor;
+        this.target = target;
+        this.duration = duration;
+        this.durationDecreaseTiming = durationDecreaseTiming;
+        stacks = -1;
+
+        allConditions.add(this);
+        durationConditions.add(this);
+        //target.inflictCondition(this);
+    }
+
+    //Creates a copy of a stacking, duration condition, and inflicts it upon a creature.
+    public Condition(Condition base, int stacks, int duration, int durationDecreaseTiming, Creature target, Creature inflictor) {
+        name = base.getName();
+        description = base.getDescription();
+        type = base.getType();
+        severity = base.getSeverity();
+        isRemovable = base.isRemovable();
+        isStacking = base.isStacking();
+        isDuration = base.isDuration();
+        isPersistent = base.isPersistent();
+
+        this.inflictor = inflictor;
+        this.target = target;
+        this.duration = duration;
+        this.durationDecreaseTiming = durationDecreaseTiming;
+        this.stacks = stacks;
+
+        allConditions.add(this);
+        stackingConditions.add(this);
+        durationConditions.add(this);
+        //target.inflictCondition(this);
+    }
 
 
-    //TODO: Finish Condition constructors
 
 
     public String getName() {
@@ -163,8 +224,8 @@ public class Condition {
         return stacks;
     }
 
-    public static ArrayList<Condition> getConditions() {
-        return conditions;
+    public static ArrayList<Condition> getAllConditions() {
+        return allConditions;
     }
 
     public static ArrayList<Condition> getStackingConditions() {

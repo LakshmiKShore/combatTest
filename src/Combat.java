@@ -14,6 +14,7 @@ public class Combat {
 
     //the only constructor.
     //asks every creature in the combat to roll initiative and then sorts combatants into initiative order.
+    //automatically appends numbers to creatures with the same name.
     public Combat(Creature[] heroes, Creature[] villains) {
 
         this.heroes = new ArrayList<>(Arrays.asList(heroes));
@@ -42,7 +43,8 @@ public class Combat {
     //Loops through combatants, and runs each combatant's turn in order.
     //Passes two arrays representing the creatures in the combat to the creature running its turn
     //These arrays are sorted as allies (same team) and enemies (opposite team).
-    public void runCombat() {
+    //Returns -1 if the villains won and +1 if the heroes won.
+    public int runCombat() {
 
         int round = 0;
 
@@ -51,7 +53,9 @@ public class Combat {
             System.out.println("Round " + round);
             System.out.println(this);
 
-            for (Creature creature : combatants) {
+            for (int i = 0; i < combatants.size(); i++) {
+                Creature creature = combatants.get(i);
+
                 System.out.println(creature.getName() + "'s Turn.");
                 int team = teamAffiliation.get(creature);
 
@@ -69,7 +73,14 @@ public class Combat {
 
                 creature.runTurn(allies, enemies);
 
-                markDeadCreatures(); //marks dead creatures by adding them to toBeRemoved, also removes them as targets
+                markDeadCreatures(); //marks dead creatures by adding them to toBeRemoved
+                for (Creature deadCreature : toBeRemoved) { //decrements i to account for the arraylist shrinking
+                    if (combatants.indexOf(deadCreature) <= i) {
+                        i--;
+                    }
+                }
+                removeDeadCreatures(); //removes dead creatures
+
                 System.out.println();
 
                 if (whoWon() != 0) {
@@ -78,14 +89,19 @@ public class Combat {
 
             }
 
-            removeDeadCreatures();
-
         }
+
+        if (whoWon() == -1) {
+            System.out.println("Villains won.");
+        } else {
+            System.out.println("Heroes won.");
+        }
+
+        return whoWon();
 
     }
 
     //Adds dead creatures to an ArrayList that stores enemies that need to be removed from initiative
-    //This also removes dead creatures from the villains and heroes list, which prevents them from being targeted
     public void markDeadCreatures() {
 
         for (Creature creature : combatants) {
@@ -94,12 +110,8 @@ public class Combat {
                 continue;
             }
 
-            villains.remove(creature);
-            heroes.remove(creature);
             toBeRemoved.add(creature);
-
         }
-
     }
 
     //Removes creatures marked by markDeadCreatures from initiative, then clears the list of marked creatures.
@@ -193,10 +205,10 @@ public class Combat {
 
         for (Creature[] creaturesWithName : duplicateNames) {
 
-            int i = creaturesWithName.length;
+            int i = 1;
             for (Creature creature : creaturesWithName) {
                 creature.appendName(i);
-                i--;
+                i++;
             }
 
         }
@@ -206,28 +218,39 @@ public class Combat {
     //Returns an array of arrays of creatures with the same names in combatants.
     public Creature[][] getCreaturesWithSameNames() {
 
-        ArrayList<Creature[]> output = new ArrayList<Creature[]>();
-        ArrayList<Creature> checking = new ArrayList<Creature>(combatants);
+        ArrayList<ArrayList<Creature>> sameNameBuckets = new ArrayList<ArrayList<Creature>>();
 
-        for (int i = checking.size() - 1; i >= 0; i--) {
-            ArrayList<Creature> list = new ArrayList<Creature>();
+        for (Creature creature : combatants) {
+            boolean foundBucket = false;
 
-            for (int j = checking.size() - 1; j >= 0; j--) {
-                if (checking.get(j).getName().equals(checking.get(i).getName())) {
-                    list.add(checking.get(j));
-                    checking.remove(j);
-                    if (i >= j) {
-                        i--;
-                    }
+            for (ArrayList<Creature> bucket : sameNameBuckets) {
+
+                //If the creature has the same name as the creatures in this bucket, add the creature to this bucket
+                //and then move on to the next creature
+                if (bucket.get(0).getName().equals(creature.getName())) {
+                    bucket.add(creature);
+                    foundBucket = true;
+                    break;
                 }
             }
 
-            if (list.size() > 1) {
-                output.add(list.toArray(new Creature[0]));
+            if (foundBucket) {
+                continue;
             }
+
+            //if the creature didn't get put into any buckets, add a new bucket with this creature
+            sameNameBuckets.add(new ArrayList<Creature>(Arrays.asList(new Creature[]{creature})));
+
         }
 
-        return output.toArray(new Creature[0][0]);
+        //format the sameNameBuckets as a 2d array and returns
+        Creature[][] output = new Creature[sameNameBuckets.size()][];
+
+        for (int i = 0; i < output.length; i++) {
+            output[i] = sameNameBuckets.get(i).toArray(new Creature[0]);
+        }
+
+        return output;
 
     }
 
