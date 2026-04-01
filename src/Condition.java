@@ -33,6 +33,7 @@ public class Condition {
             - Stunned
             - Dazed
             - Exhausted* (needs removal conditions)
+            - Blinded
             - Bleeding
             - Burning
             - Poisoned

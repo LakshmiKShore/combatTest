@@ -625,9 +625,9 @@ public class Creature {
         }
 
         hp -= damage;
-        /* if (tookDamage) {
+        if (tookDamage && hasCondition("bleeding")) {
             bleedDamage();
-        } */
+        }
         updateWoundedStatus();
     }
 
@@ -645,9 +645,9 @@ public class Creature {
         }
 
         hp -= amount;
-        /* if (tookDamage) {
+        if (tookDamage && hasCondition("bleeding")) {
             bleedDamage();
-        } */
+        }
         updateWoundedStatus();
     }
 
@@ -904,6 +904,16 @@ public class Creature {
     //Removes a condition from the creature and deletes it.
     public void comprehensiveRemoveCondition(Condition condition) {
         condition.comprehensiveRemove();
+    }
+
+    //Checks conditions to see if the creature has the condition.
+    public boolean hasCondition(String name) {
+        for (Condition condition : conditions) {
+            if (condition.getName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
