@@ -71,7 +71,9 @@ public class Combat {
                     enemies = villains.toArray(enemies);
                 }
 
+                Condition.decreaseConditionsStartOfTurn(creature);
                 creature.runTurn(allies, enemies);
+                Condition.decreaseConditionsEndOfTurn(creature);
 
                 markDeadCreatures(); //marks dead creatures by adding them to toBeRemoved
                 for (Creature deadCreature : toBeRemoved) { //decrements i to account for the arraylist shrinking

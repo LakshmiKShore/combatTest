@@ -68,7 +68,7 @@ public class Adventure {
 
     //CONDITIONS
 
-
+    public static Condition bleeding = new Condition("Bleeding", "Target takes 1d4 unresistable damage whenever they take damage.", Condition.internal, Condition.minor, true, false, true, false);
 
     //ENEMIES
 

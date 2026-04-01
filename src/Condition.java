@@ -30,7 +30,11 @@ public class Condition {
 
     /*
         TODO: Implement the following
+            - Stunned
+            - Dazed
             - Exhausted* (needs removal conditions)
+            - Bleeding
+            - Burning
             - Poisoned
             - Distracted
             - Taunted
@@ -53,9 +57,11 @@ public class Condition {
     boolean isStacking;
     boolean isDuration;
     boolean isPersistent;
+    boolean isDurationPaused;
 
     Creature inflictor;
     Creature target;
+    Creature durationDecreasesOn;
 
     int durationDecreaseTiming;
     public static final int inflictorStartTurn = 0;
@@ -100,7 +106,7 @@ public class Condition {
         stacks = -1;
 
         allConditions.add(this);
-        //target.inflictCondition(this);
+        target.inflictCondition(this);
     }
 
     //Creates a copy of a stacking, non-duration condition, and inflicts it upon a creature.
@@ -121,7 +127,7 @@ public class Condition {
 
         allConditions.add(this);
         stackingConditions.add(this);
-        //target.inflictCondition(this);
+        target.inflictCondition(this);
     }
 
     //Creates a copy of a non-stacking, duration condition, and inflicts it upon a creature.
@@ -141,9 +147,15 @@ public class Condition {
         this.durationDecreaseTiming = durationDecreaseTiming;
         stacks = -1;
 
+        if (durationDecreaseTiming == Condition.inflictorStartTurn || durationDecreaseTiming == Condition.inflictorEndTurn) {
+            durationDecreasesOn = inflictor;
+        } else {
+            durationDecreasesOn = target;
+        }
+
         allConditions.add(this);
         durationConditions.add(this);
-        //target.inflictCondition(this);
+        target.inflictCondition(this);
     }
 
     //Creates a copy of a stacking, duration condition, and inflicts it upon a creature.
@@ -163,14 +175,106 @@ public class Condition {
         this.durationDecreaseTiming = durationDecreaseTiming;
         this.stacks = stacks;
 
+        if (durationDecreaseTiming == Condition.inflictorStartTurn || durationDecreaseTiming == Condition.inflictorEndTurn) {
+            durationDecreasesOn = inflictor;
+        } else {
+            durationDecreasesOn = target;
+        }
+
         allConditions.add(this);
         stackingConditions.add(this);
         durationConditions.add(this);
-        //target.inflictCondition(this);
+        target.inflictCondition(this);
+    }
+
+
+    //Checks all duration conditions to see if their durations should be decreased, then decreases them if they should be.
+    public static void decreaseConditionsStartOfTurn(Creature creatureTakingTurn) {
+
+        for (Condition condition : durationConditions) {
+
+            if (condition.durationDecreasesOn != creatureTakingTurn) {
+                continue;
+            }
+            if (condition.durationDecreaseTiming == Condition.inflictorEndTurn || condition.durationDecreaseTiming == Condition.targetEndTurn) {
+                continue;
+            }
+            if (condition.isDurationPaused) {
+                continue;
+            }
+
+            condition.duration--;
+        }
+
+        cleanUpAll();
+    }
+
+
+    //Checks all duration conditions to see if their durations should be decreased, then decreases them if they should be.
+    public static void decreaseConditionsEndOfTurn(Creature creatureTakingTurn) {
+
+        for (Condition condition : durationConditions) {
+
+            if (condition.durationDecreasesOn != creatureTakingTurn) {
+                continue;
+            }
+            if (condition.durationDecreaseTiming == Condition.inflictorStartTurn || condition.durationDecreaseTiming == Condition.targetStartTurn) {
+                continue;
+            }
+
+            condition.duration--;
+            condition.cleanUp();
+
+        }
+
+    }
+
+
+    //Checks all conditions to see if they should still be active, and if not, removes them from everywhere.
+    public static void cleanUpAll() {
+        for (int i = 0; i < allConditions.size(); i++) {
+            boolean removed = allConditions.get(i).cleanUp();
+
+            if (removed) {
+                i--;
+            }
+        }
+    }
+
+    //Checks to see if the condition should still be active, then if not, removes it from everywhere.
+    //Returns a boolean: TRUE if the condition was removed, FALSE if the condition was not removed.
+    public boolean cleanUp() {
+        if (isDuration && duration <= 0) {
+            comprehensiveRemove();
+            System.out.println(target.getName() + " is no longer " + this + ".");
+            return true;
+        }
+
+        if (isStacking && stacks <= 0) {
+            comprehensiveRemove();
+            System.out.println(target.getName() + " is no longer " + this + ".");
+            return true;
+        }
+
+        return false;
+    }
+
+    //removes the condition from all the places it needs to be removed from
+    public void comprehensiveRemove() {
+
+        allConditions.remove(this);
+        durationConditions.remove(this);
+        stackingConditions.remove(this);
+        target.nonComprehensiveRemoveCondition(this);
+
     }
 
 
 
+
+    public String toString() {
+        return name;
+    }
 
     public String getName() {
         return name;

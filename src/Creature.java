@@ -891,6 +891,23 @@ public class Creature {
 
     //CONDITION METHODS
 
+    //Inflicts a condition on the creature. SHOULD NOT BE CALLED DIRECTLY! create a NEW CONDITION and that will AUTOMATICALLY inflict it.
+    public void inflictCondition(Condition condition) {
+        conditions.add(condition);
+    }
+
+    //Removes a condition from the creature. SHOULD NOT BE CALLED DIRECTLY! call COMPREHENSIVE remove condition.
+    public void nonComprehensiveRemoveCondition(Condition condition) {
+        conditions.remove(condition);
+    }
+
+    //Removes a condition from the creature and deletes it.
+    public void comprehensiveRemoveCondition(Condition condition) {
+        condition.comprehensiveRemove();
+    }
+
+
+
 
 
     //getter methods (booooring!)

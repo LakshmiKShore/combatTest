@@ -2,6 +2,7 @@
     - Rewrite the Condition class
     - Add calls to Condition before and after each creature's turns.
     - Implement Conditions into Creature class
+        - Implement "hasCondition"
     - Implement Creature.inflictCondition() into both creature and condition classes
 
     - Figure out a way for creatures to be immediately removed from the combat upon death.
@@ -19,7 +20,14 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Combat combat = new Combat(new Creature[] {new Creature(Adventure.tempSkeletonChamp), new Creature(Adventure.tempSkeletonChamp)}, new Creature[] {new Creature(Adventure.tempSkeleton), new Creature(Adventure.tempSkeleton), new Creature(Adventure.tempSkeleton)});
+        Creature daChamp = new Creature(Adventure.tempSkeletonChamp);
+        Creature daGuy = new Creature(Adventure.tempSkeleton);
+
+        Condition newCondition = new Condition(Adventure.bleeding, 1, Condition.targetStartTurn, daChamp, daGuy);
+
+        Combat combat = new Combat(new Creature[] {daChamp, new Creature(Adventure.tempSkeletonChamp)}, new Creature[] {daGuy, new Creature(Adventure.tempSkeleton), new Creature(Adventure.tempSkeleton)});
+
+
         combat.runCombat();
 
     }
