@@ -33,8 +33,6 @@ public class Condition {
             - Stunned
             - Dazed
             - Exhausted* (needs removal conditions)
-            - Blinded
-            - Bleeding
             - Burning
             - Poisoned
             - Distracted
@@ -60,15 +58,15 @@ public class Condition {
     boolean isPersistent;
     boolean isDurationPaused;
 
-    Creature inflictor;
+    Creature inflicter;
     Creature target;
     Creature durationDecreasesOn;
 
     int durationDecreaseTiming;
-    public static final int inflictorStartTurn = 0;
-    public static final int inflictorEndTurn = 1;
-    public static final int targetStartTurn = 2;
-    public static final int targetEndTurn = 3;
+    public static final int inflictorStartTurn = 2;
+    public static final int inflictorEndTurn = 3;
+    public static final int targetStartTurn = 0;
+    public static final int targetEndTurn = 1;
 
     int duration;
     int stacks;
@@ -91,7 +89,7 @@ public class Condition {
     }
 
     //Creates a copy of a non-stacking, non-duration condition, and inflicts it upon a creature.
-    public Condition(Condition base, Creature target, Creature inflictor) {
+    public Condition(Condition base, Creature target, Creature inflicter) {
         name = base.getName();
         description = base.getDescription();
         type = base.getType();
@@ -101,17 +99,17 @@ public class Condition {
         isDuration = base.isDuration();
         isPersistent = base.isPersistent();
 
-        this.inflictor = inflictor;
+        this.inflicter = inflicter;
         this.target = target;
         duration = -1;
         stacks = -1;
 
         allConditions.add(this);
-        target.inflictCondition(this);
+        target.addCondition(this);
     }
 
     //Creates a copy of a stacking, non-duration condition, and inflicts it upon a creature.
-    public Condition(Condition base, int stacks, Creature target, Creature inflictor) {
+    public Condition(Condition base, int stacks, Creature target, Creature inflicter) {
         name = base.getName();
         description = base.getDescription();
         type = base.getType();
@@ -121,18 +119,18 @@ public class Condition {
         isDuration = base.isDuration();
         isPersistent = base.isPersistent();
 
-        this.inflictor = inflictor;
+        this.inflicter = inflicter;
         this.target = target;
         duration = -1;
         this.stacks = stacks;
 
         allConditions.add(this);
         stackingConditions.add(this);
-        target.inflictCondition(this);
+        target.addCondition(this);
     }
 
     //Creates a copy of a non-stacking, duration condition, and inflicts it upon a creature.
-    public Condition(Condition base, int duration, int durationDecreaseTiming, Creature target, Creature inflictor) {
+    public Condition(Condition base, int duration, int durationDecreaseTiming, Creature target, Creature inflicter) {
         name = base.getName();
         description = base.getDescription();
         type = base.getType();
@@ -142,25 +140,25 @@ public class Condition {
         isDuration = base.isDuration();
         isPersistent = base.isPersistent();
 
-        this.inflictor = inflictor;
+        this.inflicter = inflicter;
         this.target = target;
         this.duration = duration;
         this.durationDecreaseTiming = durationDecreaseTiming;
         stacks = -1;
 
         if (durationDecreaseTiming == Condition.inflictorStartTurn || durationDecreaseTiming == Condition.inflictorEndTurn) {
-            durationDecreasesOn = inflictor;
+            durationDecreasesOn = inflicter;
         } else {
             durationDecreasesOn = target;
         }
 
         allConditions.add(this);
         durationConditions.add(this);
-        target.inflictCondition(this);
+        target.addCondition(this);
     }
 
     //Creates a copy of a stacking, duration condition, and inflicts it upon a creature.
-    public Condition(Condition base, int stacks, int duration, int durationDecreaseTiming, Creature target, Creature inflictor) {
+    public Condition(Condition base, int stacks, int duration, int durationDecreaseTiming, Creature target, Creature inflicter) {
         name = base.getName();
         description = base.getDescription();
         type = base.getType();
@@ -170,14 +168,14 @@ public class Condition {
         isDuration = base.isDuration();
         isPersistent = base.isPersistent();
 
-        this.inflictor = inflictor;
+        this.inflicter = inflicter;
         this.target = target;
         this.duration = duration;
         this.durationDecreaseTiming = durationDecreaseTiming;
         this.stacks = stacks;
 
         if (durationDecreaseTiming == Condition.inflictorStartTurn || durationDecreaseTiming == Condition.inflictorEndTurn) {
-            durationDecreasesOn = inflictor;
+            durationDecreasesOn = inflicter;
         } else {
             durationDecreasesOn = target;
         }
@@ -185,7 +183,7 @@ public class Condition {
         allConditions.add(this);
         stackingConditions.add(this);
         durationConditions.add(this);
-        target.inflictCondition(this);
+        target.addCondition(this);
     }
 
 
@@ -231,6 +229,17 @@ public class Condition {
     }
 
 
+    //reduces or increases a condition's stacks
+    public void changeStacks(int amount) {
+        if (!isStacking) {
+            return;
+        }
+
+        stacks += amount;
+    }
+
+
+
     //Checks all conditions to see if they should still be active, and if not, removes them from everywhere.
     public static void cleanUpAll() {
         for (int i = 0; i < allConditions.size(); i++) {
@@ -273,6 +282,14 @@ public class Condition {
 
 
 
+    public void setDuration(int value) {
+        duration = value;
+    }
+
+    public void setDurationDecreaseTiming(int value) {
+        durationDecreaseTiming = value;
+    }
+
     public String toString() {
         return name;
     }
@@ -309,8 +326,8 @@ public class Condition {
         return isPersistent;
     }
 
-    public Creature getInflictor() {
-        return inflictor;
+    public Creature getInflicter() {
+        return inflicter;
     }
 
     public Creature getTarget() {

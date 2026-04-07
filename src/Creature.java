@@ -15,12 +15,12 @@ public class Creature {
             - Level                                         X
             - Array of all skills                           X
             - ArrayList of skill proficiencies they have    X
-            - ArrayList of all possible features
+            - ArrayList of all possible features (maybe goes into Adventure)
             - ArrayList of features they have
             - Weapons                                       X
             - Resistances                                   X
             - Speed (CUT SYSTEM, MAYBE ADD LATER?)          X
-            - ArrayList of current conditions
+            - ArrayList of current conditions               X
             - ArrayList of actions that can be taken        X
         - Constructors
             - Automatic Constructor                         X
@@ -29,7 +29,7 @@ public class Creature {
             - Getters                                       X
             - Take Damage                                   X
             - Heal/Give THP                                 X
-            - Print Status
+            - Print Status                                  X
             - Run Turn                                      X
                 - Start Turn                                X
                 - Run Turn                                  X
@@ -285,6 +285,10 @@ public class Creature {
     //handles all effects that happen at the end of your turn.
     public void endTurn(Creature[] allies, Creature[] enemies) {
 
+        if (hasCondition("Burning")) {
+            damage(getCondition("Burning").getStacks(), Attack.elemental);
+        }
+
         if (isDying) {
             System.out.println(name + " is bleeding out.");
             damageUnresistable(1, Attack.physical);
@@ -437,6 +441,8 @@ public class Creature {
 
     //finds all sources of advantage for an attacking parry.
     public int attackingParryAdvantages() {
+        int output = 0;
+
         return 0;
     }
 
@@ -449,12 +455,20 @@ public class Creature {
     public int attackingParryDisadvantages() {
         int output = 0;
 
+        if (hasCondition("blinded")) {
+            output++;
+        }
+
         return output;
     }
 
     //finds all sources of disadvantage for a defending parry.
     public int defendingParryDisadvantages() {
         int output = 0;
+
+        if (hasCondition("blinded")) {
+            output++;
+        }
 
         return output;
     }
@@ -891,9 +905,46 @@ public class Creature {
 
     //CONDITION METHODS
 
+    //creates a copy of the given base condition, which automatically inflicts it on the target.
+    public void inflictCondition(Condition baseCondition, Creature target) {
+        Condition condition = new Condition(baseCondition, target, this);
+    }
+
+    public void inflictCondition(Condition baseCondition, Creature target, int stacks) {
+        Condition condition = new Condition(baseCondition, stacks, target, this);
+    }
+
+    public void inflictCondition(Condition baseCondition, Creature target, int duration, int durationDecreaseTiming) {
+        Condition condition = new Condition(baseCondition, duration, durationDecreaseTiming, target, this);
+    }
+
+    public void inflictCondition(Condition baseCondition, Creature target, int stacks, int duration, int durationDecreaseTiming) {
+        Condition condition = new Condition(baseCondition, stacks, duration, durationDecreaseTiming, target, this);
+    }
+
+
     //Inflicts a condition on the creature. SHOULD NOT BE CALLED DIRECTLY! create a NEW CONDITION and that will AUTOMATICALLY inflict it.
-    public void inflictCondition(Condition condition) {
-        conditions.add(condition);
+    //If you inflict a stacking condition on a creature that already has the condition, the stacks increase.
+    //If you inflict a duration condition on a creature that already has the condition, take the higher duration.
+    public void addCondition(Condition condition) {
+
+        if (!hasCondition(condition.getName())) {
+            conditions.add(condition);
+            return;
+        }
+
+        if (condition.isStacking()) {
+            getCondition(condition).changeStacks(condition.getStacks());
+        }
+
+        if (condition.isDuration()) {
+
+            condition.setDuration(Math.max(condition.getDuration(), getCondition(condition).getDuration()));
+
+            condition.setDurationDecreaseTiming(Math.max(condition.getDurationDecreaseTiming(), getCondition(condition).getDurationDecreaseTiming()));
+            //larger values of durationDecreaseTiming correspond to slightly longer durations, in terms of "will the inflicter have a turn before the target?"
+
+        }
     }
 
     //Removes a condition from the creature. SHOULD NOT BE CALLED DIRECTLY! call COMPREHENSIVE remove condition.
@@ -916,6 +967,25 @@ public class Creature {
         return false;
     }
 
+    //returns a condition with name matching.
+    public Condition getCondition(String name) {
+        for (Condition condition : conditions) {
+            if (condition.getName().equalsIgnoreCase(name)) {
+                return condition;
+            }
+        }
+        return null;
+    }
+
+    //returns a condition with name matching.
+    public Condition getCondition(Condition matchingCondition) {
+        for (Condition condition : conditions) {
+            if (condition.getName().equalsIgnoreCase(matchingCondition.getName())) {
+                return condition;
+            }
+        }
+        return null;
+    }
 
 
 
