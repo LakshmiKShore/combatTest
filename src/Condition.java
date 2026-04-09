@@ -33,12 +33,7 @@ public class Condition {
             - Stunned
             - Dazed
             - Exhausted* (needs removal conditions)
-            - Burning
-            - Poisoned
-            - Distracted
-            - Taunted
-            - Prone
-            - Incapacitated
+            - Taunted (needs Creature implementation)
      */
 
     String name;
@@ -74,6 +69,14 @@ public class Condition {
     public static ArrayList<Condition> allConditions = new ArrayList<>();
     public static ArrayList<Condition> stackingConditions = new ArrayList<>();
     public static ArrayList<Condition> durationConditions = new ArrayList<>();
+
+
+    public static Condition bleeding = new Condition("Bleeding", "Target takes 1d4 unresistable damage whenever they take damage.", internal, minor, true, false, true, false);
+    public static Condition burning = new Condition("Burning", "Target takes X damage at the end of their turn.", external, minor, true, true, true, false);
+    public static Condition blinded = new Condition("Blinded", "Target has disadvantage on all parry checks.", external, minor, true, false, true, false);
+    public static Condition distracted = new Condition("Distracted", "Target has disadvantage on defending parry checks and saving throws.", external, minor, true, false, true, false);
+    public static Condition incapacitated = new Condition("Incapacitated", "Target cannot take actions.", external, major, true, false, true, false);
+    public static Condition taunted = new Condition("Taunted", "Target has disadvantage on attacking parry checks.", external, minor, true, false, true, false);
 
 
     //Creates the base condition that other conditions copy from. DOES NOT GET ADDED to the arraylists!

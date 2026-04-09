@@ -66,13 +66,6 @@ public class Adventure {
     public static final Weapon[] basicWeapons = {longsword, warhammer, heavyAxe, smallShield, spear};
 
 
-    //CONDITIONS
-
-    public static Condition blinded = new Condition("Blinded", "Target has disadvantage on all parry checks.", Condition.external, Condition.minor, true, false, true, false);
-    public static Condition burning = new Condition("Burning", "Target takes X damage at the end of their turn.", Condition.external, Condition.minor, true, true, true, false);
-    public static Condition bleeding = new Condition("Bleeding", "Target takes 1d4 unresistable damage whenever they take damage.", Condition.internal, Condition.minor, true, false, true, false);
-
-
     //ENEMIES
 
     public static Creature tempSkeleton = new Creature("Skeleton Warrior", 1, 2, 2, 2, -1, -1, 1, 1, true, false, false, new Skill[] {}, new Weapon[] {Adventure.spear, Adventure.smallShield});

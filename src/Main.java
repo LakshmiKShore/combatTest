@@ -17,7 +17,7 @@ public class Main {
         Creature daChamp = new Creature(Adventure.tempSkeletonChamp);
         Creature daGuy = new Creature(Adventure.tempSkeleton);
 
-        Condition newCondition = new Condition(Adventure.bleeding, 1, Condition.targetStartTurn, daChamp, daGuy);
+        Condition newCondition = new Condition(Condition.bleeding, 1, Condition.targetStartTurn, daChamp, daGuy);
 
         Combat combat = new Combat(new Creature[] {daChamp, new Creature(Adventure.tempSkeletonChamp)}, new Creature[] {daGuy, new Creature(Adventure.tempSkeleton), new Creature(Adventure.tempSkeleton)});
 

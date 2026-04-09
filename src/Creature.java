@@ -271,14 +271,15 @@ public class Creature {
 
         //Turn Loop
         while (ap > 0 && !quitTurn) {
+            if (hasCondition("incapacitated")) {
+                break;
+            }
 
             boolean didSomething = turnBehavior(allies, enemies);
 
             quitTurn = !didSomething;
 
         }
-
-
 
     }
 
@@ -448,7 +449,13 @@ public class Creature {
 
     //finds all sources of advantage for a defending parry.
     public int defendingParryAdvantages() {
-        return 0;
+        int output = 0;
+
+        if (hasCondition("distracted")) {
+            output++;
+        }
+
+        return output;
     }
 
     //finds all sources of disadvantage for an attacking parry.
@@ -469,6 +476,25 @@ public class Creature {
         if (hasCondition("blinded")) {
             output++;
         }
+        if (hasCondition("distracted")) {
+            output++;
+        }
+
+        return output;
+    }
+
+    //finds all sources of advantage for a saving throw.
+    public int savingThrowAdvantages() {
+        return 0;
+    }
+
+    //finds all sources of disadvantage for a saving throw.
+    public int savingThrowDisadvantages() {
+        int output = 0;
+
+        if (hasCondition("distracted")) {
+            output++;
+        }
 
         return output;
     }
@@ -478,7 +504,7 @@ public class Creature {
     //OTHER COMBAT METHODS
 
     //returns true if they succeeded the save, false if they failed.
-    public boolean succeededSavingThrow(int dc, int type, int advantages, int disadvantages) {
+    public boolean succeededSavingThrow(int dc, int type) {
         int modifier = 0;
         if (type == Creature.reflexSave) {
             modifier += abilities[dex];
@@ -494,7 +520,7 @@ public class Creature {
             modifier += proficiency;
         }
 
-        int roll = rollD20(modifier, advantages, disadvantages);
+        int roll = rollD20(modifier, savingThrowAdvantages(), savingThrowDisadvantages());
         return (roll >= dc);
     }
 
